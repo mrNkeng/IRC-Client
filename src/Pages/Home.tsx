@@ -1,9 +1,9 @@
-import React, { FC } from 'react';
+import React from 'react';
 
 interface HomeProps {
 }
 
-export const Home: FC<HomeProps> = () => {
+export const Home = (props: HomeProps) => {
   return (
     <body>
       <h1>HOME PAGE</h1>

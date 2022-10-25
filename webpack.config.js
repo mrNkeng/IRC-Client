@@ -19,6 +19,9 @@ module.exports = [
     }
   },
   {
+    resolve: {
+      extensions: [".js", ".json", ".ts", ".tsx"],
+    },
     mode: 'development',
     entry: './src/react.tsx',
     target: 'electron-renderer',
