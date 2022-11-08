@@ -8,22 +8,40 @@ import Button from "@mui/material/Button";
 
 interface LoginProps {}
 
+type Direction = "col" | "row";
+
+interface SpacerProps {
+  spaceMultiplier: number;
+  direction: Direction;
+}
+
+const Spacer = (props: SpacerProps) => {
+  const { spaceMultiplier, direction } = props;
+  const spaceing = 4 * (spaceMultiplier ?? 1);
+  const style = {
+    [direction === "row" ? "width" : "height"]: Math.max(0, spaceing),
+  };
+  return <div style={style}></div>;
+};
+
 export const Login = (props: LoginProps) => {
   return (
     //we can style this correctly later :P
     <Box
       sx={{
-        justifyContent: "center",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-evenly",
         alignItems: "center",
       }}
     >
       <InputLabel>Sign In</InputLabel>
       <FormControl>
-        <body />
+        <Spacer spaceMultiplier={2} direction="col" />
         <TextField label="Email Address" />
-        <body /> {/*idk how else to add space here */}
+        <Spacer spaceMultiplier={2} direction="col" />
         <TextField label="Password" />
-        <body />
+        <Spacer spaceMultiplier={2} direction="col" />
         <Button
           onClick={() => {
             alert("you're signed in");
