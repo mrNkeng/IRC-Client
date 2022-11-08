@@ -3,8 +3,7 @@ import Stack from "@mui/material/Stack";
 import { Button, Box, Typography } from "@mui/material";
 
 
-interface HomeProps {
-}
+interface HomeProps { }
 
 interface Server {
   serverName: string;
@@ -43,17 +42,17 @@ export const Home = (props: HomeProps) => {
   useEffect(() => {});
 
   return (
-    <Box style={{ 
+    <Box style={{
       margin: "0px",
       padding: "0px",
-      width: 100 
+      width: 100
     }}>
       <Box
         className="App"
-        style={{ 
-          backgroundColor: "gray", 
-          margin: "0px", 
-          padding: "0px" 
+        style={{
+          backgroundColor: "gray",
+          margin: "0px",
+          padding: "0px"
         }}
       >
         <span className="heading">
@@ -93,4 +92,3 @@ export const Home = (props: HomeProps) => {
     </Box>
   );
 };
-
