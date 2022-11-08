@@ -3,8 +3,7 @@ import Stack from "@mui/material/Stack";
 import { Grid, Button, Box, Typography } from "@mui/material";
 import { visitEachChild } from "typescript";
 
-interface HomeProps {
-}
+interface HomeProps { }
 
 interface Server {
   serverName: string;
@@ -140,4 +139,3 @@ export const Home = (props: HomeProps) => {
     </Grid>
   );
 };
-
