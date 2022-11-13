@@ -1,24 +1,19 @@
-import React, { useRef } from "react";
-import "./style.css";
-import SendIcon from "@mui/icons-material/Send";
+import React, { useRef } from 'react';
+// import './style.css';
+import SendIcon from '@mui/icons-material/Send';
 
-interface props {
+interface ChatInputFieldProps {
   chat: string;
   setchat: React.Dispatch<React.SetStateAction<string>>;
   handleAdd: (e: React.FormEvent) => void;
 }
 
-const InputField: React.FC<props> = ({ chat, setchat, handleAdd }: props) => {
+const ChatInputField: React.FC<ChatInputFieldProps> = (props: ChatInputFieldProps) => {
+  const { chat, setchat, handleAdd } = props;
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <form
-      className="input"
-      onSubmit={(e) => {
-        handleAdd(e);
-        inputRef.current?.blur();
-      }}
-    >
+    <form onSubmit={handleAdd} className="chat_input_field_form">
       <input
         type="text"
         placeholder="Enter a Chat"
@@ -33,4 +28,4 @@ const InputField: React.FC<props> = ({ chat, setchat, handleAdd }: props) => {
     </form>
   );
 };
-export default InputField;
+export default ChatInputField;

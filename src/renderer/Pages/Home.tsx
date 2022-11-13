@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Stack from "@mui/material/Stack";
 import { Grid, Button, Box, Typography } from "@mui/material";
 import { visitEachChild } from "typescript";
+import { ChatWindow } from "renderer/components/Chat/ChatWindow";
 
 interface HomeProps { }
 
@@ -86,7 +87,7 @@ export const Home = (props: HomeProps) => {
       <Grid item xs={12}>
         <Box
           className="App"
-          style={{ 
+          style={{
             backgroundColor: "lightgray"
         }}>
           <span className="heading">
@@ -120,6 +121,7 @@ export const Home = (props: HomeProps) => {
           }}
         >
           <Typography>{currServer?.serverName}</Typography>
+          <ChatWindow/>
         </Box>
       </Grid>
       <Grid item xs={1}>

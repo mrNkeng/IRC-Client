@@ -1,11 +1,9 @@
-import { chat } from "../model";
-import { render } from "react-dom";
-import "./style.css";
+import { Chat } from "data-models";
 
 type Props = {
-  chat: chat;
-  chats: chat[];
-  setchats: React.Dispatch<React.SetStateAction<chat[]>>;
+  chat: Chat;
+  chats: Chat[];
+  setchats: React.Dispatch<React.SetStateAction<Chat[]>>;
 };
 
 const Chatbubble = ({ chat, chats, setchats }: Props) => {

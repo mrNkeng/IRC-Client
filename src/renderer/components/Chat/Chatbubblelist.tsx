@@ -1,11 +1,11 @@
 import React from "react";
-import { chat } from "../model";
-import Chatbubble from "./chatbubble";
-import "./style.css";
+import { Chat } from "data-models";
+import Chatbubble from "./Chatbubble";
+// import "./style.css";
 
 interface Props {
-  chats: Array<chat>;
-  setchats: React.Dispatch<React.SetStateAction<chat[]>>;
+  chats: Array<Chat>;
+  setchats: React.Dispatch<React.SetStateAction<Chat[]>>;
 }
 
 const Chatbubblelist: React.FC<Props> = ({ chats, setchats }) => {
