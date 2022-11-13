@@ -1,4 +1,5 @@
 import { Chat } from "data-models";
+import Typography from '@mui/material/Typography';
 
 type Props = {
   chat: Chat;
@@ -11,7 +12,7 @@ const Chatbubble = ({ chat, chats, setchats }: Props) => {
   chatBubbleClasses.push(chat.isOther ? "other_chat" : "self_chat");
   return (
     <div className={chatBubbleClasses.join(" ")}>
-      <span className="Chatbubbletext">{chat.chat}</span>
+      <Typography className="Chatbubbletext">{chat.chat}</Typography>
     </div>
   );
 };

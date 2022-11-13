@@ -13,6 +13,7 @@
   width: 90%;
   height: 50px;
 }
+
 .Recepient {
   padding-top: 10px;
   font-size: 20px;
@@ -62,6 +63,7 @@
 }
 
 
+
 .input_submit {
   position: relative;
   font-size: 30px;
@@ -92,6 +94,7 @@
 }
 
 .chats {
+  overflow: auto;
   border-radius: 5px;
   display: flex;
   justify-content: space-evenly;

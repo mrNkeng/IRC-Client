@@ -1,7 +1,7 @@
 import React from "react";
 import { Chat } from "data-models";
 import Chatbubble from "./Chatbubble";
-// import "./style.css";
+import { Box } from "@mui/material";
 
 interface Props {
   chats: Array<Chat>;
@@ -10,7 +10,7 @@ interface Props {
 
 const Chatbubblelist: React.FC<Props> = ({ chats, setchats }) => {
   return (
-    <div className="chats">
+    <Box className="chats">
       {chats?.map((chat, key) => (
         <Chatbubble
           chat={chat}
@@ -19,7 +19,7 @@ const Chatbubblelist: React.FC<Props> = ({ chats, setchats }) => {
           setchats={setchats}
         />
       ))}
-    </div>
+    </Box>
   );
 };
 export default Chatbubblelist;
