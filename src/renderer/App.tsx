@@ -1,9 +1,11 @@
 import { MemoryRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { Home, Login, Serverlist } from './Pages';
+import CssBaseline from '@mui/material/CssBaseline';
 
 export default function App() {
   return (
     <Router>
+      <CssBaseline/>
       <div>
         <nav>
           <Link to="/">Home</Link>
