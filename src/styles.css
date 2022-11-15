@@ -2,13 +2,15 @@
 
 
 .App {
-    font-family: "Times New Roman", Times, serif;
+    /*font-family: "Times New Roman", Times, serif;*/
     text-align: center;
+    background-color: #333;
+
     /* width: 100vw;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #333;
-    font-family: "Roboto", cursive; */
+    background-color: #333;*/
+    font-family: "Roboto", cursive; 
   }
