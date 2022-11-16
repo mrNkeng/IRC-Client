@@ -109,7 +109,7 @@ export const Home = (props: HomeProps) => {
           className="App"
           style={{
             backgroundColor: "#36393e",
-            height: "75px",
+            height: "7vh",
             justifyContent: "center",
             alignItems: "center",
             borderBottom: '2px solid #2C2F33'
@@ -131,7 +131,7 @@ export const Home = (props: HomeProps) => {
           style={{
             alignItems: "center",
             justifyContent: "right",
-            height: "100vh",
+            height: "90vh",
             backgroundColor: "#1e2124"
         }}>
           <ServerList servers={servers} setServer={setCurrServer} />
@@ -142,7 +142,7 @@ export const Home = (props: HomeProps) => {
       <Grid item xs={1.5}>
       <Box
           style={{
-            height: "100vh",
+            height: "90vh",
             backgroundColor: "#282b30",
         }}>  
       <Typography sx={{fontSize: 'large', 
@@ -160,7 +160,7 @@ export const Home = (props: HomeProps) => {
           sx={{
             alignItems: "center",
             justifyContent: "right",
-            height: '100vh',
+            height: '90vh',
             backgroundColor: "#36393e",
             padding: 0
           }}
@@ -176,7 +176,7 @@ export const Home = (props: HomeProps) => {
           style={{
             alignItems: "center",
             justifyContent: "center",
-            height: "100vh",
+            height: "90vh",
             backgroundColor: "#2C2F33",
             padding: 0,
             borderColor: "darkgray"

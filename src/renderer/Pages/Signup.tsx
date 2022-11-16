@@ -30,6 +30,9 @@ const Spacer = (props: SpacerProps) => {
 export const Signup = (props: SignupProps) => {
   return (
     //we can style this correctly later :P
+
+    //reagan changed spacing, couldn't figure out proper alignment yet
+    //will wait till we moved the styling to its own file
     <Box sx={{
       display: "flex",
       flexDirection: "row",
@@ -42,98 +45,94 @@ export const Signup = (props: SignupProps) => {
       bottom: "0px",
       left: "0px"
     }}>
-
-
-    <Stack spacing={2}>
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent:"center",        
-        height: "35vh",
-        width:"25vw"
-        
-      }} >
-      <FormControl sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent:"center",
-        borderRadius: "30px",
-       
-        padding: "20px 30px",
-        backgroundColor: "#7289da"
-      }}>
-        <span className="heading">
-            <Box sx = 
-            {{fontSize: 'large', 
-           
-            paddingTop:' 10px',
-            fontWeight: 'bold',
-            color: 'lightgrey' }}>AOL Messenger</Box>
-          </span> 
-          <DiamondIcon sx={{ fontSize: 100 }} />{" "}
-      <Spacer spaceMultiplier={2} direction="col" />
-      <Spacer spaceMultiplier={1} direction="col" />
-        <TextField label="Email Address" variant="outlined"/>
-        <Spacer spaceMultiplier={2} direction="col" />
-        <TextField label="Mobile Number" variant="outlined"/>
-        <Spacer spaceMultiplier={2} direction="col" />
-        <TextField label="Full Name" variant="outlined"/>
-        <Spacer spaceMultiplier={2} direction="col" />
-        <TextField label="Username" variant="outlined"/>
-        <Spacer spaceMultiplier={2} direction="col" />
-        <TextField label="Password" variant="outlined"/>
-        <Spacer spaceMultiplier={2} direction="col" />
-        <Button
-          onClick={() => {
-            alert("you're signed in");
-          }}
-          size="small"
-          variant="outlined"
-        >
-          Sign Up
-        </Button>
-      </FormControl>
-    </Box>
-
-    <Spacer spaceMultiplier={2} direction="col" />
+      <Stack spacing={2}>
+        <Box sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent:"center",        
+          height: "35vh",
+          width:"25vw",
+          margin: "2px"
+        }} >
+          <FormControl sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent:"center",
+            borderRadius: "30px",
           
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent:"center",
-        height: "8vh",
-        width:"25vw"
-        
-      }}
-    >
-      
-      <FormControl sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent:"center",
-        borderRadius: "30px",
-        padding: "20px 30px",
-        backgroundColor: "#7289da"
-      }}>
-         <span className="heading">
-            <Box sx = 
-            {{fontSize: 'large', 
-           
-            paddingTop:' 10px',
-            fontWeight: 'bold',
-            color: 'lightgrey' }}>Already have an account?</Box>
-          </span> 
+            padding: "20px 30px",
+            backgroundColor: "#7289da",
+            margin: "10px"
+          }}>
+            <span className="heading">
+                <Box sx = {{
+                  fontSize: 'large', 
+                  paddingTop:' 10px',
+                  fontWeight: 'bold',
+                  color: 'lightgrey' 
+                }}>AOL Messenger</Box>
+            </span> 
+            <DiamondIcon sx={{ fontSize: 100 }} />{" "}
+            <Spacer spaceMultiplier={2} direction="col" />
+            <Spacer spaceMultiplier={1} direction="col" />
+            <TextField label="Email Address" variant="outlined"/>
+            <Spacer spaceMultiplier={2} direction="col" />
+            <TextField label="Mobile Number" variant="outlined"/>
+            <Spacer spaceMultiplier={2} direction="col" />
+            <TextField label="Full Name" variant="outlined"/>
+            <Spacer spaceMultiplier={2} direction="col" />
+            <TextField label="Username" variant="outlined"/>
+            <Spacer spaceMultiplier={2} direction="col" />
+            <TextField label="Password" variant="outlined"/>
+            <Spacer spaceMultiplier={2} direction="col" />
+            <Button
+              onClick={() => {
+                alert("you're signed in");
+              }}
+              size="small"
+              variant="outlined"
+            >
+              Sign Up
+            </Button>
+          </FormControl>
+        </Box>
 
-          <Link to="/Login" className="btn btn-primary">Login</Link>
-      </FormControl>
-    </Box>
-    </Stack>    
+        <Spacer spaceMultiplier={2} direction="col" />
+              
+        <Box sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent:"center",
+          height: "8vh",
+          width:"25vw" 
+        }} >
+          
+          <FormControl sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent:"center",
+            borderRadius: "30px",
+            padding: "30px",
+            backgroundColor: "#7289da"
+          }}>
+            <span className="heading">
+              <Box sx = {{
+                fontSize: 'large',           
+                paddingTop:' 10px',
+                fontWeight: 'bold',
+                color: 'lightgrey' 
+              }}>
+                Already have an account?
+              </Box>
+            </span> 
+              <Link to="/Login" className="btn btn-primary">Login</Link>
+          </FormControl>
+        </Box>
+      </Stack>    
     </Box>
   );
 };

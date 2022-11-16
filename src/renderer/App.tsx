@@ -10,16 +10,14 @@ export default function App() {
       <div>
         <nav style={{
         justifyContent: 'space-evenly',
-        height: "40px",
+        height: "3vh",
         backgroundColor:"#1e2124"
         }}>
-          <Link to="/">Home</Link>
-          <Link to="/Accountsettings">Accountsettings</Link>
-          <Link to="/Login">Login</Link>
-          <Link to="/Serverlist">Serverlist</Link>
-          <Link to="/Signup">Signup</Link>
-          
-
+          <Link to="/" style={{ margin: '15px' }}>Home</Link>
+          <Link to="/Accountsettings" style={{ margin: '15px' }}>Accountsettings</Link>
+          <Link to="/Login" style={{ margin: '15px' }}>Login</Link>
+          <Link to="/Serverlist" style={{ margin: '15px' }}>Serverlist</Link>
+          <Link to="/Signup" style={{ margin: '15px' }}>Signup</Link>
         </nav>
         <Routes>
           <Route path="/" element={<Home />} />
