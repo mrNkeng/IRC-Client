@@ -1,7 +1,7 @@
 import CircleIcon from "@mui/icons-material/Circle";
 import React, { useState } from "react";
 import ChatInputField from "./ChatInputField";
-import { Chat } from "data-models";
+import { Chat } from "../../../data-models";
 import ChatBubblelist from "./Chatbubblelist";
 import "./ChatStyles.css";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
