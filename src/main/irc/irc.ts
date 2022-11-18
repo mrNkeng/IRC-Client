@@ -1,11 +1,18 @@
-// import net from "net";
-const net = require('net');
+import net from "net";
 
-class IRCClient {
-  constructor(server, client, config) {
+
+export class IRCClient {
+  server: ServerInformaiton;
+  client: ClientInformation;
+  config: IRCClientConfiguration;
+
+  ircSocket: net.Socket | undefined;
+
+  constructor(server: ServerInformaiton, client: ClientInformation, config: IRCClientConfiguration) {
     this.server = server
     this.client = client
     this.config = config
+
   }
 
   connect = () => {
@@ -19,14 +26,14 @@ class IRCClient {
   // https://modern.ircdocs.horse/#connection-registration
   authenticateToIRCServer = () => {
     this.sendCommand(`USER ${this.client.username} 0 * :${this.client.realName}`)
-    this.sendCommand(`NICK ${this.client.nick}`)
+    this.sendCommand(`NICK ${this.client.nickname}`)
 
     // we can only run after we've connected and authenticated
     setTimeout(() => this.sendCommand('JOIN #test'), 10000)
 
 
     // start ping stuff
-    this.ping(this.config.pingInterval)
+    this.ping()
   }
 
   ping = () => {
@@ -35,31 +42,13 @@ class IRCClient {
   }
 
 
-  parseData = (data) => {
+  parseData = (data: Buffer) => {
     console.log(data.toString());
   }
 
 
-  sendCommand = (command) => {
+  sendCommand = (command: string) => {
     console.debug("DEBUG | (sendCommand): ", command);
-    this.ircSocket.write(command + "\n");
+    this.ircSocket?.write(command + "\n");
   }
 }
-
-const server = {
-  host: "irc.valanidas.dev",
-  port :6667
-}
-
-const client = {
-  realName: "John Valanidas",
-  username: "Test",
-  nick: "NodeClient"
-}
-
-const config = {
-  pingInterval: 20 * 1000 // this is arbitrary (maybe there is a proper number)
-}
-
-const ircClient = new IRCClient(server, client, config);
-ircClient.connect();

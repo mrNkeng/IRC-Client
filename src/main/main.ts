@@ -14,6 +14,7 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+import { IRCClient } from './irc/irc';
 
 class AppUpdater {
   constructor() {
@@ -135,3 +136,21 @@ app
     });
   })
   .catch(console.log);
+
+const server = {
+  host: 'irc.valanidas.dev',
+  port: 6667,
+};
+
+const client = {
+  realName: 'John Valanidas',
+  username: 'Test',
+  nickname: 'NodeClient',
+};
+
+const config = {
+  pingInterval: 20 * 1000, // this is arbitrary (maybe there is a proper number)
+};
+
+const ircClient = new IRCClient(server, client, config);
+ircClient.connect();
