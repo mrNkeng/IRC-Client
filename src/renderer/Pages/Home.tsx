@@ -4,6 +4,7 @@ import { Grid, Button, Box, Typography, Tooltip, IconButton } from "@mui/materia
 import { visitEachChild } from "typescript";
 import { ChatWindow } from "renderer/components/Chat/ChatWindow";
 import { color } from "@mui/system";
+
 import CatchingPokemonIcon from '@mui/icons-material/CatchingPokemon';
 
 interface HomeProps { }
