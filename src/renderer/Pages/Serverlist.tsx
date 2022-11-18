@@ -77,10 +77,13 @@ export const Serverlist = (props: ServerlistProps) => {
               <TextField label="Server" variant="outlined" />
             </Grid>
             <Grid item>
-              <TextField label="Email Address" variant="outlined" />
+              <TextField label="Port" variant="outlined" />
             </Grid>
             <Grid item>
-              <TextField label="Password" variant="outlined" />
+              <TextField label="Username" variant="outlined" />
+            </Grid>
+            <Grid item>
+              <TextField label="Password" variant="outlined" type="password" />
             </Grid>
             <Grid item>
               <Button

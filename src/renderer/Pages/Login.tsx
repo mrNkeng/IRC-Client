@@ -74,7 +74,7 @@ export const Login = (props: LoginProps) => {
               <TextField label="Email Address" variant="outlined" />
             </Grid>
             <Grid item>
-              <TextField label="Password" variant="outlined" />
+              <TextField label="Password" variant="outlined" type="password" />
             </Grid>
             <Grid item>
               <Button

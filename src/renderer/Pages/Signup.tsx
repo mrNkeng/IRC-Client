@@ -90,13 +90,11 @@ export const Signup = (props: SignupProps) => {
             <Spacer spaceMultiplier={1} direction="col" />
             <TextField label="Email Address" variant="outlined" />
             <Spacer spaceMultiplier={2} direction="col" />
-            <TextField label="Mobile Number" variant="outlined" />
-            <Spacer spaceMultiplier={2} direction="col" />
             <TextField label="Full Name" variant="outlined" />
             <Spacer spaceMultiplier={2} direction="col" />
             <TextField label="Username" variant="outlined" />
             <Spacer spaceMultiplier={2} direction="col" />
-            <TextField label="Password" variant="outlined" />
+            <TextField label="Password" variant="outlined" type="password" />
             <Spacer spaceMultiplier={2} direction="col" />
             <Button
               onClick={() => {
