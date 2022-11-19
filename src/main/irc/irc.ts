@@ -1,10 +1,13 @@
 import net from "net";
+import { buffer } from "stream/consumers";
 
 
 export class IRCClient {
   server: ServerInformaiton;
   client: ClientInformation;
   config: IRCClientConfiguration;
+
+  serverMessage: string;
 
   ircSocket: net.Socket | undefined;
 
@@ -13,6 +16,7 @@ export class IRCClient {
     this.client = client
     this.config = config
 
+    this.serverMessage = '';
   }
 
   connect = () => {
@@ -43,7 +47,19 @@ export class IRCClient {
 
 
   parseData = (data: Buffer) => {
-    console.log(data.toString());
+    for(const c of data) {
+      const char = String.fromCharCode(c)
+      this.serverMessage += char;
+      if(char === "\n") {
+        this.parseServerMessage();
+      }
+    }
+  }
+
+  parseServerMessage = () => {
+    let serverMessage = this.serverMessage;
+    this.serverMessage = "";
+    console.log(serverMessage);
   }
 
 
