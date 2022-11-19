@@ -3,9 +3,12 @@ import { buffer } from "stream/consumers";
 
 
 export class IRCClient {
+  // TODO: this could all be logged under a single configuraiton object.
   server: ServerInformaiton;
   client: ClientInformation;
   config: IRCClientConfiguration;
+
+  connected: boolean;
 
   serverMessage: string;
 
@@ -17,15 +20,57 @@ export class IRCClient {
     this.config = config
 
     this.serverMessage = '';
+    this.connected = false;
   }
 
   connect = () => {
     this.ircSocket = net.createConnection(this.server.port, this.server.host);
 
-    this.ircSocket.on('data', this.parseData)
-    this.ircSocket.on('connect', () => this.authenticateToIRCServer())
+    this.ircSocket.on('data', this.onData)
+    this.ircSocket.on('connect', this.onConnect)
+    this.ircSocket.on('close', this.onClose)
+    this.ircSocket.on('error', this.onError)
+    this.ircSocket.on('end', this.onEnd)
+    this.ircSocket.on('timeout', this.onTimeout)
   }
 
+  // This feels kind of improper ~ come back this this. Maybe we should
+  // subclass the socket? and then propagate messages upward? - JV
+  onData = (data: Buffer) => {
+    for(const c of data) {
+      const char = String.fromCharCode(c)
+      this.serverMessage += char;
+
+      // once we scan a new line char we know that we can try and parse the command
+      if(char === "\n") {
+        this.parseServerMessage();
+      }
+    }
+  }
+
+  onConnect = () => {
+    this.connected = true;
+    this.authenticateToIRCServer()
+  }
+
+  /**
+   * Emitted when the server closes. If connections exist, this event is not emitted until all connections are ended.
+   */
+  onClose = () => {
+    this.connected = false
+  }
+
+  onError = () => {
+    // TODO: handle errors
+  }
+
+  onEnd = () => {
+    // TODO: handle end
+  }
+
+  onTimeout = () => {
+    // TODO: handle timeout
+  }
 
   // https://modern.ircdocs.horse/#connection-registration
   authenticateToIRCServer = () => {
@@ -43,17 +88,6 @@ export class IRCClient {
   ping = () => {
     this.sendCommand("PING :msg")
     setTimeout(this.ping, this.config.pingInterval)
-  }
-
-
-  parseData = (data: Buffer) => {
-    for(const c of data) {
-      const char = String.fromCharCode(c)
-      this.serverMessage += char;
-      if(char === "\n") {
-        this.parseServerMessage();
-      }
-    }
   }
 
   parseServerMessage = () => {
