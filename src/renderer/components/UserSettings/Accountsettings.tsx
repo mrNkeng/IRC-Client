@@ -26,10 +26,10 @@ export const Accountsettings = (props: AccountsettingsProps) => {
       justifyContent:"right",
       backgroundColor: "	#1e2124",
       height: "100vh"
-     
+
     }}>
-      <Typography sx={{fontSize: 'large', 
-            textAlign: 'right', 
+      <Typography sx={{fontSize: 'large',
+            textAlign: 'right',
             paddingTop:' 70px',
             paddingRight: '100px',
             fontWeight: 'bold',
@@ -38,34 +38,34 @@ export const Accountsettings = (props: AccountsettingsProps) => {
       <Stack>
       <Button variant="text" sx={{justifyContent:'flex-start', paddingTop:'20px', paddingBottom: '15px'}}>
         <Typography sx={{fontSize: 'inherit',
-            textAlign: 'right', 
+            textAlign: 'right',
             fontWeight: 'bold',
             color: 'lightgrey' }} >My Account
       </Typography></Button>
 
       <Button variant="text" sx={{justifyContent:'flex-start', paddingBottom: '15px'}}>
         <Typography sx={{fontSize: 'inherit',
-            textAlign: 'right', 
+            textAlign: 'right',
             fontWeight: 'bold',
             color: 'lightgrey' }} >Blocked Users
       </Typography></Button>
 
       <Button variant="text" sx={{justifyContent:'flex-start', paddingBottom: '15px'}}>
         <Typography sx={{fontSize: 'inherit',
-            textAlign: 'right', 
+            textAlign: 'right',
             fontWeight: 'bold',
             color: 'lightgrey' }} >Alert Volume Settings
       </Typography></Button>
 
       <Button variant="text" sx={{justifyContent:'flex-start', paddingBottom: '15px'}}>
         <Typography sx={{fontSize: 'inherit',
-            textAlign: 'right', 
+            textAlign: 'right',
             fontWeight: 'bold',
             color: 'lightgrey' }} >Direct Message Settings
       </Typography></Button>
-      
+
       </Stack>
-      
+
       </Box>
       </Grid>
 
@@ -80,16 +80,16 @@ export const Accountsettings = (props: AccountsettingsProps) => {
       height: "100vh"
     }}>
       <Stack>
-      <Typography sx={{fontSize: 'large', 
-            textAlign: 'left', 
+      <Typography sx={{fontSize: 'large',
+            textAlign: 'left',
             paddingTop:' 80px',
             paddingLeft: '40px',
             fontWeight: 'bold',
             fontSize: '300%',
             color: 'lightgrey' }} >My Account</Typography>
 
-      <Typography sx={{fontSize: 'large', 
-            textAlign: 'left', 
+      <Typography sx={{fontSize: 'large',
+            textAlign: 'left',
             paddingTop:' 10px',
             paddingLeft: '40px',
             fontWeight: 'bold',
@@ -101,9 +101,9 @@ export const Accountsettings = (props: AccountsettingsProps) => {
       </Box>
       </Stack>
       </Box>
-      
+
       </Grid>
-      
+
 
       </Grid>
 
