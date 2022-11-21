@@ -1,0 +1,29 @@
+{
+  "ServerList": [
+    {
+      "server": "Coolest Server Ever",
+      "UserList": ["Michael","Christopher","John","Ryan"],
+      "ChannelList": ["#general", "#about", "#video-games"]
+    },
+    {
+      "server": "Cool Programming Server",
+      "UserList": ["Jessica","Matthew","Joseph","Christopher"],
+      "ChannelList": ["#general", "#about", "#video-games"]
+    },
+    {
+      "server": "Another One",
+      "UserList": ["Jennifer","Ashley","Andrew"],
+      "ChannelList": ["#general", "#about", "#video-games"]
+    },
+    {
+      "server": "Yet another SERVER",
+      "UserList": ["Amanda","Joshua","Daniel"],
+      "ChannelList": ["#general", "#about", "#video-games"]
+    },
+    {
+      "server": "Jay D Server",
+      "UserList": ["David","James","Robert"],
+      "ChannelList": ["#general", "#about", "#video-games"]
+    }
+  ]
+}

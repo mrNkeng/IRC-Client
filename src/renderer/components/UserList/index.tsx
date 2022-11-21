@@ -1,3 +1,4 @@
+import '../../../styles.css';
 import { Box, Stack, Typography } from "@mui/material";
 
 interface User {
@@ -10,17 +11,7 @@ interface UserListProps {
 
 function UserList(props: UserListProps) {
   return (
-    <Box
-      style={{
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100vh',
-        backgroundColor: '#2C2F33',
-        padding: 0,
-        borderColor: 'darkgray',
-        margin: '0px',
-      }}
-    >
+    <Box className="UserList">
       <Typography
         sx={{
           fontSize: 'large',

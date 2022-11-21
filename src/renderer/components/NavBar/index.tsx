@@ -11,7 +11,6 @@ function NavBar() {
 
   return (
     <Box>
-      <CssBaseline/>
       <nav
         style={{
           justifyContent: 'space-evenly',

@@ -1,3 +1,4 @@
+import '../../../styles.css';
 import Box from '@mui/material/Box';
 import { Container, Grid, IconButton, Stack, Tooltip, Typography } from '@mui/material';
 import CatchingPokemonIcon from '@mui/icons-material/CatchingPokemon';
@@ -13,16 +14,7 @@ interface ServerListProps {
 
 function ServerList(props: ServerListProps) {
   return (
-    <Box
-      style={{
-        alignItems: 'center',
-        justifyContent: 'right',
-        height: '100vh',
-        backgroundColor: '#1e2124',
-        margin: '0px',
-        padding: '0px',
-      }}
-    >
+    <Box className="ServerList" >
       <Typography
         sx={{
           fontSize: 'large',

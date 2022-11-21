@@ -1,19 +1,14 @@
-import { PropaneSharp } from "@mui/icons-material";
+import '../../../styles.css';
 import { Box, Typography } from "@mui/material";
 
-type ChannelListProps = {
+interface ChannelListProps {
   currentServer: string | undefined,
   channels: string[],
 }
 
-function ChannelList({ currentServer, channels }: ChannelListProps) {
+function ChannelList(props: ChannelListProps) {
   return(
-    <Box
-      style={{
-        height: '100vh',
-        backgroundColor: '#282b30',
-      }}
-    >
+    <Box className="ChannelList">
       <Typography
         sx={{
           fontSize: 'large',
@@ -24,7 +19,7 @@ function ChannelList({ currentServer, channels }: ChannelListProps) {
           color: 'lightgrey',
         }}
       >
-        {currentServer}
+        {props.currentServer}
       </Typography>
     </Box>
   );
