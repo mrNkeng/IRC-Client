@@ -1,5 +1,7 @@
+// import { IRC_Replies } from "data-models/IRC";
 import net from "net";
 import { buffer } from "stream/consumers";
+import { ClientInformation, IRCClientConfiguration, IRCReplies, ServerInformaiton } from "./protocol";
 
 
 export class IRCClient {
@@ -9,6 +11,7 @@ export class IRCClient {
   config: IRCClientConfiguration;
 
   connected: boolean;
+  authenticated: boolean;
 
   serverMessage: string;
 
@@ -21,6 +24,7 @@ export class IRCClient {
 
     this.serverMessage = '';
     this.connected = false;
+    this.authenticated = false;
   }
 
   connect = () => {
@@ -39,11 +43,12 @@ export class IRCClient {
   onData = (data: Buffer) => {
     for(const c of data) {
       const char = String.fromCharCode(c)
-      this.serverMessage += char;
-
       // once we scan a new line char we know that we can try and parse the command
       if(char === "\n") {
         this.parseServerMessage();
+      }
+      else {
+        this.serverMessage += char
       }
     }
   }
@@ -74,12 +79,15 @@ export class IRCClient {
 
   // https://modern.ircdocs.horse/#connection-registration
   authenticateToIRCServer = () => {
+    this.authenticated = false;
+
+    this.sendCommand(`CAP LS 302`);
+
+    this.sendCommand(`NICK ${this.client.nickname}`);
     this.sendCommand(`USER ${this.client.username} 0 * :${this.client.realName}`)
-    this.sendCommand(`NICK ${this.client.nickname}`)
 
     // we can only run after we've connected and authenticated
-    setTimeout(() => this.sendCommand('JOIN #test'), 10000)
-
+    // setTimeout(() => this.sendCommand('JOIN #test'), 10000)
 
     // start ping stuff
     this.ping()
@@ -93,12 +101,35 @@ export class IRCClient {
   parseServerMessage = () => {
     let serverMessage = this.serverMessage;
     this.serverMessage = "";
-    console.log(serverMessage);
+    // console.debug("Server: ", serverMessage);
+
+    // parsing
+    const tokens = serverMessage.split(" ")
+    const messageId = tokens[1];
+    switch (messageId) {
+      case IRCReplies.welcome.id:
+        console.debug("~~~DEBUG~~~: processing Welcome");
+        break;
+      case IRCReplies.yourHost.id:
+        console.debug("~~~DEBUG~~~: processing YourHost");
+        break;
+      case IRCReplies.created.id:
+        console.debug("~~~DEBUG~~~: processing created");
+        break;
+      case IRCReplies.myInfo.id:
+        console.debug("~~~DEBUG~~~: processing myInfo");
+        break;
+      case IRCReplies.iSupport.id:
+        console.debug("~~~DEBUG~~~: processing iSupport");
+        break;
+      default:
+        console.warn("Unsupported message type: ", messageId);
+    }
   }
 
 
   sendCommand = (command: string) => {
-    console.debug("DEBUG | (sendCommand): ", command);
+    console.debug("Client: ", command);
     this.ircSocket?.write(command + "\n");
   }
 }
