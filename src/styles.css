@@ -16,24 +16,43 @@
   font-family: "Roboto", cursive;
 }
 
-.FlexChildrenRow {
-  /* Don't edit height, sets the height of flexbox in src/renderer/app */
-  height: 5vh;
-  margin: 0px;
-  padding: 0px;
-  align-items: center;
-  justify-content: right;
+/* Styles for text and display items */
+.WindowHeadingContainer {
+  height: 4%;
+  align-items: left;
+  justify-content: left;
+  background-color: #2C2F33;
 }
 
-.FlexChildrenColumn {
-  /* Don't edit height, sets the height of flexbox in src/renderer/app */
-  height: 95vh;
-  margin: 0px;
-  padding: 0px;
-  align-items: center;
-  justify-content: right;
+.WindowHeading {
+  font-size: large;
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-weight: bold;
+  color: #2E8B57;
+  text-align: left;
 }
 
+.FlexColumnHeading {
+  font-size: large;
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-weight: bold;
+  color: lightgrey;
+}
+
+.typography {
+  font-size: large;
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-weight: bold;
+  color: lightgrey;
+}
+
+/* Styles for main divs around flexbox */
 .Header {
   height: 100%;
   background-color: #36393e;
@@ -64,6 +83,25 @@
 .TextWindow {
   height: 100%;
   background-color: #36393e;
+  align-items: center;
+  justify-content: right;
+}
+
+/* flexbox parent controllers */
+.FlexChildrenRow {
+  /* Don't edit height, sets the height of flexbox in src/renderer/app */
+  height: 5vh;
+  margin: 0px;
+  padding: 0px;
+  align-items: center;
+  justify-content: right;
+}
+
+.FlexChildrenColumn {
+  /* Don't edit height, sets the height of flexbox in src/renderer/app */
+  height: 95vh;
+  margin: 0px;
+  padding: 0px;
   align-items: center;
   justify-content: right;
 }

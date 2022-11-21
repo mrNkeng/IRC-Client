@@ -1,26 +1,26 @@
 import '../../../styles.css';
-import { Box, Typography } from "@mui/material";
+import { Box, IconButton, Stack, Tooltip, Typography } from "@mui/material";
+import * as Interfaces from '../interfaces';
 
-interface ChannelListProps {
-  currentServer: string | undefined,
-  channels: string[],
-}
-
-function ChannelList(props: ChannelListProps) {
+function ChannelList(props: Interfaces.ChannelListProps) {
   return(
     <Box className="ChannelList">
-      <Typography
-        sx={{
-          fontSize: 'large',
-          textAlign: 'center',
-          paddingTop: ' 10px',
-          paddingBottom: '10px',
-          fontWeight: 'bold',
-          color: 'lightgrey',
-        }}
-      >
+      <Typography className="FlexColumnHeading">
         {props.currentServer}
       </Typography>
+
+      <Stack>
+        {props.channels.map((channel) => (
+          <IconButton
+            size="medium"
+            color="secondary"
+            onClick={() => props.setChannel(channel)}
+            key={channel.channelName}
+          >
+            {channel.channelName}
+          </IconButton>
+        ))}
+      </Stack>
     </Box>
   );
 }

@@ -13,28 +13,26 @@ function UserList(props: UserListProps) {
   return (
     <Box className="UserList">
       <Typography
-        sx={{
-          fontSize: 'large',
-          textAlign: 'center',
-          paddingTop: ' 10px',
-          fontWeight: 'bold',
-          color: '#2E8B57',
-        }}
+        className="FlexColumnHeading"
+        sx={{color: '#2E8B57'}}
       >
         Online
       </Typography>
-      <Stack
-        sx={{
-          fontSize: 'large',
-          textAlign: 'center',
-          paddingTop: ' 10px',
-          fontWeight: 'bold',
-          color: 'lightgrey',
-        }}
-      >
+
+      <Stack>
         {props.users.map((user) => (
-          <Typography>{user.userName}</Typography>
+          <Typography className="typography" key={user.userName}>{user.userName}</Typography>
         ))}
+      </Stack>
+
+      <Typography
+        className="FlexColumnHeading"
+        sx={{color: '#2E8B57'}}
+      >
+        Offline
+      </Typography>
+      <Stack>
+        <Typography className="typography">TODO?</Typography>
       </Stack>
     </Box>
   );

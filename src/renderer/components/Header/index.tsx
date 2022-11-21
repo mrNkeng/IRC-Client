@@ -5,15 +5,7 @@ function Header() {
   return(
     <Box className="Header">
       <span className="heading">
-        <Box
-          sx={{
-            fontSize: 'large',
-            textAlign: 'center',
-            paddingTop: ' 10px',
-            fontWeight: 'bold',
-            color: 'lightgrey',
-          }}
-        >
+        <Box className="FlexColumnHeading">
           AOL Messenger
         </Box>
       </span>

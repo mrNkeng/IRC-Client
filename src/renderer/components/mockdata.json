@@ -1,29 +1,90 @@
 {
   "ServerList": [
     {
-      "server": "Coolest Server Ever",
-      "UserList": ["Michael","Christopher","John","Ryan"],
-      "ChannelList": ["#general", "#about", "#video-games"]
+      "serverName": "Cool Programming Server",
+      "userList": ["Michael","Christopher","John","Ryan"],
+      "channelList": [
+        {
+          "channelName": "#general",
+          "messages": ["hello", "welcome"]
+        },
+        {
+          "channelName": "#about",
+          "messages": ["This is a message, could be MTOD"]
+        },
+        {
+          "channelName": "#video-games",
+          "messages": ["What's your favorite video game?", "Starbound"]
+        },
+        {
+          "channelName": "#homework",
+          "messages": ["What's the answer to 7c", "215819"]
+        }
+      ]
     },
     {
-      "server": "Cool Programming Server",
-      "UserList": ["Jessica","Matthew","Joseph","Christopher"],
-      "ChannelList": ["#general", "#about", "#video-games"]
+      "serverName": "Coolest Server Ever",
+      "userList": ["Jessica","Matthew","Joseph","Christopher"],
+      "channelList": [
+        {
+          "channelName": "#general",
+          "messages": ["hello", "welcome"]
+        },
+        {
+          "channelName": "#about",
+          "messages": ["This is a message, could be MTOD"]
+        },
+        {
+          "channelName": "#video-games",
+          "messages": ["What's your favorite video game?"]
+        }
+      ]
     },
     {
-      "server": "Another One",
-      "UserList": ["Jennifer","Ashley","Andrew"],
-      "ChannelList": ["#general", "#about", "#video-games"]
+      "serverName": "Another One",
+      "userList": ["Jennifer","Ashley","Andrew"],
+      "channelList": [
+        {
+          "channelName": "#general",
+          "messages": ["hello", "welcome"]
+        },
+        {
+          "channelName": "#about",
+          "messages": ["MTOD"]
+        }
+      ]
     },
     {
-      "server": "Yet another SERVER",
-      "UserList": ["Amanda","Joshua","Daniel"],
-      "ChannelList": ["#general", "#about", "#video-games"]
+      "serverName": "Yet another SERVER",
+      "userList": ["Amanda","Joshua","Daniel"],
+      "channelList": [
+        {
+          "channelName": "#general",
+          "messages": ["hello", "welcome"]
+        },
+        {
+          "channelName": "#about",
+          "messages": ["This is a message, could be MTOD"]
+        }
+      ]
     },
     {
-      "server": "Jay D Server",
-      "UserList": ["David","James","Robert"],
-      "ChannelList": ["#general", "#about", "#video-games"]
+      "serverName": "Jay D Server",
+      "userList": ["David","James","Robert"],
+      "channelList": [
+        {
+          "channelName": "#general",
+          "messages": ["hello", "welcome"]
+        },
+        {
+          "channelName": "#about",
+          "messages": ["This is a message, could be MTOD"]
+        },
+        {
+          "channelName": "#video-games",
+          "messages": ["What's your favorite video game?"]
+        }
+      ]
     }
   ]
 }
