@@ -15,7 +15,22 @@ let mock_servers: ReadonlyArray<Interfaces.Server> = mock_data.ServerList.map((l
 
 let global_data: Interfaces.Root = mock_data;
 
+function getMessages(currServer: Interfaces.Server | undefined) {
+  //uses built in array functions
+  //see more: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
+  //TODO once someone figures out how to write the actual chat window
+  const str: Interfaces.Message[] | undefined =
+    [];
+
+  if (str != undefined) {
+    return str;
+  }
+  return [];
+}
+
 function getChannels(currServer: Interfaces.Server | undefined) {
+  //uses built in array functions
+  //see more: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
   const str: Interfaces.Channel[] | undefined =
     global_data.ServerList.find((element) => {
       return element.serverName == currServer?.serverName
@@ -30,10 +45,17 @@ function getChannels(currServer: Interfaces.Server | undefined) {
 }
 
 function getUsers(currServer: Interfaces.Server | undefined) {
-  const str: string[] | undefined = global_data.ServerList.find((element) => { return element.serverName == currServer?.serverName })?.userList;
+  //uses built in array functions
+  //see more: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
+  const str: Interfaces.User[] | undefined =
+    global_data.ServerList.find((element) => {
+      return element.serverName == currServer?.serverName
+    })?.userList.map(item => {
+      return { userName: item };
+    });
 
   if (str != undefined) {
-    return str.map(item => { return { userName: item }; })
+    return str;
   }
   return [];
 }
@@ -64,7 +86,7 @@ export default function App() {
       {/* Main Window */}
       <Grid className="FlexChildrenColumn" item xs={9}>
         {/* TODO: add logic here to display login, signup, and settings pages */}
-        <CenterWindow currentChannel={currChannel?.channelName} messages={[]} />
+        <CenterWindow currentChannel={currChannel?.channelName} messages={getMessages(currServer)} />
       </Grid>
 
       {/* User List */}
