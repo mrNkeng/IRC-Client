@@ -4,6 +4,8 @@ import { buffer } from "stream/consumers";
 import { ClientInformation, IRCClientConfiguration, IRCReplies, ServerInformaiton } from "./protocol";
 
 
+// TODO: Create hooks that other objects need to  be aware of:
+//       Some ides: onConfigurationChange, onMessage, onServerStatusChange?
 export class IRCClient {
   // TODO: this could all be logged under a single configuraiton object.
   server: ServerInformaiton;
@@ -101,10 +103,13 @@ export class IRCClient {
   parseServerMessage = () => {
     let serverMessage = this.serverMessage;
     this.serverMessage = "";
-    // console.debug("Server: ", serverMessage);
+    console.debug("Server: ", serverMessage);
 
     // parsing
+    // TODO: properly tokenize the message instead of naive split
     const tokens = serverMessage.split(" ")
+
+
     const messageId = tokens[1];
     switch (messageId) {
       case IRCReplies.welcome.id:
@@ -118,9 +123,12 @@ export class IRCClient {
         break;
       case IRCReplies.myInfo.id:
         console.debug("~~~DEBUG~~~: processing myInfo");
+        this.authenticated = true
         break;
       case IRCReplies.iSupport.id:
         console.debug("~~~DEBUG~~~: processing iSupport");
+        const result = IRCReplies.iSupport.parseFunction(serverMessage);
+        // do something with the result...
         break;
       default:
         console.warn("Unsupported message type: ", messageId);

@@ -40,6 +40,10 @@ export const IRCReplies = {
   },
   iSupport: {
     id: "005",
+    parseFunction: (message: string) => {
+      // TODO: parse message and return a json representation of
+      // important information in the message
+    }
   }
 
 }
