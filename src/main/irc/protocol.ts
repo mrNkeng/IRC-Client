@@ -44,6 +44,41 @@ export const IRCReplies = {
       // TODO: parse message and return a json representation of
       // important information in the message
     }
+  },
+  bounce: {
+    id: "010",
+  },
+  uModeIs: {
+    id: "221",
+  },
+  lUserClient: {
+    id: "251",
+  },
+  lUserUnknown: {
+    id: "253",
+  },
+  lUserChannels: {
+    id: "254",
+  },
+  lUserMe: {
+    id: "255",
+  },
+  localUsers: {
+    id: "265",
+  },
+  globalUsers: {
+    id: "266",
+  },
+  motd: {
+    id: "372",
+  },
+  motdStart: {
+    id: "375",
+  },
+  endOfMotd: {
+    id: "376",
+  },
+  notRegistered: {
+    id: "451",
   }
-
 }

@@ -111,7 +111,13 @@ export class IRCClient {
 
 
     const messageId = tokens[1];
+    //console.log(messageId);
     switch (messageId) {
+      case "PONG":
+        console.debug("connection kept");
+        break;
+      case "NOTICE":
+        break;
       case IRCReplies.welcome.id:
         console.debug("~~~DEBUG~~~: processing Welcome");
         break;
@@ -130,8 +136,45 @@ export class IRCClient {
         const result = IRCReplies.iSupport.parseFunction(serverMessage);
         // do something with the result...
         break;
+      case IRCReplies.bounce.id:
+        //console.debug(Something here maybe?);
+        break;
+      case IRCReplies.uModeIs.id:
+        //console.debug(Something here maybe?);
+        break;
+      case IRCReplies.lUserClient.id:
+        //console.debug(Something here maybe?);
+        break;
+      case IRCReplies.lUserUnknown.id:
+        //console.debug(Something here maybe?);
+        break;
+      case IRCReplies.lUserChannels.id:
+        //console.debug(Something here maybe?);
+        break;
+      case IRCReplies.lUserMe.id:
+        //console.debug(Something here maybe?);
+        break;
+      case IRCReplies.localUsers.id:
+        //console.debug(Something here maybe?);
+        break;
+      case IRCReplies.globalUsers.id:
+        //console.debug(Something here maybe?);
+        break;
+      case IRCReplies.motd.id:
+        //console.debug(Something here maybe?);
+        break;
+      case IRCReplies.motdStart.id:
+        //console.debug(Something here maybe?);
+        break;
+      case IRCReplies.endOfMotd.id:
+        //console.debug(Something here maybe?);
+        break;
+      case IRCReplies.notRegistered.id:
+        //console.debug(Something here maybe?);
+        break;
       default:
         console.warn("Unsupported message type: ", messageId);
+        break;
     }
   }
 
