@@ -23,12 +23,12 @@ function NavBar() {
         <Link to="/Login" style={{ margin: '15px' }}>Login</Link>
         <Link to="/Signup" style={{ margin: '15px' }}>Signup</Link>
       </nav>
-      {/* <Routes>
+      <Routes>
         <Route path="/" element={<App />} />
         <Route path="/Accountsettings" element={<Accountsettings />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/Signup" element={<Signup />} />
-      </Routes> */}
+      </Routes>
     </Box>
   );
 }
