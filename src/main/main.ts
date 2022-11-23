@@ -154,3 +154,10 @@ const config = {
 
 const ircClient = new IRCClient(server, client, config);
 ircClient.connect();
+
+const onPing = (ping: number) => {
+  console.log("Ping in milliseconds: ", ping);
+}
+
+
+ircClient.on("ping", onPing);

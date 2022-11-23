@@ -1,25 +1,32 @@
 // import { IRC_Replies } from "data-models/IRC";
 import net from "net";
+import EventEmitter from "events";
 import { buffer } from "stream/consumers";
 import { ClientInformation, IRCClientConfiguration, IRCReplies, ServerInformaiton } from "./protocol";
 
 
 // TODO: Create hooks that other objects need to  be aware of:
 //       Some ides: onConfigurationChange, onMessage, onServerStatusChange?
-export class IRCClient {
-  // TODO: this could all be logged under a single configuraiton object.
-  server: ServerInformaiton;
-  client: ClientInformation;
-  config: IRCClientConfiguration;
+
+
+// TODO: https://basarat.gitbook.io/typescript/main-1/typed-event -- john valanidas
+export class IRCClient extends EventEmitter {
+  // TODO: this could all be logged under a single configuraiton object. Yes we do this
+  private server: ServerInformaiton;
+  private client: ClientInformation;
+  private config: IRCClientConfiguration;
 
   connected: boolean;
   authenticated: boolean;
 
-  serverMessage: string;
+  private serverMessage: string;
+  private pingSendTime: number | undefined;
 
-  ircSocket: net.Socket | undefined;
+  private ircSocket: net.Socket | undefined;
 
   constructor(server: ServerInformaiton, client: ClientInformation, config: IRCClientConfiguration) {
+    super();
+
     this.server = server
     this.client = client
     this.config = config
@@ -42,7 +49,7 @@ export class IRCClient {
 
   // This feels kind of improper ~ come back this this. Maybe we should
   // subclass the socket? and then propagate messages upward? - JV
-  onData = (data: Buffer) => {
+  private onData = (data: Buffer) => {
     for(const c of data) {
       const char = String.fromCharCode(c)
       // once we scan a new line char we know that we can try and parse the command
@@ -55,7 +62,7 @@ export class IRCClient {
     }
   }
 
-  onConnect = () => {
+  private onConnect = () => {
     this.connected = true;
     this.authenticateToIRCServer()
   }
@@ -63,24 +70,33 @@ export class IRCClient {
   /**
    * Emitted when the server closes. If connections exist, this event is not emitted until all connections are ended.
    */
-  onClose = () => {
+  private onClose = () => {
     this.connected = false
   }
 
-  onError = () => {
+  private onError = () => {
     // TODO: handle errors
   }
 
-  onEnd = () => {
+  private onEnd = () => {
     // TODO: handle end
   }
 
-  onTimeout = () => {
+  private onTimeout = () => {
     // TODO: handle timeout
   }
 
+  private setConnected = (connection: boolean) => {
+
+  }
+
+  private setAuthenticated = (authenticated: boolean) => {
+    this.authenticated = authenticated
+    this.emit("")
+  }
+
   // https://modern.ircdocs.horse/#connection-registration
-  authenticateToIRCServer = () => {
+  private authenticateToIRCServer = () => {
     this.authenticated = false;
 
     this.sendCommand(`CAP LS 302`);
@@ -95,18 +111,30 @@ export class IRCClient {
     this.ping()
   }
 
-  ping = () => {
+  private ping = () => {
+    // FIXME: do we need a unique message here? Please fix it
     this.sendCommand("PING :msg")
+    this.pingSendTime = Date.now()
     setTimeout(this.ping, this.config.pingInterval)
   }
 
-  parseServerMessage = () => {
+  /**
+   * stands in as an example of how we'll propagate information out of the irc library.
+   */
+  private pong = () => {
+    console.debug("connection kept");
+    const pingMilliseconds = Date.now() - (this.pingSendTime ?? Date.now()) // catch for first ping value...
+    this.emit('ping', pingMilliseconds)
+  }
+
+  private parseServerMessage = () => {
     let serverMessage = this.serverMessage;
     this.serverMessage = "";
     console.debug("Server: ", serverMessage);
 
     // parsing
     // TODO: properly tokenize the message instead of naive split
+    // For above use this: https://modern.ircdocs.horse/#client-to-server-protocol-structure
     const tokens = serverMessage.split(" ")
 
 
@@ -114,7 +142,7 @@ export class IRCClient {
     //console.log(messageId);
     switch (messageId) {
       case "PONG":
-        console.debug("connection kept");
+        this.pong();
         break;
       case "NOTICE":
         break;
@@ -133,7 +161,7 @@ export class IRCClient {
         break;
       case IRCReplies.iSupport.id:
         console.debug("~~~DEBUG~~~: processing iSupport");
-        const result = IRCReplies.iSupport.parseFunction(serverMessage);
+        // const result = IRCReplies.iSupport.parseFunction(serverMessage);
         // do something with the result...
         break;
       case IRCReplies.bounce.id:
@@ -179,7 +207,7 @@ export class IRCClient {
   }
 
 
-  sendCommand = (command: string) => {
+  private sendCommand = (command: string) => {
     console.debug("Client: ", command);
     this.ircSocket?.write(command + "\n");
   }
