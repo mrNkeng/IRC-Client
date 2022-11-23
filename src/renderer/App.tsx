@@ -1,41 +1,48 @@
 import '../styles.css';
-import { Box, CssBaseline, Grid, Typography } from '@mui/material';
+import { Box, CssBaseline, Grid } from '@mui/material';
 import { useState } from 'react';
 import CenterWindow from './components/Center';
 import UserList from './components/UserList';
 import ServerList from './components/ServerList';
 import Header from './components/Header';
 import ChannelList from './components/ChannelList';
-import * as Interfaces from './components/interfaces';
+import { Root, ServerData, ChannelData, Server, Channel, User, Message } from '../data-models/interfaces';
 
 //var mock_data = require('./components/mockdata.json');
-import mock_data from './components/mockdata.json'
+import mock_data from '../main/const/mockdata.json';
 
-let mock_servers: ReadonlyArray<Interfaces.Server> = mock_data.ServerList.map((list: Interfaces.ServerList) => { return { serverName: list.serverName }});
+//these two lines will be changed, not sure what I'm doing with the types yet
+let mock_servers: ReadonlyArray<Server> = mock_data.ServerList.map((list: ServerData) => { return { name: list.serverName }});
+let global_data: Root = mock_data;
 
-let global_data: Interfaces.Root = mock_data;
-
-function getMessages(currServer: Interfaces.Server | undefined) {
+function getMessages(currServer: Server | undefined, currChannel: Channel | undefined) {
   //uses built in array functions
   //see more: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
-  //TODO once someone figures out how to write the actual chat window
-  const str: Interfaces.Message[] | undefined =
-    [];
+  const str: Message[] | undefined =
+    global_data.ServerList.find((element) => {
+      return element.serverName == currServer?.name
+    })?.channelList?.find((element) => {
+      return element.channelName == currChannel?.name
+    })?.messages.map((element) => {
+      return { content: element };
+    });
 
   if (str != undefined) {
+    //it works!
+    //console.log(str);
     return str;
   }
   return [];
 }
 
-function getChannels(currServer: Interfaces.Server | undefined) {
+function getChannels(currServer: Server | undefined) {
   //uses built in array functions
   //see more: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
-  const str: Interfaces.Channel[] | undefined =
+  const str: Channel[] | undefined =
     global_data.ServerList.find((element) => {
-      return element.serverName == currServer?.serverName
-    })?.channelList?.map((element: Interfaces.ChannelList) => {
-      return { channelName: element.channelName }
+      return element.serverName == currServer?.name
+    })?.channelList?.map((element: ChannelData) => {
+      return { name: element.channelName }
     });
 
   if (str != undefined) {
@@ -44,14 +51,14 @@ function getChannels(currServer: Interfaces.Server | undefined) {
   return [];
 }
 
-function getUsers(currServer: Interfaces.Server | undefined) {
+function getUsers(currServer: Server | undefined) {
   //uses built in array functions
   //see more: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
-  const str: Interfaces.User[] | undefined =
+  const str: User[] | undefined =
     global_data.ServerList.find((element) => {
-      return element.serverName == currServer?.serverName
+      return element.serverName == currServer?.name
     })?.userList.map(item => {
-      return { userName: item };
+      return { name: item };
     });
 
   if (str != undefined) {
@@ -61,8 +68,8 @@ function getUsers(currServer: Interfaces.Server | undefined) {
 }
 
 export default function App() {
-  const [currServer, setCurrServer] = useState<Interfaces.Server>();
-  const [currChannel, setCurrChannel] = useState<Interfaces.Channel>();
+  const [currServer, setCurrServer] = useState<Server>();
+  const [currChannel, setCurrChannel] = useState<Channel>();
 
   return (
     <Grid className="App" container>
@@ -80,13 +87,16 @@ export default function App() {
 
       {/* Channel List */}
       <Grid className="FlexChildrenColumn" item xs={1.25}>
-          <ChannelList currentServer={currServer?.serverName} channels={getChannels(currServer)} setChannel={setCurrChannel}/>
+          <ChannelList currentServer={currServer?.name} channels={getChannels(currServer)} setChannel={setCurrChannel}/>
       </Grid>
 
       {/* Main Window */}
       <Grid className="FlexChildrenColumn" item xs={9}>
-        {/* TODO: add logic here to display login, signup, and settings pages */}
-        <CenterWindow currentChannel={currChannel?.channelName} messages={getMessages(currServer)} />
+        {/*
+          TODO: add logic here to display login, signup, and settings pages
+          Not sure how to route this. <routes> can be across different files but this set up is tricky
+        */}
+        <CenterWindow currentChannel={currChannel?.name} messages={getMessages(currServer, currChannel)} />
       </Grid>
 
       {/* User List */}

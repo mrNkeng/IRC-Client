@@ -1,9 +1,6 @@
 import '../../../styles.css';
 import { Box, Stack, Typography } from "@mui/material";
-
-interface User {
-  userName: string;
-}
+import { User } from '../../../data-models/interfaces';
 
 interface UserListProps {
   users: ReadonlyArray<User>;
@@ -21,7 +18,7 @@ function UserList(props: UserListProps) {
 
       <Stack>
         {props.users.map((user) => (
-          <Typography className="typography" key={user.userName}>{user.userName}</Typography>
+          <Typography className="typography" key={user.name}>{user.name}</Typography>
         ))}
       </Stack>
 

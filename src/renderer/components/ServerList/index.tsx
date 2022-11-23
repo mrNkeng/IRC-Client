@@ -2,9 +2,14 @@ import '../../../styles.css';
 import Box from '@mui/material/Box';
 import { Container, Grid, IconButton, Stack, Tooltip, Typography } from '@mui/material';
 import CatchingPokemonIcon from '@mui/icons-material/CatchingPokemon';
-import * as Interfaces from '../interfaces';
+import { Server } from '../../../data-models/interfaces';
 
-function ServerList(props: Interfaces.ServerListProps) {
+interface ServerListProps {
+  servers: ReadonlyArray<Server>;
+  setServer: (server: Server) => void;
+}
+
+function ServerList(props: ServerListProps) {
   return (
     <Box className="ServerList" >
       <Typography className="FlexColumnHeading">
@@ -13,7 +18,7 @@ function ServerList(props: Interfaces.ServerListProps) {
 
       <Stack>
         {props.servers.map((server) => (
-          <Tooltip title={server.serverName} key={server.serverName} placement="right" arrow>
+          <Tooltip title={server.name} key={server.name} placement="right" arrow>
             <IconButton
               size="large"
               color="secondary"

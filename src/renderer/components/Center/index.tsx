@@ -1,9 +1,14 @@
 import '../../../styles.css';
-import { Grid, Button, Box, Typography, Tooltip, IconButton, } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { ChatWindow } from 'renderer/components/Center/Chat/ChatWindow';
-import * as Interfaces from '../interfaces';
+import { Message } from '../../../data-models/interfaces';
 
-function CenterWindow(props: Interfaces.WindowProps) {
+export interface WindowProps {
+  currentChannel: string | undefined;
+  messages: ReadonlyArray<Message>;
+}
+
+function CenterWindow(props: WindowProps) {
   return (
     <Box className="TextWindow">
       <Box className = "WindowHeadingContainer">

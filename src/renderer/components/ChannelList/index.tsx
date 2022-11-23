@@ -1,8 +1,14 @@
 import '../../../styles.css';
 import { Box, IconButton, Stack, Tooltip, Typography } from "@mui/material";
-import * as Interfaces from '../interfaces';
+import { Channel } from '../../../data-models/interfaces';
 
-function ChannelList(props: Interfaces.ChannelListProps) {
+interface ChannelListProps {
+  currentServer: string | undefined;
+  channels: ReadonlyArray<Channel>;
+  setChannel: (channel: Channel) => void;
+}
+
+function ChannelList(props: ChannelListProps) {
   return(
     <Box className="ChannelList">
       <Typography className="FlexColumnHeading">
@@ -15,9 +21,9 @@ function ChannelList(props: Interfaces.ChannelListProps) {
             size="medium"
             color="secondary"
             onClick={() => props.setChannel(channel)}
-            key={channel.channelName}
+            key={channel.name}
           >
-            {channel.channelName}
+            {channel.name}
           </IconButton>
         ))}
       </Stack>
