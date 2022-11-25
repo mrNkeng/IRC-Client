@@ -1,0 +1,90 @@
+{
+  "ServerList": [
+    {
+      "serverName": "Cool Programming Server",
+      "userList": ["Michael","Christopher","John","Ryan"],
+      "channelList": [
+        {
+          "channelName": "#general",
+          "messages": ["hello", "welcome"]
+        },
+        {
+          "channelName": "#about",
+          "messages": ["This is a message, could be MTOD"]
+        },
+        {
+          "channelName": "#video-games",
+          "messages": ["What's your favorite video game?", "Starbound"]
+        },
+        {
+          "channelName": "#homework",
+          "messages": ["What's the answer to 7c", "215819"]
+        }
+      ]
+    },
+    {
+      "serverName": "Coolest Server Ever",
+      "userList": ["Jessica","Matthew","Joseph","Christopher"],
+      "channelList": [
+        {
+          "channelName": "#general",
+          "messages": ["hello", "welcome"]
+        },
+        {
+          "channelName": "#about",
+          "messages": ["This is a message, could be MTOD"]
+        },
+        {
+          "channelName": "#video-games",
+          "messages": ["What's your favorite video game?"]
+        }
+      ]
+    },
+    {
+      "serverName": "Another One",
+      "userList": ["Jennifer","Ashley","Andrew"],
+      "channelList": [
+        {
+          "channelName": "#general",
+          "messages": ["hello", "welcome"]
+        },
+        {
+          "channelName": "#about",
+          "messages": ["MTOD"]
+        }
+      ]
+    },
+    {
+      "serverName": "Yet another SERVER",
+      "userList": ["Amanda","Joshua","Daniel"],
+      "channelList": [
+        {
+          "channelName": "#general",
+          "messages": ["hello", "welcome"]
+        },
+        {
+          "channelName": "#about",
+          "messages": ["This is a message, could be MTOD"]
+        }
+      ]
+    },
+    {
+      "serverName": "Jay D Server",
+      "userList": ["David","James","Robert"],
+      "channelList": [
+        {
+          "channelName": "#general",
+          "messages": ["hello", "welcome"]
+        },
+        {
+          "channelName": "#about",
+          "messages": ["This is a message, could be MTOD"]
+        },
+        {
+          "channelName": "#video-games",
+          "messages": ["What's your favorite video game?"]
+        }
+      ]
+    }
+  ]
+}

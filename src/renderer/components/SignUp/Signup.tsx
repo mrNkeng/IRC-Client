@@ -7,7 +7,7 @@ import flexbox from '@mui/system';
 import Button from '@mui/material/Button';
 import { Container, Grid, Stack } from '@mui/material';
 import { MemoryRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { Login } from './Login';
+import { Login } from '../Login/Login';
 import DiamondIcon from '@mui/icons-material/Diamond';
 interface SignupProps {}
 
