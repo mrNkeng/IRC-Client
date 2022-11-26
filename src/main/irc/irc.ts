@@ -130,13 +130,13 @@ export class IRCClient extends EventEmitter {
   private parseServerMessage = () => {
     let serverMessage = this.serverMessage;
     this.serverMessage = "";
-    console.debug("Server: ", serverMessage);
+    // console.debug("Server: ", serverMessage);
 
     // parsing
     // TODO: properly tokenize the message instead of naive split
     // For above use this: https://modern.ircdocs.horse/#client-to-server-protocol-structure
     const ircMessage = tokenizeServerMessage(serverMessage)
-    console.log(ircMessage)
+    // console.log("command: ", ircMessage.command)
     //console.log(messageId);
     switch (ircMessage.command) {
       case "PONG":
@@ -187,6 +187,8 @@ export class IRCClient extends EventEmitter {
         //console.debug(Something here maybe?);
         break;
       case IRCReplies.motd.id:
+        // console.log(ircMessage)
+        this.emit("serverMessage", ircMessage.parameters[0], ircMessage.parameters.slice(1).join(" "))
         //console.debug(Something here maybe?);
         break;
       case IRCReplies.motdStart.id:
@@ -199,7 +201,7 @@ export class IRCClient extends EventEmitter {
         //console.debug(Something here maybe?);
         break;
       default:
-        console.warn("Unsupported message type: ", messageId);
+        console.warn("Unsupported message type: ", ircMessage.command);
         break;
     }
   }

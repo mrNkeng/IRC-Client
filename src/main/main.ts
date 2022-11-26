@@ -161,3 +161,7 @@ const onPing = (ping: number) => {
 
 
 ircClient.on("ping", onPing);
+
+ircClient.on("serverMessage", (client, message) => {
+  console.log("serverMessage: ", message)
+})
