@@ -2,7 +2,7 @@
 import net from "net";
 import EventEmitter from "events";
 import { buffer } from "stream/consumers";
-import { ClientInformation, createBlankIRCMessage, IRCClientConfiguration, IRCMessage, IRCReplies, ServerInformaiton } from "./protocol";
+import { ClientInformation, createBlankIRCMessage, IRCClientConfiguration, IRCMessage, IRCReplies, ServerInformaiton, tokenizeServerMessage } from "./protocol";
 
 
 // TODO: Create hooks that other objects need to  be aware of:
@@ -135,12 +135,10 @@ export class IRCClient extends EventEmitter {
     // parsing
     // TODO: properly tokenize the message instead of naive split
     // For above use this: https://modern.ircdocs.horse/#client-to-server-protocol-structure
-    const tokens = serverMessage.split(" ")
-
-
-    const messageId = tokens[1];
+    const ircMessage = tokenizeServerMessage(serverMessage)
+    console.log(ircMessage)
     //console.log(messageId);
-    switch (messageId) {
+    switch (ircMessage.command) {
       case "PONG":
         this.pong();
         break;

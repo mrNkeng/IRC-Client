@@ -82,7 +82,6 @@ export const tokenizeTags = (input: string):IRCMessageTags => {
 }
 
 export const cleanParameters = (params: string[]): string[] => {
-  console.log("before: ", params)
   const cleaned: string[] = [];
   for (let param of params) {
     if (param[0] === ":") {
@@ -90,7 +89,6 @@ export const cleanParameters = (params: string[]): string[] => {
     }
     cleaned.push(param)
   }
-  console.log("after: ", cleaned)
   return cleaned
 }
 
