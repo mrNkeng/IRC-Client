@@ -1,4 +1,4 @@
-import { tokenizeServerMessage, tokenizeTags } from "../protocol";
+import { createBlankIRCMessage, tokenizeServerMessage, tokenizeTags } from "../protocol";
 
 
 describe("read tags from server message", () => {
@@ -55,5 +55,18 @@ describe("read source from server message", () => {
     const result = tokenizeServerMessage(input);
 
     expect(result.source).toEqual(expectedResult)
+  })
+})
+
+describe('read command and paramters', () => {
+  test("correctly read command with no tags or source", () => {
+    const input = "CAP REQ :sasl message-tags foo"
+    const expectedResult = createBlankIRCMessage()
+    expectedResult.command = "CAP"
+    expectedResult.parameters = ["REQ", "sasl", "message-tags", "foo"]
+
+    const result = tokenizeServerMessage(input);
+
+    expect(result).toEqual(expectedResult)
   })
 })

@@ -62,12 +62,11 @@ export const tokenizeServerMessage = (message: string): IRCMessage => {
     // We can now parse the command and params
     else {
       ircMessage.command = token
-      ircMessage.parameters = tokens.slice(i + 1)
+      const parameters = tokens.slice(i + 1)
+      ircMessage.parameters = cleanParameters(parameters)
       break
     }
-
   }
-  console.log(ircMessage)
   return ircMessage
 }
 
@@ -80,6 +79,19 @@ export const tokenizeTags = (input: string):IRCMessageTags => {
     tags[key] = value ?? ''
   }
   return tags;
+}
+
+export const cleanParameters = (params: string[]): string[] => {
+  console.log("before: ", params)
+  const cleaned: string[] = [];
+  for (let param of params) {
+    if (param[0] === ":") {
+      param = param.slice(1)
+    }
+    cleaned.push(param)
+  }
+  console.log("after: ", cleaned)
+  return cleaned
 }
 
 // TODO: come up with a better name for this...
