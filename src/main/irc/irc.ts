@@ -2,7 +2,7 @@
 import net from "net";
 import EventEmitter from "events";
 import { buffer } from "stream/consumers";
-import { ClientInformation, IRCClientConfiguration, IRCReplies, ServerInformaiton } from "./protocol";
+import { ClientInformation, createBlankIRCMessage, IRCClientConfiguration, IRCMessage, IRCReplies, ServerInformaiton } from "./protocol";
 
 
 // TODO: Create hooks that other objects need to  be aware of:
@@ -125,6 +125,19 @@ export class IRCClient extends EventEmitter {
     console.debug("connection kept");
     const pingMilliseconds = Date.now() - (this.pingSendTime ?? Date.now()) // catch for first ping value...
     this.emit('ping', pingMilliseconds)
+  }
+
+  private tokenizeMessage = (message: string): IRCMessage => {
+    const ircMessage: IRCMessage = createBlankIRCMessage();
+    const tokens = message.split(" ");
+    while (tokens.length) {
+      const token = tokens.shift()!
+      // if (token[0] == "@") {
+      //   ircMessage.tags.push(token)
+      // }
+    }
+
+    return ircMessage
   }
 
   private parseServerMessage = () => {

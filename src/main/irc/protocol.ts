@@ -24,6 +24,51 @@ export interface IRCServerCapabilities {
   channelLimit: number
 }
 
+export interface IRCMessage {
+  tags: IRCMessageTags;
+  source: string | undefined
+  command: string | undefined
+  parameters: string[]
+}
+
+export type IRCMessageTags = {[key: string]: string | number}
+
+
+export const createBlankIRCMessage = () => {
+  const message: IRCMessage = {
+    tags: {},
+    source: undefined,
+    command: undefined,
+    parameters: [],
+  }
+  return message;
+}
+
+export const tokenizeServerMessage = (message: string): IRCMessage => {
+  const ircMessage: IRCMessage = createBlankIRCMessage();
+  const tokens = message.split(" ");
+  while (tokens.length) {
+    const token = tokens.shift()!
+    if (token[0] == "@") {
+      const cleaned = token.slice(1)
+      ircMessage.tags = tokenizeTags(cleaned)
+    }
+  }
+  return ircMessage
+}
+
+export const tokenizeTags = (input: string):IRCMessageTags => {
+  const cleanedInput = input.slice(1)
+  const tags: IRCMessageTags = {}
+  const tokens = cleanedInput.split(";")
+  for (const token of tokens) {
+    const [key, value] = token.split('=');
+    tags[key] = value ?? ''
+
+  }
+  return tags;
+}
+
 // TODO: come up with a better name for this...
 export const IRCReplies = {
   welcome: {
