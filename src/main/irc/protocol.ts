@@ -33,7 +33,6 @@ export interface IRCMessage {
 
 export type IRCMessageTags = {[key: string]: string | number}
 
-
 export const createBlankIRCMessage = () => {
   const message: IRCMessage = {
     tags: {},

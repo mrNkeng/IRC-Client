@@ -1,16 +1,11 @@
 // import { IRC_Replies } from "data-models/IRC";
 import net from "net";
-import EventEmitter from "events";
+import { EventEmitter } from 'typed-event-emitter';
 import { buffer } from "stream/consumers";
 import { ClientInformation, createBlankIRCMessage, IRCClientConfiguration, IRCMessage, IRCReplies, ServerInformaiton, tokenizeServerMessage } from "./protocol";
 
 
-// TODO: Create hooks that other objects need to  be aware of:
-//       Some ides: onConfigurationChange, onMessage, onServerStatusChange?
-
-
-// TODO: https://basarat.gitbook.io/typescript/main-1/typed-event -- john valanidas
-export class IRCClient extends EventEmitter {
+export class IRCClient extends EventEmitter  {
   // TODO: this could all be logged under a single configuraiton object. Yes we do this
   private server: ServerInformaiton;
   private client: ClientInformation;
@@ -23,6 +18,9 @@ export class IRCClient extends EventEmitter {
   private pingSendTime: number | undefined;
 
   private ircSocket: net.Socket | undefined;
+
+  public readonly onPing = this.registerEvent<[number]>();
+  public readonly onServerMessage = this.registerEvent<[string, string]>()
 
   constructor(server: ServerInformaiton, client: ClientInformation, config: IRCClientConfiguration) {
     super();
@@ -92,7 +90,7 @@ export class IRCClient extends EventEmitter {
 
   private setAuthenticated = (authenticated: boolean) => {
     this.authenticated = authenticated
-    this.emit("")
+    // this.emit("")
   }
 
   // https://modern.ircdocs.horse/#connection-registration
@@ -124,7 +122,7 @@ export class IRCClient extends EventEmitter {
   private pong = () => {
     console.debug("connection kept");
     const pingMilliseconds = Date.now() - (this.pingSendTime ?? Date.now()) // catch for first ping value...
-    this.emit('ping', pingMilliseconds)
+    this.emit(this.onPing, pingMilliseconds)
   }
 
   private parseServerMessage = () => {
@@ -188,7 +186,7 @@ export class IRCClient extends EventEmitter {
         break;
       case IRCReplies.motd.id:
         // console.log(ircMessage)
-        this.emit("serverMessage", ircMessage.parameters[0], ircMessage.parameters.slice(1).join(" "))
+        this.emit(this.onServerMessage, ircMessage.parameters[0], ircMessage.parameters.slice(1).join(" "))
         //console.debug(Something here maybe?);
         break;
       case IRCReplies.motdStart.id:
