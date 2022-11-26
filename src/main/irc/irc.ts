@@ -103,7 +103,7 @@ export class IRCClient extends EventEmitter  {
     this.sendCommand(`USER ${this.client.username} 0 * :${this.client.realName}`)
 
     // we can only run after we've connected and authenticated
-    // setTimeout(() => this.sendCommand('JOIN #test'), 10000)
+    setTimeout(() => this.sendCommand('JOIN #test'), 10000)
 
     // start ping stuff
     this.ping()
