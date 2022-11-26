@@ -47,13 +47,27 @@ export const createBlankIRCMessage = () => {
 export const tokenizeServerMessage = (message: string): IRCMessage => {
   const ircMessage: IRCMessage = createBlankIRCMessage();
   const tokens = message.split(" ");
-  while (tokens.length) {
-    const token = tokens.shift()!
+  for (let i = 0; i < tokens.length; i++) {
+    const token = tokens[i];
+    // parse tags
     if (token[0] == "@") {
-      const cleaned = token.slice(1)
-      ircMessage.tags = tokenizeTags(cleaned)
+      ircMessage.tags = tokenizeTags(token)
     }
+    // parse source
+    else if (token[0] === ":" && ((Object.keys(ircMessage.tags).length
+    === 0 && i === 0) || (ircMessage.tags.length > 0 && i === 1))) {
+      ircMessage.source = token.slice(1)
+    }
+
+    // We can now parse the command and params
+    else {
+      ircMessage.command = token
+      ircMessage.parameters = tokens.slice(i + 1)
+      break
+    }
+
   }
+  console.log(ircMessage)
   return ircMessage
 }
 
@@ -64,7 +78,6 @@ export const tokenizeTags = (input: string):IRCMessageTags => {
   for (const token of tokens) {
     const [key, value] = token.split('=');
     tags[key] = value ?? ''
-
   }
   return tags;
 }

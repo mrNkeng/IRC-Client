@@ -127,19 +127,6 @@ export class IRCClient extends EventEmitter {
     this.emit('ping', pingMilliseconds)
   }
 
-  private tokenizeMessage = (message: string): IRCMessage => {
-    const ircMessage: IRCMessage = createBlankIRCMessage();
-    const tokens = message.split(" ");
-    while (tokens.length) {
-      const token = tokens.shift()!
-      // if (token[0] == "@") {
-      //   ircMessage.tags.push(token)
-      // }
-    }
-
-    return ircMessage
-  }
-
   private parseServerMessage = () => {
     let serverMessage = this.serverMessage;
     this.serverMessage = "";
