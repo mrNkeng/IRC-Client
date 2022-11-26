@@ -1,7 +1,6 @@
 import '../styles.css';
 import { Box, CssBaseline, Grid } from '@mui/material';
 import { useState } from 'react';
-import CenterWindow from './components/Center';
 import UserList from './components/UserList';
 import ServerList from './components/ServerList';
 import Header from './components/Header';
@@ -10,6 +9,10 @@ import { Root, ServerData, ChannelData, Server, Channel, User, Message } from '.
 
 //var mock_data = require('./components/mockdata.json');
 import mock_data from '../main/const/mockdata.json';
+import NavBar from './components/NavBar';
+import { ChatWindow } from './components/Chat/ChatWindow';
+import CenterWindow from './components/CenterWindow/CenterWindow';
+
 
 //these two lines will be changed, not sure what I'm doing with the types yet
 let mock_servers: ReadonlyArray<Server> = mock_data.ServerList.map((list: ServerData) => { return { name: list.serverName }});
@@ -74,6 +77,7 @@ export default function App() {
   return (
     <Grid className="App" container>
       <CssBaseline/>
+      <NavBar/>
 
       {/* Header */}
       <Grid className="FlexChildrenRow" item xs={12}>
@@ -96,7 +100,9 @@ export default function App() {
           TODO: add logic here to display login, signup, and settings pages
           Not sure how to route this. <routes> can be across different files but this set up is tricky
         */}
-        <CenterWindow currentChannel={currChannel?.name} messages={getMessages(currServer, currChannel)} />
+        <CenterWindow windowTitle={currChannel?.name}>
+          <ChatWindow/>
+        </CenterWindow>
       </Grid>
 
       {/* User List */}
