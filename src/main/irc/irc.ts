@@ -25,9 +25,9 @@ export class IRCClient extends EventEmitter  {
   constructor(server: ServerInformaiton, client: ClientInformation, config: IRCClientConfiguration) {
     super();
 
-    this.server = server
-    this.client = client
-    this.config = config
+    this.server = server;
+    this.client = client;
+    this.config = config;
 
     this.serverMessage = '';
     this.connected = false;
@@ -37,39 +37,39 @@ export class IRCClient extends EventEmitter  {
   connect = () => {
     this.ircSocket = net.createConnection(this.server.port, this.server.host);
 
-    this.ircSocket.on('data', this.onData)
-    this.ircSocket.on('connect', this.onConnect)
-    this.ircSocket.on('close', this.onClose)
-    this.ircSocket.on('error', this.onError)
-    this.ircSocket.on('end', this.onEnd)
-    this.ircSocket.on('timeout', this.onTimeout)
+    this.ircSocket.on('data', this.onData);
+    this.ircSocket.on('connect', this.onConnect);
+    this.ircSocket.on('close', this.onClose);
+    this.ircSocket.on('error', this.onError);
+    this.ircSocket.on('end', this.onEnd);
+    this.ircSocket.on('timeout', this.onTimeout);
   }
 
   // This feels kind of improper ~ come back this this. Maybe we should
   // subclass the socket? and then propagate messages upward? - JV
   private onData = (data: Buffer) => {
     for(const c of data) {
-      const char = String.fromCharCode(c)
+      const char = String.fromCharCode(c);
       // once we scan a new line char we know that we can try and parse the command
       if(char === "\n") {
         this.parseServerMessage();
       }
       else {
-        this.serverMessage += char
+        this.serverMessage += char;
       }
     }
   }
 
   private onConnect = () => {
     this.connected = true;
-    this.authenticateToIRCServer()
+    this.authenticateToIRCServer();
   }
 
   /**
    * Emitted when the server closes. If connections exist, this event is not emitted until all connections are ended.
    */
   private onClose = () => {
-    this.connected = false
+    this.connected = false;
   }
 
   private onError = () => {
@@ -111,9 +111,9 @@ export class IRCClient extends EventEmitter  {
 
   private ping = () => {
     // FIXME: do we need a unique message here? Please fix it
-    this.sendCommand("PING :msg")
-    this.pingSendTime = Date.now()
-    setTimeout(this.ping, this.config.pingInterval)
+    this.sendCommand("PING :msg");
+    this.pingSendTime = Date.now();
+    setTimeout(this.ping, this.config.pingInterval);
   }
 
   /**
@@ -203,7 +203,6 @@ export class IRCClient extends EventEmitter  {
         break;
     }
   }
-
 
   private sendCommand = (command: string) => {
     console.debug("Client: ", command);

@@ -29,6 +29,7 @@ export interface IRCMessage {
   source: string | undefined
   command: string | undefined
   parameters: string[]
+  time: Date
 }
 
 export type IRCMessageTags = {[key: string]: string | number}
@@ -39,6 +40,7 @@ export const createBlankIRCMessage = () => {
     source: undefined,
     command: undefined,
     parameters: [],
+    time: new Date()
   }
   return message;
 }
