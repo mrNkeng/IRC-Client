@@ -1,34 +1,109 @@
-import { MemoryRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { Accountsettings, Home, Login, Serverlist, Signup } from './Pages';
-import CssBaseline from '@mui/material/CssBaseline';
-import React from 'react';
+import '../styles.css';
+import { Box, CssBaseline, Grid } from '@mui/material';
+import { useState } from 'react';
+import CenterWindow from './components/Center';
+import UserList from './components/UserList';
+import ServerList from './components/ServerList';
+import Header from './components/Header';
+import ChannelList from './components/ChannelList';
+import { Root, ServerData, ChannelData, Server, Channel, User, Message } from '../data-models/interfaces';
+
+//var mock_data = require('./components/mockdata.json');
+import mock_data from '../main/const/mockdata.json';
+
+//these two lines will be changed, not sure what I'm doing with the types yet
+let mock_servers: ReadonlyArray<Server> = mock_data.ServerList.map((list: ServerData) => { return { name: list.serverName }});
+let global_data: Root = mock_data;
+
+function getMessages(currServer: Server | undefined, currChannel: Channel | undefined) {
+  //uses built in array functions
+  //see more: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
+  const str: Message[] | undefined =
+    global_data.ServerList.find((element) => {
+      return element.serverName == currServer?.name
+    })?.channelList?.find((element) => {
+      return element.channelName == currChannel?.name
+    })?.messages.map((element) => {
+      return { content: element };
+    });
+
+  if (str != undefined) {
+    //it works!
+    //console.log(str);
+    return str;
+  }
+  return [];
+}
+
+function getChannels(currServer: Server | undefined) {
+  //uses built in array functions
+  //see more: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
+  const str: Channel[] | undefined =
+    global_data.ServerList.find((element) => {
+      return element.serverName == currServer?.name
+    })?.channelList?.map((element: ChannelData) => {
+      return { name: element.channelName }
+    });
+
+  if (str != undefined) {
+    return str;
+  }
+  return [];
+}
+
+function getUsers(currServer: Server | undefined) {
+  //uses built in array functions
+  //see more: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
+  const str: User[] | undefined =
+    global_data.ServerList.find((element) => {
+      return element.serverName == currServer?.name
+    })?.userList.map(item => {
+      return { name: item };
+    });
+
+  if (str != undefined) {
+    return str;
+  }
+  return [];
+}
 
 export default function App() {
+  const [currServer, setCurrServer] = useState<Server>();
+  const [currChannel, setCurrChannel] = useState<Channel>();
+
   return (
-    <Router>
+    <Grid className="App" container>
       <CssBaseline/>
-      <div>
-        <nav style={{
-        justifyContent: 'space-evenly',
-        height: "3vh",
-        backgroundColor:"#1e2124"
-        }}>
-          <Link to="/" style={{ margin: '15px' }}>Home</Link>
-          <Link to="/Accountsettings" style={{ margin: '15px' }}>Accountsettings</Link>
-          <Link to="/Login" style={{ margin: '15px' }}>Login</Link>
-          <Link to="/Serverlist" style={{ margin: '15px' }}>Serverlist</Link>
-          <Link to="/Signup" style={{ margin: '15px' }}>Signup</Link>
-        </nav>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/Accountsettings" element={<Accountsettings />} />
-          <Route path="/Login" element={<Login />} />
-          <Route path="/Serverlist" element={<Serverlist />} />
-          <Route path="/Signup" element={<Signup />} />
 
+      {/* Header */}
+      <Grid className="FlexChildrenRow" item xs={12}>
+        <Header />
+      </Grid>
 
-        </Routes>
-      </div>
-    </Router>
+      {/* Server List */}
+      <Grid className="FlexChildrenColumn" item xs={0.5}>
+        <ServerList servers={mock_servers} setServer={setCurrServer} />
+      </Grid>
+
+      {/* Channel List */}
+      <Grid className="FlexChildrenColumn" item xs={1.25}>
+          <ChannelList currentServer={currServer?.name} channels={getChannels(currServer)} setChannel={setCurrChannel}/>
+      </Grid>
+
+      {/* Main Window */}
+      <Grid className="FlexChildrenColumn" item xs={9}>
+        {/*
+          TODO: add logic here to display login, signup, and settings pages
+          Not sure how to route this. <routes> can be across different files but this set up is tricky
+        */}
+        <CenterWindow currentChannel={currChannel?.name} messages={getMessages(currServer, currChannel)} />
+      </Grid>
+
+      {/* User List */}
+      <Grid className="FlexChildrenColumn" item xs={1.25}>
+          <UserList users={getUsers(currServer)} />
+      </Grid>
+
+    </Grid>
   );
 }

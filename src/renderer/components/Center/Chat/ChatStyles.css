@@ -40,7 +40,7 @@
   width: 100%;
   justify-content: space-between;
   /* height: 60vh; */
-  height: 95%; /*raised the bottom bar up a few pixels*/
+  height: 90%; /*raised the bottom bar up a few pixels*/
   /* align-items: center; */
 }
 
@@ -63,8 +63,6 @@
   justify-content: center;
   align-items: center;
 }
-
-
 
 .input_submit {
   position: relative;
@@ -91,6 +89,7 @@
   transform: scale(0.8);
   box-shadow: 0 0 25px rgb(79, 182, 93);
 }
+
 .chatbubblelist {
   display: flex;
 }
@@ -112,6 +111,7 @@
   align-self: flex-end;
   background-color: #2f74c0;
 }
+
 .self_chat {
   display: flex;
   border-radius: 50px;
@@ -120,6 +120,7 @@
   align-self: flex-end;
   background-color: #2f74c0;
 }
+
 .other_chat {
   display: flex;
   border-radius: 50px;
@@ -137,4 +138,3 @@
   text-align: center;
   color: white;
 }
-
