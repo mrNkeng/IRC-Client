@@ -87,6 +87,7 @@ export const AlertVolumeSettings = (props: AlertVolumeSettingsProps) => {
             fontWeight: 'bold',
             fontSize: '300%',
             color: 'lightgrey' }} >Alert Volume Settings</Typography>
+      <VolumeSlider/>
 
       </Stack>
       </Box>

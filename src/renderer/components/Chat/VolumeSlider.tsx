@@ -37,13 +37,20 @@ export const VolumeSlider = (props: Props) => {
   };
 
   return (
-    <Box sx={{ width: 250 }}>
+    <Box sx={{ width: 300, paddingLeft: "30px", paddingTop:"40px", backgroundColor: "#7289da", paddingBottom:"40px", paddingRight:"40px"}}>
       <Typography id="input-slider" gutterBottom>
         Volume
       </Typography>
       <Grid container spacing={2} alignItems="center">
         <Grid item>
-
+          <VolumeUp />
+        </Grid>
+        <Grid item xs>
+          <Slider
+            value={typeof value === 'number' ? value : 0}
+            onChange={handleSliderChange}
+            aria-labelledby="input-slider"
+          />
         </Grid>
         <Grid item>
           <Input
