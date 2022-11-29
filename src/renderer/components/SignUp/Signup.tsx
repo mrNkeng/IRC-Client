@@ -28,13 +28,12 @@ const Spacer = (props: SpacerProps) => {
 };
 
 export const Signup = (props: SignupProps) => {
-  const [email, setEmail] = useState("");
   const [fullName, setFullName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const signUp = () => {
-    window.electron.ipcRenderer.sendMessage('sign-up', [email, fullName, username, password]);
+    window.electron.ipcRenderer.sendMessage('sign-up', [fullName, username, password]);
   }
 
   return (
@@ -96,8 +95,6 @@ export const Signup = (props: SignupProps) => {
             </span>
             <DiamondIcon sx={{ fontSize: 100 }} />{' '}
             <Spacer spaceMultiplier={2} direction="col" />
-            <Spacer spaceMultiplier={1} direction="col" />
-            <TextField label="Email Address" variant="outlined" value={email} onChange={(e) => setEmail(e.target.value)} />
             <Spacer spaceMultiplier={2} direction="col" />
             <TextField label="Full Name" variant="outlined" value={fullName} onChange={(e) => setFullName(e.target.value)} />
             <Spacer spaceMultiplier={2} direction="col" />

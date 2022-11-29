@@ -147,7 +147,7 @@ ipcMain.on('sign-up', async (event, arg) => {
   // const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
   // console.log(msgTemplate(arg));
   console.log("signup");
-  const [ email, name, username, password ]= arg
+  const [ name, username, password ]= arg
   aol.signUp(name, username, password);
   console.log(arg)
 });
