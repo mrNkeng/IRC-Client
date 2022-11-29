@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
@@ -28,6 +28,15 @@ const Spacer = (props: SpacerProps) => {
 };
 
 export const Signup = (props: SignupProps) => {
+  const [email, setEmail] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const signUp = () => {
+    window.electron.ipcRenderer.sendMessage('sign-up', [email, fullName, username, password]);
+  }
+
   return (
     //we can style this correctly later :P
 
@@ -88,16 +97,17 @@ export const Signup = (props: SignupProps) => {
             <DiamondIcon sx={{ fontSize: 100 }} />{' '}
             <Spacer spaceMultiplier={2} direction="col" />
             <Spacer spaceMultiplier={1} direction="col" />
-            <TextField label="Email Address" variant="outlined" />
+            <TextField label="Email Address" variant="outlined" value={email} onChange={(e) => setEmail(e.target.value)} />
             <Spacer spaceMultiplier={2} direction="col" />
-            <TextField label="Full Name" variant="outlined" />
+            <TextField label="Full Name" variant="outlined" value={fullName} onChange={(e) => setFullName(e.target.value)} />
             <Spacer spaceMultiplier={2} direction="col" />
-            <TextField label="Username" variant="outlined" />
+            <TextField label="Username" variant="outlined" value={username} onChange={(e) => setUsername(e.target.value)}/>
             <Spacer spaceMultiplier={2} direction="col" />
-            <TextField label="Password" variant="outlined" type="password" />
-            <Spacer spaceMultiplier={2} direction="col" />
+            <TextField label="Password" variant="outlined" type="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
+            {/* <Spacer spaceMultiplier={2} direction="col" /> */}
             <Button
               onClick={() => {
+                signUp();
                 alert("you're signed in");
               }}
               size="small"

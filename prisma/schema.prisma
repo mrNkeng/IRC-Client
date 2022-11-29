@@ -1,0 +1,22 @@
+// Data source
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.sqlite" // Come back to this (different for each OS)
+}
+
+// Generator
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id    Int     @id @default(autoincrement())
+  username String  @unique
+  name  String
+
+  hashedPassword String
+  salt String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

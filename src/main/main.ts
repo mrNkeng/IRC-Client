@@ -1,4 +1,7 @@
 /* eslint global-require: off, no-console: off, promise/always-return: off */
+// set up env
+import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
+dotenv.config()
 
 /**
  * This module executes inside of electron's main process. You can start
@@ -14,6 +17,8 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+
+import { AOLMessenger } from './app';
 
 class AppUpdater {
   constructor() {
@@ -135,3 +140,23 @@ app
     });
   })
   .catch(console.log);
+
+const aol = new AOLMessenger()
+
+ipcMain.on('sign-up', async (event, arg) => {
+  // const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
+  // console.log(msgTemplate(arg));
+  console.log("signup");
+  const [ email, name, username, password ]= arg
+  aol.signUp(name, username, password);
+  console.log(arg)
+});
+
+
+ipcMain.on('login', async (event, arg) => {
+  console.log("login")
+  const [username, password] = arg
+  console.log(username, password);
+  aol.login(username, password)
+})
+
