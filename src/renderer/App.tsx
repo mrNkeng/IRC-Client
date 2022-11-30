@@ -1,29 +1,47 @@
 import '../styles.css';
-import { Box, CssBaseline, Grid } from '@mui/material';
+import { CssBaseline, Grid } from '@mui/material';
 import { useState } from 'react';
-import CenterWindow from './components/Center';
 import UserList from './components/UserList';
 import ServerList from './components/ServerList';
 import Header from './components/Header';
 import ChannelList from './components/ChannelList';
-import { Root, ServerData, ChannelData, Server, Channel, User, Message } from '../data-models/interfaces';
+import {
+  Root,
+  ServerData,
+  ChannelData,
+  Server,
+  Channel,
+  User,
+  Message,
+} from '../data-models/interfaces';
 
 //var mock_data = require('./components/mockdata.json');
 import mock_data from '../main/const/mockdata.json';
+import NavBar from './components/NavBar';
+import { ChatWindow } from './components/Chat/ChatWindow';
+import CenterWindow from './components/CenterWindow/CenterWindow';
 
 //these two lines will be changed, not sure what I'm doing with the types yet
-let mock_servers: ReadonlyArray<Server> = mock_data.ServerList.map((list: ServerData) => { return { name: list.serverName }});
+let mock_servers: ReadonlyArray<Server> = mock_data.ServerList.map(
+  (list: ServerData) => {
+    return { name: list.serverName };
+  }
+);
 let global_data: Root = mock_data;
 
-function getMessages(currServer: Server | undefined, currChannel: Channel | undefined) {
+function getMessages(
+  currServer: Server | undefined,
+  currChannel: Channel | undefined
+) {
   //uses built in array functions
   //see more: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
-  const str: Message[] | undefined =
-    global_data.ServerList.find((element) => {
-      return element.serverName == currServer?.name
-    })?.channelList?.find((element) => {
-      return element.channelName == currChannel?.name
-    })?.messages.map((element) => {
+  const str: Message[] | undefined = global_data.ServerList.find((element) => {
+    return element.serverName == currServer?.name;
+  })
+    ?.channelList?.find((element) => {
+      return element.channelName == currChannel?.name;
+    })
+    ?.messages.map((element) => {
       return { content: element };
     });
 
@@ -38,12 +56,11 @@ function getMessages(currServer: Server | undefined, currChannel: Channel | unde
 function getChannels(currServer: Server | undefined) {
   //uses built in array functions
   //see more: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
-  const str: Channel[] | undefined =
-    global_data.ServerList.find((element) => {
-      return element.serverName == currServer?.name
-    })?.channelList?.map((element: ChannelData) => {
-      return { name: element.channelName }
-    });
+  const str: Channel[] | undefined = global_data.ServerList.find((element) => {
+    return element.serverName == currServer?.name;
+  })?.channelList?.map((element: ChannelData) => {
+    return { name: element.channelName };
+  });
 
   if (str != undefined) {
     return str;
@@ -54,12 +71,11 @@ function getChannels(currServer: Server | undefined) {
 function getUsers(currServer: Server | undefined) {
   //uses built in array functions
   //see more: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
-  const str: User[] | undefined =
-    global_data.ServerList.find((element) => {
-      return element.serverName == currServer?.name
-    })?.userList.map(item => {
-      return { name: item };
-    });
+  const str: User[] | undefined = global_data.ServerList.find((element) => {
+    return element.serverName == currServer?.name;
+  })?.userList.map((item) => {
+    return { name: item };
+  });
 
   if (str != undefined) {
     return str;
@@ -73,7 +89,8 @@ export default function App() {
 
   return (
     <Grid className="App" container>
-      <CssBaseline/>
+      <CssBaseline />
+      <NavBar />
 
       {/* Header */}
       <Grid className="FlexChildrenRow" item xs={12}>
@@ -87,7 +104,11 @@ export default function App() {
 
       {/* Channel List */}
       <Grid className="FlexChildrenColumn" item xs={1.25}>
-          <ChannelList currentServer={currServer?.name} channels={getChannels(currServer)} setChannel={setCurrChannel}/>
+        <ChannelList
+          currentServer={currServer?.name}
+          channels={getChannels(currServer)}
+          setChannel={setCurrChannel}
+        />
       </Grid>
 
       {/* Main Window */}
@@ -96,14 +117,15 @@ export default function App() {
           TODO: add logic here to display login, signup, and settings pages
           Not sure how to route this. <routes> can be across different files but this set up is tricky
         */}
-        <CenterWindow currentChannel={currChannel?.name} messages={getMessages(currServer, currChannel)} />
+        <CenterWindow windowTitle={currChannel?.name}>
+          <ChatWindow/>
+        </CenterWindow>
       </Grid>
 
       {/* User List */}
       <Grid className="FlexChildrenColumn" item xs={1.25}>
-          <UserList users={getUsers(currServer)} />
+        <UserList users={getUsers(currServer)} />
       </Grid>
-
     </Grid>
   );
 }

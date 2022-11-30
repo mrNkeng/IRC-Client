@@ -1,4 +1,7 @@
 /* eslint global-require: off, no-console: off, promise/always-return: off */
+// set up env
+import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
+dotenv.config()
 
 /**
  * This module executes inside of electron's main process. You can start
@@ -15,6 +18,8 @@ import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import { IRCClient } from './irc/irc';
+
+import { AOLMessenger } from './app';
 
 class AppUpdater {
   constructor() {
@@ -137,32 +142,22 @@ app
   })
   .catch(console.log);
 
-const server = {
-  host: 'irc.valanidas.dev',
-  port: 6667,
-};
+const aol = new AOLMessenger()
 
-const client = {
-  realName: 'John Valanidas',
-  username: 'Test',
-  nickname: 'JohnClient',
-};
-
-const config = {
-  pingInterval: 20 * 1000, // this is arbitrary (maybe there is a proper number)
-};
-
-const ircClient = new IRCClient(server, client, config);
-ircClient.connect();
-
-const onPing = (ping: number) => {
-  console.log("Ping in milliseconds: ", ping);
-}
+ipcMain.on('sign-up', async (event, arg) => {
+  // const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
+  // console.log(msgTemplate(arg));
+  console.log("signup");
+  const [ name, username, password ]= arg
+  aol.signUp(name, username, password);
+  console.log(arg)
+});
 
 
-ircClient.onPing(onPing)
-
-
-ircClient.onServerMessage((client, message) => {
-  console.log("serverMessage: ", message)
+ipcMain.on('login', async (event, arg) => {
+  console.log("login")
+  const [username, password] = arg
+  console.log(username, password);
+  aol.login(username, password)
 })
+

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
@@ -11,6 +11,13 @@ import DiamondIcon from '@mui/icons-material/Diamond';
 interface LoginProps {}
 
 export const Login = (props: LoginProps) => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const login = () => {
+    window.electron.ipcRenderer.sendMessage('login', [username, password]);
+  }
+
   return (
     //we can style this correctly later :P
     <Box
@@ -71,14 +78,15 @@ export const Login = (props: LoginProps) => {
             alignItems="center"
           >
             <Grid item>
-              <TextField label="Email Address" variant="outlined" />
+              <TextField label="Username" variant="outlined" value={username} onChange={(e) => setUsername(e.target.value)}/>
             </Grid>
             <Grid item>
-              <TextField label="Password" variant="outlined" type="password" />
+              <TextField label="Password" variant="outlined" type="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
             </Grid>
             <Grid item>
               <Button
                 onClick={() => {
+                  login();
                   alert("You're signed in");
                 }}
                 size="small"
