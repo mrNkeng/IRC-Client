@@ -1,24 +1,21 @@
-import React from 'react';
-import { StrictMode } from "react";
-import * as ReactDOMClient from "react-dom/client";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import App from './App';
-import { Accountsettings } from './components/UserSettings/Accountsettings';
-import { Login } from './components/Login/Login';
-import { Signup } from './components/SignUp/Signup';
-
-const rootElement = document.getElementById("root");
+import { StrictMode } from 'react';
+import * as ReactDOMClient from 'react-dom/client';
+import {history} from './history';
+import { BrowserRouter } from 'react-router-dom';
+import { App } from './App';
+import { createStore, getStore } from './state';
+import { unstable_HistoryRouter as HistoryRouter } from 'react-router-dom';
+createStore();
+const rootElement = document.getElementById('root');
 const root = ReactDOMClient.createRoot(rootElement!);
+
+
 root.render(
   <StrictMode>
-    <BrowserRouter>
-      <Routes>
-            <Route path="*" element={<App />} />
-            <Route path="/Accountsettings" element={<Accountsettings />} />
-            <Route path="/Login" element={<Login />} />
-            <Route path="/Signup" element={<Signup />} />
-      </Routes>
-    </BrowserRouter>
+    {/* I have no idea how important that error is Just pray we don't need to worry about it*/}
+    <HistoryRouter history={history}>
+      <App />
+    </HistoryRouter>
   </StrictMode>
 );
 
@@ -28,3 +25,11 @@ window.electron.ipcRenderer.once('ipc-example', (arg) => {
   console.log(arg);
 });
 window.electron.ipcRenderer.sendMessage('ipc-example', ['ping']);
+
+window.electron.ipcRenderer.on('authSuccess', (args) => {
+  const state = getStore();
+  const [username, name]: [string, string] = args;
+  state.currentUser = { name: name, username: username };
+  history.push("/Chat")
+  console.log(state.currentUser);
+});

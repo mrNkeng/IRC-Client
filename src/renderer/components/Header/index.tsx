@@ -1,4 +1,4 @@
-import '../../../styles.css';
+import '../../styles.css';
 import { Box } from "@mui/material";
 
 function Header() {

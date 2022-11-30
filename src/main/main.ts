@@ -30,6 +30,8 @@ class AppUpdater {
 }
 
 let mainWindow: BrowserWindow | null = null;
+const aol = new AOLMessenger(mainWindow)
+
 
 ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
@@ -98,6 +100,7 @@ const createWindow = async () => {
     } else {
       mainWindow.show();
     }
+    aol.window = mainWindow
   });
 
   mainWindow.on('closed', () => {
@@ -142,7 +145,7 @@ app
   })
   .catch(console.log);
 
-const aol = new AOLMessenger()
+
 
 ipcMain.on('sign-up', async (event, arg) => {
   // const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;

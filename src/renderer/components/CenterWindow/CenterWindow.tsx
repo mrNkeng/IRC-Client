@@ -1,4 +1,4 @@
-import '../../../styles.css';
+import '../../styles.css';
 import { Box, Typography } from '@mui/material';
 
 export interface WindowProps {
