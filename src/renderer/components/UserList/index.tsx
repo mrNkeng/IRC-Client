@@ -1,4 +1,4 @@
-import '../../../styles.css';
+import '../../styles.css';
 import { Box, Stack, Typography } from "@mui/material";
 import { User } from '../../../data-models/interfaces';
 

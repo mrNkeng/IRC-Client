@@ -105,7 +105,6 @@ export const Signup = (props: SignupProps) => {
             <Button
               onClick={() => {
                 signUp();
-                alert("you're signed in");
               }}
               size="small"
               variant="outlined"
