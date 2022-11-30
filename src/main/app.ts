@@ -1,14 +1,17 @@
 import { User } from "@prisma/client";
+import { ipcMain } from "electron";
 import { prisma } from "./db";
 import { hashPassword } from "./util";
+
 
 
 export class AOLMessenger {
 
   private currentUser: User | undefined
+  public window: Electron.CrossProcessExports.BrowserWindow | null
 
-  constructor() {
-
+  constructor(window: Electron.CrossProcessExports.BrowserWindow | null) {
+    this.window = window
   }
 
   async signUp(name: string, username: string, password: string) {
@@ -22,8 +25,11 @@ export class AOLMessenger {
     }
 
     const user = await prisma.user.create({data})
+    this.window!.webContents.send('authSuccess', [user.username, user.name]);
     console.log(user);
   }
+
+
 
   async login(username: string, password: string) {
     const user = await prisma.user.findFirst({where: {username: username}})
@@ -43,6 +49,7 @@ export class AOLMessenger {
 
     this.currentUser = user;
 
+    this.window!.webContents.send('authSuccess', [user.username, user.name]);
     console.log(user)
   }
 }
