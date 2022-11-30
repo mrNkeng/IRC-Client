@@ -30,8 +30,6 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/Accountsettings" element={<Accountsettings />} />
-          <Route path="/AlertVolumeSettings" element={<AlertVolumeSettings />} />
-          <Route path="/BlockedUsers" element={<BlockedUsers />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/Serverlist" element={<Serverlist />} />
           <Route path="/Signup" element={<Signup />} />
