@@ -1,10 +1,11 @@
 import { AccountCircle } from '@mui/icons-material';
 import { Box, Button, FormControl, Grid, Stack, TextField, Typography } from '@mui/material';
 import React from 'react';
+import { VolumeSlider } from "renderer/components/Chat/VolumeSlider";
 
-interface AccountsettingsProps {
+interface AlertVolumeSettingsProps {
 }
-export const Accountsettings = (props: AccountsettingsProps) => {
+export const AlertVolumeSettings = (props: AlertVolumeSettingsProps) => {
   return (
     <Grid container>
      <Grid item xs={4}>
@@ -36,25 +37,25 @@ export const Accountsettings = (props: AccountsettingsProps) => {
             color: 'lightgrey' }} >User Settings
       </Typography>
       <Stack>
-      <TextField
-          disabled
-          id="outlined-disabled"
-          defaultValue="My Account" sx={{backgroundColor: "grey"}}
-        />
-
       <Button variant="text" sx={{justifyContent:'flex-start', paddingBottom: '15px', paddingTop: '15px'}}>
         <Typography sx={{fontSize: 'inherit',
             textAlign: 'right',
             fontWeight: 'bold',
-            color: 'lightgrey' }} >Blocked Users
+            color: 'lightgrey' }} >My Account
       </Typography></Button>
 
       <Button variant="text" sx={{justifyContent:'flex-start', paddingBottom: '15px'}}>
         <Typography sx={{fontSize: 'inherit',
             textAlign: 'right',
             fontWeight: 'bold',
-            color: 'lightgrey' }} >Alert Volume Settings
+            color: 'lightgrey' }} >Blocked Users
       </Typography></Button>
+
+      <TextField
+          disabled
+          id="outlined-disabled"
+          defaultValue="Alert Volume Settings" sx={{backgroundColor: "grey"}}
+        />
 
       <Button variant="text" sx={{justifyContent:'flex-start', paddingBottom: '15px'}}>
         <Typography sx={{fontSize: 'inherit',
@@ -85,39 +86,8 @@ export const Accountsettings = (props: AccountsettingsProps) => {
             paddingLeft: '40px',
             fontWeight: 'bold',
             fontSize: '300%',
-            color: 'lightgrey' }} >My Account</Typography>
-
-      <Typography sx={{fontSize: 'large',
-            textAlign: 'left',
-            paddingTop:' 10px',
-            paddingLeft: '40px',
-            paddingBottom: '10px',
-            fontWeight: 'bold',
-            fontSize: '100%',
-            color: 'lightgrey' }} > Username</Typography>
-
-        <Box sx={{ display: 'flex', alignItems: 'flex-end', paddingLeft: "40px", backgroundColor: "#7289da"}}>
-        <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
-        <TextField id="input-with-sx" label="Edit Username" variant="standard" />
-      </Box>
-
-      <Typography sx={{fontSize: 'large',
-            textAlign: 'left',
-            paddingTop:' 25px',
-            paddingLeft: '40px',
-            paddingBottom: '10px',
-            fontWeight: 'bold',
-            fontSize: '100%',
-            color: 'lightgrey' }} > Password</Typography>
-      <Box sx={{ display: 'flex', alignItems: 'flex-end', paddingLeft: "40px", backgroundColor: "#7289da"}}>
-      <TextField id="standard-basic" label="Change Password" variant="standard" />
-      </Box>
-      <Box sx={{ display: 'flex', alignItems: 'flex-end', paddingLeft: "40px", backgroundColor: "#7289da"}}>
-      <TextField id="standard-basic" label="Confirm Change" variant="standard" />
-      </Box>
-
-
-
+            color: 'lightgrey' }} >Alert Volume Settings</Typography>
+      <VolumeSlider/>
 
       </Stack>
       </Box>
@@ -133,6 +103,7 @@ export const Accountsettings = (props: AccountsettingsProps) => {
       backgroundColor: "	#424549",
       height: "100vh"
     }}></Box>
+    <VolumeSlider/>
     </Grid>
 
 

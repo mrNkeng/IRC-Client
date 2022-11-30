@@ -13,7 +13,7 @@ const Chatbubble = ({ chat, chats, setchats }: Props) => {
   chatBubbleClasses.push(chat.isOther ? "other_chat" : "self_chat");
   return (
     <div className={chatBubbleClasses.join(" ")}>
-      <Typography className="Chatbubbletext">{chat.chat}</Typography>
+      <Typography className="Chatbubbletext" >{chat.chat}</Typography>
     </div>
   );
 };

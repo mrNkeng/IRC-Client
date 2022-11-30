@@ -1,5 +1,5 @@
 import { MemoryRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { Accountsettings, Home, Login, Serverlist, Signup } from './Pages';
+import { Accountsettings, Home, Login, Serverlist, Signup, AlertVolumeSettings, BlockedUsers} from './Pages';
 import CssBaseline from '@mui/material/CssBaseline';
 import React from 'react';
 
@@ -15,19 +15,28 @@ export default function App() {
         }}>
           <Link to="/">Home</Link>
           <Link to="/Accountsettings">Accountsettings</Link>
+          <Link to="/AlertVolumeSettings">AlertVolumeSettings</Link>
+          <Link to="/BlockedUsers">BlockedUsers</Link>
           <Link to="/Login">Login</Link>
           <Link to="/Serverlist">Serverlist</Link>
           <Link to="/Signup">Signup</Link>
-          
+
+
+
+
+
 
         </nav>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/Accountsettings" element={<Accountsettings />} />
+          <Route path="/AlertVolumeSettings" element={<AlertVolumeSettings />} />
+          <Route path="/BlockedUsers" element={<BlockedUsers />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/Serverlist" element={<Serverlist />} />
           <Route path="/Signup" element={<Signup />} />
-          
+
+
 
         </Routes>
       </div>
