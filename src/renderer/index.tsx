@@ -2,8 +2,18 @@ import { StrictMode } from 'react';
 import * as ReactDOMClient from 'react-dom/client';
 import { history } from './history';
 import { App } from './App';
-import { createStore, getStore } from './state';
+import { createStore, getStore, Server } from './state';
 import { unstable_HistoryRouter as HistoryRouter } from 'react-router-dom';
+import {
+  Root,
+  ServerData,
+  ChannelData,
+  Server,
+  Channel,
+  User,
+  Message,
+} from 'data-models/interfaces';
+import { Server } from 'http';
 
 createStore();
 const rootElement = document.getElementById('root');
@@ -31,4 +41,25 @@ window.electron.ipcRenderer.on('authSuccess', (args) => {
   state.currentUser = { name: name, username: username };
   history.push("/Chat")
   console.log(state.currentUser);
+
+  loadInitalData()
 });
+
+
+window.electron.ipcRenderer.on('serverMessage', (args) => {
+  const state = getStore();
+  const [message, server]: [string, string] = args;
+  state.serverList.get(server)?.messages.push({
+    content: message,
+    id: 0
+  })
+});
+
+
+const loadInitalData = async () => {
+  const state = getStore();
+  state.serverList.set("irc.valanidas.dev", new Server("irc.vlaanidas.dev"))
+  // const data = await window.electron.ipcRenderer.getData('data-channel')
+  // state.serverData = data;
+  // console.log(data);
+}

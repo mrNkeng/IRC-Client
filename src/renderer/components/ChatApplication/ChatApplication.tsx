@@ -1,37 +1,25 @@
 import '../../styles.css';
 import { CssBaseline, Grid } from '@mui/material';
 import { useEffect, useState } from 'react';
-import UserList from 'renderer/components/UserList';
-import ServerList from 'renderer/components/ServerList';
 import Header from 'renderer/components/Header';
-import ChannelList from 'renderer/components/ChannelList';
-import mock_data from 'main/const/mockdata.json';
 import { ChatWindow } from 'renderer/components/Chat/ChatWindow';
 import CenterWindow from 'renderer/components/CenterWindow/CenterWindow';
 import {
-  Root,
   ServerData,
   ChannelData,
-  Server,
   Channel,
   User,
   Message,
 } from 'data-models/interfaces';
+import { observer } from 'mobx-react';
+import { getStore, Server } from 'renderer/state';
 
-export const ChatApplication = () => {
-  const [data, setData] = useState<Root>();
+
+export const ChatApplication = observer(() => {
   const [currServer, setCurrServer] = useState<Server>();
   const [currChannel, setCurrChannel] = useState<Channel>();
-
-  useEffect(() => {
-    //this is to set the state on startup, only way I could figure out how to do this
-    async function fetchRoot() {
-      const data = await window.electron.ipcRenderer.getData('data-channel')
-      //console.log(data);
-      setData(data);
-    }
-    fetchRoot().catch(console.error);
-  }, []);
+  const store = getStore()
+  const data = store.serverList
 
   function getUsers() {
     //uses built in array functions
@@ -108,19 +96,19 @@ export const ChatApplication = () => {
 
       {/* Server List */}
       <Grid className="FlexChildrenColumn" item xs={0.5}>
-        <ServerList
+        {/* <ServerList
           servers={getServerList()}
           setServerAndClearState={setServerAndClearState}
-        />
+        /> */}
       </Grid>
 
       {/* Channel List */}
       <Grid className="FlexChildrenColumn" item xs={1.25}>
-        <ChannelList
+        {/* <ChannelList
           currentServer={currServer?.name}
           channels={getChannels()}
           setChannel={setCurrChannel}
-        />
+        /> */}
       </Grid>
 
       {/* Main Window */}
@@ -130,14 +118,14 @@ export const ChatApplication = () => {
           Not sure how to route this. <routes> can be across different files but this set up is tricky
         */}
         <CenterWindow windowTitle={currChannel?.name}>
-          <ChatWindow/>
+          <ChatWindow messages={data.get("irc.valanidas.dev")?.messages ?? []} />
         </CenterWindow>
       </Grid>
 
       {/* User List */}
       <Grid className="FlexChildrenColumn" item xs={1.25}>
-        <UserList users={getUsers()} />
+        {/* <UserList users={getUsers()} /> */}
       </Grid>
     </Grid>
   );
-}
+})

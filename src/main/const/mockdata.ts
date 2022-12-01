@@ -1,7 +1,10 @@
-{
+import { Root } from "data-models/interfaces";
+
+const data: Root =  {
   "ServerList": [
     {
-      "serverName": "Cool Programming Server",
+      "serverMessages": [],
+      "serverName": "irc.valanidas.dev",
       "userList": ["Michael","Christopher","John","Ryan"],
       "channelList": [
         {
@@ -25,6 +28,7 @@
     {
       "serverName": "Coolest Server Ever",
       "userList": ["Jessica","Matthew","Joseph","Christopher"],
+      "serverMessages": [],
       "channelList": [
         {
           "channelName": "#general",
@@ -42,6 +46,7 @@
     },
     {
       "serverName": "Another One",
+      "serverMessages": [],
       "userList": ["Jennifer","Ashley","Andrew"],
       "channelList": [
         {
@@ -56,6 +61,7 @@
     },
     {
       "serverName": "Yet another SERVER",
+      "serverMessages": [],
       "userList": ["Amanda","Joshua","Daniel"],
       "channelList": [
         {
@@ -70,6 +76,7 @@
     },
     {
       "serverName": "Jay D Server",
+      "serverMessages": [],
       "userList": ["David","James","Robert"],
       "channelList": [
         {
@@ -88,3 +95,7 @@
     }
   ]
 }
+
+
+
+export default data;

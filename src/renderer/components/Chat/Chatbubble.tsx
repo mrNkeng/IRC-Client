@@ -1,19 +1,20 @@
 import { Chat } from "data-models";
 import Typography from '@mui/material/Typography';
 import React from "react";
+import { Message } from "data-models/interfaces";
 
 type Props = {
-  chat: Chat;
-  chats: Chat[];
-  setchats: React.Dispatch<React.SetStateAction<Chat[]>>;
+  chat: Message;
+  chats: Message[];
+  setchats: React.Dispatch<React.SetStateAction<Message[]>>;
 };
 
 const Chatbubble = ({ chat, chats, setchats }: Props) => {
   const chatBubbleClasses = ["Chatbubble"];
-  chatBubbleClasses.push(chat.isOther ? "other_chat" : "self_chat");
+  chatBubbleClasses.push(chat.isSelf ? "self_chat": "other_chat");
   return (
     <div className={chatBubbleClasses.join(" ")}>
-      <Typography className="Chatbubbletext">{chat.chat}</Typography>
+      <Typography className="Chatbubbletext">{chat.content}</Typography>
     </div>
   );
 };

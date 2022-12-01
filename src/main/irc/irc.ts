@@ -7,7 +7,7 @@ import { ClientInformation, createBlankIRCMessage, IRCClientConfiguration, IRCMe
 
 export class IRCClient extends EventEmitter  {
   // TODO: this could all be logged under a single configuraiton object. Yes we do this
-  private server: ServerInformaiton;
+  public server: ServerInformaiton;
   private client: ClientInformation;
   private config: IRCClientConfiguration;
 

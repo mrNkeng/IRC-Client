@@ -13,6 +13,8 @@ export interface Channel {
 }
 
 export interface Message {
+  id: number
+  isSelf?: boolean
   content: string;
 }
 
@@ -24,6 +26,7 @@ export interface Root {
 
 export interface ServerData {
   serverName: string
+  serverMessages: Message[]
   userList: string[]
   channelList: ChannelData[]
 }
