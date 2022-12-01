@@ -1,10 +1,13 @@
 import '../../styles.css';
 import { CssBaseline, Grid } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import UserList from 'renderer/components/UserList';
 import ServerList from 'renderer/components/ServerList';
 import Header from 'renderer/components/Header';
 import ChannelList from 'renderer/components/ChannelList';
+import mock_data from 'main/const/mockdata.json';
+import { ChatWindow } from 'renderer/components/Chat/ChatWindow';
+import CenterWindow from 'renderer/components/CenterWindow/CenterWindow';
 import {
   Root,
   ServerData,
@@ -15,82 +18,88 @@ import {
   Message,
 } from 'data-models/interfaces';
 
-//var mock_data = require('./components/mockdata.json');
-import mock_data from 'main/const/mockdata.json';
-import NavBar from 'renderer/components/NavBar';
-import { ChatWindow } from 'renderer/components/Chat/ChatWindow';
-import CenterWindow from 'renderer/components/CenterWindow/CenterWindow';
-
-//these two lines will be changed, not sure what I'm doing with the types yet
-let mock_servers: ReadonlyArray<Server> = mock_data.ServerList.map(
-  (list: ServerData) => {
-    return { name: list.serverName };
-  }
-);
-let global_data: Root = mock_data;
-
-function getMessages(
-  currServer: Server | undefined,
-  currChannel: Channel | undefined
-) {
-  //uses built in array functions
-  //see more: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
-  const str: Message[] | undefined = global_data.ServerList.find((element) => {
-    return element.serverName == currServer?.name;
-  })
-    ?.channelList?.find((element) => {
-      return element.channelName == currChannel?.name;
-    })
-    ?.messages.map((element) => {
-      return { content: element };
-    });
-
-  if (str != undefined) {
-    //it works!
-    //console.log(str);
-    return str;
-  }
-  return [];
-}
-
-function getChannels(currServer: Server | undefined) {
-  //uses built in array functions
-  //see more: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
-  const str: Channel[] | undefined = global_data.ServerList.find((element) => {
-    return element.serverName == currServer?.name;
-  })?.channelList?.map((element: ChannelData) => {
-    return { name: element.channelName };
-  });
-
-  if (str != undefined) {
-    return str;
-  }
-  return [];
-}
-
-function getUsers(currServer: Server | undefined) {
-  //uses built in array functions
-  //see more: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
-  const str: User[] | undefined = global_data.ServerList.find((element) => {
-    return element.serverName == currServer?.name;
-  })?.userList.map((item) => {
-    return { name: item };
-  });
-
-  if (str != undefined) {
-    return str;
-  }
-  return [];
-}
-
 export const ChatApplication = () => {
+  const [data, setData] = useState<Root>();
   const [currServer, setCurrServer] = useState<Server>();
   const [currChannel, setCurrChannel] = useState<Channel>();
+
+  useEffect(() => {
+    //this is to set the state on startup, only way I could figure out how to do this
+    async function fetchRoot() {
+      const data = await window.electron.ipcRenderer.getData('data-channel')
+      //console.log(data);
+      setData(data);
+    }
+    fetchRoot().catch(console.error);
+  }, []);
+
+  function getUsers() {
+    //uses built in array functions
+    //see more: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
+    const str: User[] | undefined =
+      data?.ServerList.find((element) => {
+        return element.serverName == currServer?.name
+      })?.userList.map(item => {
+        return { name: item };
+      });
+
+    if (str != undefined) {
+      return str;
+    }
+    return [];
+  }
+
+  function getChannels() {
+    //uses built in array functions
+    //see more: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
+    const str: Channel[] | undefined =
+      data?.ServerList.find((element) => {
+        return element.serverName == currServer?.name
+      })?.channelList?.map((element: ChannelData) => {
+        return { name: element.channelName }
+      });
+
+    if (str != undefined) {
+      return str;
+    }
+    return [];
+  }
+
+  function getMessages() {
+    //uses built in array functions
+    //see more: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
+    const str: Message[] | undefined =
+      data?.ServerList.find((element) => {
+        return element.serverName == currServer?.name
+      })?.channelList?.find((element) => {
+        return element.channelName == currChannel?.name
+      })?.messages.map((element) => {
+        return { content: element };
+      });
+
+    if (str != undefined) {
+      //it works!
+      //console.log(str);
+      return str;
+    }
+    return [];
+  }
+
+  function getServerList() {
+    //this is here to not clutter up the nice look of return html tags
+    return data?.ServerList.map((list: ServerData) => { return { name: list.serverName }});
+  }
+
+  function setServerAndClearState(server: Server) {
+    //when we change the server, we want to change what channel is in view
+    //TODO search for general and assign it here
+    setCurrServer(server);
+    setCurrChannel(undefined);
+  }
 
   return (
     <Grid className="App" container>
       <CssBaseline />
-      <NavBar />
 
       {/* Header */}
       <Grid className="FlexChildrenRow" item xs={12}>
@@ -99,14 +108,17 @@ export const ChatApplication = () => {
 
       {/* Server List */}
       <Grid className="FlexChildrenColumn" item xs={0.5}>
-        <ServerList servers={mock_servers} setServer={setCurrServer} />
+        <ServerList
+          servers={getServerList()}
+          setServerAndClearState={setServerAndClearState}
+        />
       </Grid>
 
       {/* Channel List */}
       <Grid className="FlexChildrenColumn" item xs={1.25}>
         <ChannelList
           currentServer={currServer?.name}
-          channels={getChannels(currServer)}
+          channels={getChannels()}
           setChannel={setCurrChannel}
         />
       </Grid>
@@ -124,7 +136,7 @@ export const ChatApplication = () => {
 
       {/* User List */}
       <Grid className="FlexChildrenColumn" item xs={1.25}>
-        <UserList users={getUsers(currServer)} />
+        <UserList users={getUsers()} />
       </Grid>
     </Grid>
   );

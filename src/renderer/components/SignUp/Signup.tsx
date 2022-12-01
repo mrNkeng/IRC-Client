@@ -2,13 +2,11 @@ import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
-import InputLabel from '@mui/material/InputLabel';
-import flexbox from '@mui/system';
 import Button from '@mui/material/Button';
-import { Container, Grid, Stack } from '@mui/material';
-import { MemoryRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { Login } from '../Login/Login';
+import { Stack } from '@mui/material';
 import DiamondIcon from '@mui/icons-material/Diamond';
+import { history } from '../../history';
+
 interface SignupProps {}
 
 type Direction = 'col' | 'row';
@@ -36,63 +34,25 @@ export const Signup = (props: SignupProps) => {
     window.electron.ipcRenderer.sendMessage('sign-up', [fullName, username, password]);
   }
 
+  const SwitchToLogIn = () => {
+    history.push("/Login");
+  }
+
   return (
-    //we can style this correctly later :P
-
-    //reagan changed spacing, couldn't figure out proper alignment yet
-    //will wait till we moved the styling to its own file
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '	#1e2124',
-        position: 'absolute',
-        top: '20px',
-        right: '0px',
-        bottom: '0px',
-        left: '0px',
-      }}
-    >
+    //TODO come back here and fix styling, Reagan gave up after a while
+    //TODO remove these spacers and just use CSS
+    <Box className="AppContainer">
       <Stack spacing={2}>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '35vh',
-            width: '25vw',
-            margin: '2px',
-          }}
-        >
-          {/* blue box */}
-          <FormControl
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: '30px',
 
-              padding: '20px 30px',
-              backgroundColor: '#7289da',
-              margin: '10px',
-            }}
-          >
+        <Box className="SignUpBox">
+          <FormControl className="formControl" sx={{padding: '20px 30px'}}>
+
             <span className="heading">
-              <Box
-                sx={{
-                  fontSize: 'large',
-                  paddingTop: ' 10px',
-                  fontWeight: 'bold',
-                  color: 'lightgrey',
-                }}
-              >
+              <Box className="textContainer">
                 AOL Messenger
               </Box>
             </span>
+
             <DiamondIcon sx={{ fontSize: 100 }} />{' '}
             <Spacer spaceMultiplier={2} direction="col" />
             <Spacer spaceMultiplier={2} direction="col" />
@@ -101,59 +61,27 @@ export const Signup = (props: SignupProps) => {
             <TextField label="Username" variant="outlined" value={username} onChange={(e) => setUsername(e.target.value)}/>
             <Spacer spaceMultiplier={2} direction="col" />
             <TextField label="Password" variant="outlined" type="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
-            {/* <Spacer spaceMultiplier={2} direction="col" /> */}
-            <Button
-              onClick={() => {
-                signUp();
-              }}
-              size="small"
-              variant="outlined"
-            >
+            <Spacer spaceMultiplier={2} direction="col" />
+            <Button onClick={() => {signUp();}} size="small" variant="outlined">
               Sign Up
             </Button>
+
           </FormControl>
         </Box>
 
-        <Spacer spaceMultiplier={2} direction="col" />
-
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '8vh',
-            width: '25vw',
-          }}
-        >
-          <FormControl
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: '30px',
-              padding: '30px',
-              backgroundColor: '#7289da',
-            }}
-          >
+        <Box className="SignUpBox">
+          <Box className="formControl" sx={{padding: '20px 30px'}}>
             <span className="heading">
-              <Box
-                sx={{
-                  fontSize: 'large',
-                  paddingTop: ' 10px',
-                  fontWeight: 'bold',
-                  color: 'lightgrey',
-                }}
-              >
+              <Box className="textContainer">
                 Already have an account?
               </Box>
             </span>
-            <Link to="/Login" className="btn btn-primary">
-              Login
-            </Link>
-          </FormControl>
+            <Button onClick={() => {SwitchToLogIn();}} size="small" variant="outlined">
+              Log In
+            </Button>
+          </Box>
         </Box>
+
       </Stack>
     </Box>
   );

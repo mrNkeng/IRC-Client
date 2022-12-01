@@ -5,8 +5,8 @@ import CatchingPokemonIcon from '@mui/icons-material/CatchingPokemon';
 import { Server } from '../../../data-models/interfaces';
 
 interface ServerListProps {
-  servers: ReadonlyArray<Server>;
-  setServer: (server: Server) => void;
+  servers: ReadonlyArray<Server> | undefined;
+  setServerAndClearState: (server: Server) => void;
 }
 
 function ServerList(props: ServerListProps) {
@@ -17,12 +17,12 @@ function ServerList(props: ServerListProps) {
       </Typography>
 
       <Stack>
-        {props.servers.map((server) => (
+        {props.servers?.map((server) => (
           <Tooltip title={server.name} key={server.name} placement="right" arrow>
             <IconButton
               size="large"
               color="secondary"
-              onClick={() => props.setServer(server)}
+              onClick={() => props.setServerAndClearState(server)}
             >
               <CatchingPokemonIcon fontSize="inherit" />
             </IconButton>

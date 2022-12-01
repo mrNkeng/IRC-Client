@@ -4,7 +4,6 @@ import { prisma } from "./db";
 import { hashPassword } from "./util";
 
 
-
 export class AOLMessenger {
 
   private currentUser: User | undefined

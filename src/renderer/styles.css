@@ -16,6 +16,55 @@
   font-family: "Roboto", cursive;
 }
 
+/* Styles for Login/Signup */
+.AppContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: #1e2124;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+}
+
+.SignUpBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 25vw;
+  margin: 2px;
+}
+
+.formControl {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 30px;
+  padding: 20px;
+  background-color: #7289da;
+  margin: 10px;
+}
+
+.textContainer {
+  font-size: large;
+  padding-top: 10px;
+  font-weight: bold;
+  color: lightgrey;
+}
+
+/* Styles for account Settings */
+.randomSettingsThingsIcantNameRightNow {
+  font-size: inherit;
+  text-align: right;
+  font-weight: bold;
+  color: lightgrey;
+}
+
 /* Styles for text and display items */
 .WindowHeadingContainer {
   height: 4%;
@@ -32,6 +81,15 @@
   font-weight: bold;
   color: #2E8B57;
   text-align: left;
+}
+
+.NavColumnHeading {
+  font-size: large;
+  text-align: left;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-weight: bold;
+  color: lightgrey;
 }
 
 .FlexColumnHeading {
