@@ -17,21 +17,15 @@ import {
   User,
   Message,
 } from 'data-models/interfaces';
+import { observer } from 'mobx-react';
+import { getStore } from 'renderer/state';
 
-export const ChatApplication = () => {
-  const [data, setData] = useState<Root>();
+export const ChatApplication = observer(() => {
   const [currServer, setCurrServer] = useState<Server>();
   const [currChannel, setCurrChannel] = useState<Channel>();
+  const store = getStore();
 
-  useEffect(() => {
-    //this is to set the state on startup, only way I could figure out how to do this
-    async function fetchRoot() {
-      const data = await window.electron.ipcRenderer.getData('data-channel')
-      //console.log(data);
-      setData(data);
-    }
-    fetchRoot().catch(console.error);
-  }, []);
+  const data = store.serverData
 
   function getUsers() {
     //uses built in array functions
@@ -140,4 +134,4 @@ export const ChatApplication = () => {
       </Grid>
     </Grid>
   );
-}
+})

@@ -31,4 +31,14 @@ window.electron.ipcRenderer.on('authSuccess', (args) => {
   state.currentUser = { name: name, username: username };
   history.push("/Chat")
   console.log(state.currentUser);
+
+  loadInitalData()
 });
+
+
+const loadInitalData = async () => {
+  const state = getStore();
+  const data = await window.electron.ipcRenderer.getData('data-channel')
+  state.serverData = data;
+  console.log(data);
+}
