@@ -9,7 +9,6 @@ import mock_data from 'main/const/mockdata.json';
 import { ChatWindow } from 'renderer/components/Chat/ChatWindow';
 import CenterWindow from 'renderer/components/CenterWindow/CenterWindow';
 import {
-  Root,
   ServerData,
   ChannelData,
   Server,
@@ -25,7 +24,7 @@ export const ChatApplication = observer(() => {
   const [currChannel, setCurrChannel] = useState<Channel>();
   const store = getStore();
 
-  const data = store.serverData
+  const data = store.serverList
 
   function getUsers() {
     //uses built in array functions
@@ -102,19 +101,19 @@ export const ChatApplication = observer(() => {
 
       {/* Server List */}
       <Grid className="FlexChildrenColumn" item xs={0.5}>
-        <ServerList
+        {/* <ServerList
           servers={getServerList()}
           setServerAndClearState={setServerAndClearState}
-        />
+        /> */}
       </Grid>
 
       {/* Channel List */}
       <Grid className="FlexChildrenColumn" item xs={1.25}>
-        <ChannelList
+        {/* <ChannelList
           currentServer={currServer?.name}
           channels={getChannels()}
           setChannel={setCurrChannel}
-        />
+        /> */}
       </Grid>
 
       {/* Main Window */}
@@ -124,13 +123,13 @@ export const ChatApplication = observer(() => {
           Not sure how to route this. <routes> can be across different files but this set up is tricky
         */}
         <CenterWindow windowTitle={currChannel?.name}>
-          <ChatWindow/>
+          <ChatWindow messages={data.get("irc.valanidas.dev")?.messages ?? []} />
         </CenterWindow>
       </Grid>
 
       {/* User List */}
       <Grid className="FlexChildrenColumn" item xs={1.25}>
-        <UserList users={getUsers()} />
+        {/* <UserList users={getUsers()} /> */}
       </Grid>
     </Grid>
   );

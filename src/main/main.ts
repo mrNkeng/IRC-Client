@@ -20,7 +20,7 @@ import { resolveHtmlPath } from './util';
 import { IRCClient } from './irc/irc';
 import { Root } from '../data-models/interfaces';
 
-import mock_data from './const/mockdata.json';
+import mock_data from './const/mockdata';
 
 import { AOLMessenger } from './app';
 
@@ -172,5 +172,31 @@ ipcMain.on('login', async (event, arg) => {
   const [username, password] = arg
   console.log(username, password);
   aol.login(username, password)
+})
+
+
+const server = {
+  host: 'irc.valanidas.dev',
+  port: 6667,
+};
+
+const client = {
+  realName: 'Reagan',
+  username: 'ReaganTestt',
+  nickname: 'RT',
+};
+
+const config = {
+  pingInterval: 20 * 1000, // this is arbitrary (maybe there is a proper number)
+};
+
+// TODO: add ref or some way of getting a "clean" copy of window
+const ircClient = new IRCClient(server, client, config);
+
+setTimeout( () => ircClient.connect(), 20000);
+
+ircClient.onServerMessage((client, message) => {
+  const serverName = ircClient.server.host
+  mainWindow!.webContents.send('serverMessage', [message, serverName]);
 })
 
