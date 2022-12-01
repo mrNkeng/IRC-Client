@@ -1,29 +1,24 @@
 import '../../styles.css';
 import { CssBaseline, Grid } from '@mui/material';
 import { useEffect, useState } from 'react';
-import UserList from 'renderer/components/UserList';
-import ServerList from 'renderer/components/ServerList';
 import Header from 'renderer/components/Header';
-import ChannelList from 'renderer/components/ChannelList';
-import mock_data from 'main/const/mockdata.json';
 import { ChatWindow } from 'renderer/components/Chat/ChatWindow';
 import CenterWindow from 'renderer/components/CenterWindow/CenterWindow';
 import {
   ServerData,
   ChannelData,
-  Server,
   Channel,
   User,
   Message,
 } from 'data-models/interfaces';
 import { observer } from 'mobx-react';
-import { getStore } from 'renderer/state';
+import { getStore, Server } from 'renderer/state';
+
 
 export const ChatApplication = observer(() => {
   const [currServer, setCurrServer] = useState<Server>();
   const [currChannel, setCurrChannel] = useState<Channel>();
-  const store = getStore();
-
+  const store = getStore()
   const data = store.serverList
 
   function getUsers() {

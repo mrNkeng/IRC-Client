@@ -14,14 +14,13 @@ export class ApplicationState {
 
   // serverData: Root
 
-  serverList: Map<string, Server>
+  serverList: Map<string, Server> = new Map()
 
   constructor() {
     if (ApplicationState.INSTANCE) {
       throw new Error('Store is a singleton');
     }
     ApplicationState.INSTANCE = this;
-    this.serverList = new Map()
 
     makeAutoObservable(this);
   }

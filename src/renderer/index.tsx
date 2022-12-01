@@ -53,12 +53,6 @@ window.electron.ipcRenderer.on('serverMessage', (args) => {
     content: message,
     id: 0
   })
-  // const serverData = state.serverData.ServerList.filter((serverData) => serverData.serverName === server)[0];
-  // serverData.serverMessages.push({content: message, id: serverData.serverMessages.length});
-  console.log(message)
-  console.log(server)
-
-  console.log("length: ", state.serverList.get("irc.valanidas.dev")?.messages.length)
 });
 
 
