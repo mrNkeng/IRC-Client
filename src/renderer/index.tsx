@@ -1,14 +1,13 @@
 import { StrictMode } from 'react';
 import * as ReactDOMClient from 'react-dom/client';
-import {history} from './history';
-import { BrowserRouter } from 'react-router-dom';
+import { history } from './history';
 import { App } from './App';
 import { createStore, getStore } from './state';
 import { unstable_HistoryRouter as HistoryRouter } from 'react-router-dom';
+
 createStore();
 const rootElement = document.getElementById('root');
 const root = ReactDOMClient.createRoot(rootElement!);
-
 
 root.render(
   <StrictMode>

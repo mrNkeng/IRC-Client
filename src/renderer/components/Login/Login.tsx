@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
-import InputLabel from '@mui/material/InputLabel';
-import flexbox from '@mui/system';
 import Button from '@mui/material/Button';
-import { Container, Grid } from '@mui/material';
-import { url } from 'inspector';
+import { Grid } from '@mui/material';
 import DiamondIcon from '@mui/icons-material/Diamond';
+import { history } from '../../history';
+
 interface LoginProps {}
 
 export const Login = (props: LoginProps) => {
@@ -18,85 +17,58 @@ export const Login = (props: LoginProps) => {
     window.electron.ipcRenderer.sendMessage('login', [username, password]);
   }
 
-  return (
-    //we can style this correctly later :P
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '	#1e2124',
-        position: 'absolute',
-        top: '20px',
-        right: '0px',
-        bottom: '0px',
-        left: '0px',
-      }}
-    >
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '20px 30px',
-        }}
-      >
-        <FormControl
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderRadius: '30px',
-            minHeight: '40vh',
-            width: '25vw',
-            padding: '20px 30px',
-            backgroundColor: '#7289da',
-          }}
-        >
-          <span className="heading">
-            <Box
-              sx={{
-                fontSize: 'large',
+  const SwitchToSignUp = () => {
+    history.push("/SignUp");
+  }
 
-                paddingTop: ' 10px',
-                fontWeight: 'bold',
-                color: 'lightgrey',
-              }}
-            >
-              AOL Messenger
-            </Box>
-          </span>
-          <DiamondIcon sx={{ fontSize: 100 }} />{' '}
-          <Grid
-            container
-            rowSpacing={1}
-            direction="column"
-            justifyContent="space-evenly"
-            alignItems="center"
-          >
-            <Grid item>
-              <TextField label="Username" variant="outlined" value={username} onChange={(e) => setUsername(e.target.value)}/>
-            </Grid>
-            <Grid item>
-              <TextField label="Password" variant="outlined" type="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
-            </Grid>
-            <Grid item>
-              <Button
-                onClick={() => {
-                  login();
-                }}
-                size="small"
-                variant="outlined"
-              >
-                Sign in
-              </Button>
-            </Grid>
+  const Skip = () => {
+    history.push("/Chat");
+  }
+
+  return (
+    //TODO change styles maybe?
+    //TODO remove skip eventually
+    <Box className="AppContainer">
+      <FormControl className="formControl" sx={{padding: '20px 30px'}}>
+
+        <span className="heading">
+          <Box className="textContainer">
+            AOL Messenger
+          </Box>
+        </span>
+
+        <DiamondIcon sx={{ fontSize: 100 }} />{' '}
+        <Grid
+          container
+          rowSpacing={1}
+          direction="column"
+          justifyContent="space-evenly"
+          alignItems="center"
+        >
+          <Grid item>
+            <TextField label="Username" variant="outlined" value={username} onChange={(e) => setUsername(e.target.value)}/>
           </Grid>
-        </FormControl>
-      </Box>
+          <Grid item>
+            <TextField label="Password" variant="outlined" type="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
+          </Grid>
+          <Grid item>
+            <Button onClick={() => {login();}} size="small" variant="outlined">
+              Sign In
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button onClick={() => {SwitchToSignUp();}} size="small" variant="outlined">
+              Sign Up
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button onClick={() => {Skip();}} size="small" variant="outlined">
+              Skip
+            </Button>
+          </Grid>
+        </Grid>
+
+      </FormControl>
     </Box>
   );
 };

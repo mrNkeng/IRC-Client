@@ -18,8 +18,17 @@ import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import { IRCClient } from './irc/irc';
+import { Root } from '../data-models/interfaces';
+
+import mock_data from './const/mockdata.json';
 
 import { AOLMessenger } from './app';
+
+export function handleDataChannel() {
+  //console.log("inside handler");
+  const mock_servers: Root = mock_data;
+  return(mock_servers);
+}
 
 class AppUpdater {
   constructor() {
@@ -136,6 +145,7 @@ app.on('window-all-closed', () => {
 app
   .whenReady()
   .then(() => {
+    ipcMain.handle('data-channel', handleDataChannel);
     createWindow();
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the
