@@ -10,6 +10,8 @@ import { url } from 'inspector';
 import DiamondIcon from '@mui/icons-material/Diamond';
 import { setServers } from 'dns';
 import { useNavigate } from 'react-router-dom';
+import { getStore, Server } from 'renderer/state';
+
 interface ServerlistProps {}
 
 export const ServerForm = (props: ServerlistProps) => {
@@ -18,7 +20,9 @@ export const ServerForm = (props: ServerlistProps) => {
   const navigate = useNavigate();
 
   const onConnect = () => {
+    const state = getStore();
     window.electron.ipcRenderer.sendMessage('createIRCConnection', [server, port]);
+    state.serverList.set(server, new Server(server))
     navigate("/Chat")
   }
   return (

@@ -7,11 +7,10 @@ import { observer } from "mobx-react";
 
 interface Props {
   chats: Array<Message>;
-  setchats: React.Dispatch<React.SetStateAction<Array<Message>>>;
 }
 
 const Chatbubblelist = observer((props: Props) => {
-  const { chats, setchats } = props;
+  const { chats } = props;
   return (
     <Box className="chats">
       {chats?.map((chat) => (
@@ -19,7 +18,6 @@ const Chatbubblelist = observer((props: Props) => {
           chat={chat}
           key={chat.id}
           chats={chats}
-          setchats={setchats}
         />
       ))}
     </Box>

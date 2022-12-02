@@ -3,13 +3,16 @@ import Box from '@mui/material/Box';
 import { Container, Grid, IconButton, Stack, Tooltip, Typography } from '@mui/material';
 import CatchingPokemonIcon from '@mui/icons-material/CatchingPokemon';
 import { Server } from '../../../data-models/interfaces';
+import { getStore } from 'renderer/state';
+import { observer } from 'mobx-react';
 
 interface ServerListProps {
-  servers: ReadonlyArray<Server> | undefined;
-  setServerAndClearState: (server: Server) => void;
+  setSelection: (server: string) => void;
 }
 
-function ServerList(props: ServerListProps) {
+const ServerList =  observer((props: ServerListProps) => {
+  const { setSelection } = props;
+  const state = getStore();
   return (
     <Box className="ServerList" >
       <Typography className="FlexColumnHeading">
@@ -17,12 +20,12 @@ function ServerList(props: ServerListProps) {
       </Typography>
 
       <Stack>
-        {props.servers?.map((server) => (
+        {Array.from(state.serverList.values()).map((server) => (
           <Tooltip title={server.name} key={server.name} placement="right" arrow>
             <IconButton
               size="large"
               color="secondary"
-              onClick={() => props.setServerAndClearState(server)}
+              onClick={() => setSelection(server.name)}
             >
               <CatchingPokemonIcon fontSize="inherit" />
             </IconButton>
@@ -31,6 +34,6 @@ function ServerList(props: ServerListProps) {
       </Stack>
     </Box>
   );
-};
+});
 
 export default ServerList;

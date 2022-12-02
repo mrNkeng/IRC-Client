@@ -2,14 +2,14 @@ import { Chat } from "data-models";
 import Typography from '@mui/material/Typography';
 import React from "react";
 import { Message } from "data-models/interfaces";
+import { observer } from "mobx-react";
 
 type Props = {
   chat: Message;
   chats: Message[];
-  setchats: React.Dispatch<React.SetStateAction<Message[]>>;
 };
 
-const Chatbubble = ({ chat, chats, setchats }: Props) => {
+const Chatbubble = observer(({ chat, chats }: Props) => {
   const chatBubbleClasses = ["Chatbubble"];
   chatBubbleClasses.push(chat.isSelf ? "self_chat": "other_chat");
   return (
@@ -17,6 +17,6 @@ const Chatbubble = ({ chat, chats, setchats }: Props) => {
       <Typography className="Chatbubbletext">{chat.content}</Typography>
     </div>
   );
-};
+});
 
 export default Chatbubble;

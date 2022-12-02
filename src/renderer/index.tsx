@@ -42,7 +42,7 @@ window.electron.ipcRenderer.on('authSuccess', (args) => {
   history.push("/Chat")
   console.log(state.currentUser);
 
-  loadInitalData()
+  // loadInitalData()
 });
 
 
@@ -53,13 +53,5 @@ window.electron.ipcRenderer.on('serverMessage', (args) => {
     content: message,
     id: 0
   })
+  console.log("message for: ", server);
 });
-
-
-const loadInitalData = async () => {
-  const state = getStore();
-  state.serverList.set("irc.valanidas.dev", new Server("irc.vlaanidas.dev"))
-  // const data = await window.electron.ipcRenderer.getData('data-channel')
-  // state.serverData = data;
-  // console.log(data);
-}

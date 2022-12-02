@@ -21,6 +21,7 @@ export class IRCClient extends EventEmitter  {
 
   public readonly onPing = this.registerEvent<[number]>();
   public readonly onServerMessage = this.registerEvent<[string, string]>()
+  public readonly onConnectionLoss = this.registerEvent();
 
   constructor(server: ServerInformaiton, client: ClientInformation, config: IRCClientConfiguration) {
     super();
@@ -128,7 +129,7 @@ export class IRCClient extends EventEmitter  {
   private parseServerMessage = () => {
     let serverMessage = this.serverMessage;
     this.serverMessage = "";
-    // console.debug("Server: ", serverMessage);
+    console.debug("Server: ", serverMessage);
 
     // parsing
     // TODO: properly tokenize the message instead of naive split
