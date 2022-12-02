@@ -98,23 +98,23 @@ export class IRCClient extends EventEmitter  {
   private authenticateToIRCServer = () => {
     this.authenticated = false;
 
-    this.sendCommand(`CAP LS 302`);
+    // this.sendCommand(`CAP LS 302`);
 
-    this.sendCommand(`NICK ${this.client.nickname}`);
-    this.sendCommand(`USER ${this.client.username} 0 * :${this.client.realName}`)
+    setTimeout(() => this.sendCommand(`NICK ${this.client.nickname}`), 2*1000);
+    setTimeout(() => this.sendCommand(`USER ${this.client.username} 0 * :${this.client.realName}`), 2*1000)
 
     // we can only run after we've connected and authenticated
-    setTimeout(() => this.sendCommand('JOIN #test'), 10000)
+    // setTimeout(() => this.sendCommand('JOIN #test'), 10000)
 
     // start ping stuff
-    this.ping()
+    this.pinger()
   }
 
-  private ping = () => {
+  private pinger = () => {
     // FIXME: do we need a unique message here? Please fix it
     this.sendCommand("PING :msg");
     this.pingSendTime = Date.now();
-    setTimeout(this.ping, this.config.pingInterval);
+    setTimeout(this.pinger, this.config.pingInterval);
   }
 
   /**
@@ -124,6 +124,14 @@ export class IRCClient extends EventEmitter  {
     console.debug("connection kept");
     const pingMilliseconds = Date.now() - (this.pingSendTime ?? Date.now()) // catch for first ping value...
     this.emit(this.onPing, pingMilliseconds)
+  }
+
+  private ping = (token: string) => {
+    this.sendCommand(`PONG :${token}`)
+  }
+
+  private handleError = (message: IRCMessage) => {
+
   }
 
   private parseServerMessage = () => {
@@ -136,12 +144,18 @@ export class IRCClient extends EventEmitter  {
     // For above use this: https://modern.ircdocs.horse/#client-to-server-protocol-structure
     const ircMessage = tokenizeServerMessage(serverMessage)
     // console.log("command: ", ircMessage.command)
-    //console.log(messageId);
+    console.log(ircMessage);
     switch (ircMessage.command) {
+      case "PING":
+        this.ping(ircMessage.parameters[0])
+        break;
       case "PONG":
         this.pong();
         break;
       case "NOTICE":
+        break;
+      case "ERROR":
+        this.handleError(ircMessage)
         break;
       case IRCReplies.welcome.id:
         console.debug("~~~DEBUG~~~: processing Welcome");
@@ -207,6 +221,6 @@ export class IRCClient extends EventEmitter  {
 
   private sendCommand = (command: string) => {
     console.debug("Client: ", command);
-    this.ircSocket?.write(command + "\n");
+    this.ircSocket?.write(command + "\r\n");
   }
 }
