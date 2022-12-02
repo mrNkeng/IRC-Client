@@ -1,13 +1,20 @@
 import { User } from "@prisma/client";
+import { Server } from "data-models/interfaces";
 import { ipcMain } from "electron";
 import { prisma } from "./db";
+import { IRCClient } from "./irc/irc";
+import { ServerInformaiton } from "./irc/protocol";
 import { hashPassword } from "./util";
+import log from 'electron-log';
 
-
+ type serverAddress = string;
 export class AOLMessenger {
 
   private currentUser: User | undefined
   public window: Electron.CrossProcessExports.BrowserWindow | null
+
+
+  private clients: Map<serverAddress, IRCClient> = new Map<serverAddress, IRCClient>();
 
   constructor(window: Electron.CrossProcessExports.BrowserWindow | null) {
     this.window = window
@@ -27,8 +34,6 @@ export class AOLMessenger {
     this.window!.webContents.send('authSuccess', [user.username, user.name]);
     console.log(user);
   }
-
-
 
   async login(username: string, password: string) {
     const user = await prisma.user.findFirst({where: {username: username}})
@@ -50,5 +55,39 @@ export class AOLMessenger {
 
     this.window!.webContents.send('authSuccess', [user.username, user.name]);
     console.log(user)
+  }
+
+  addIRCServer() {
+
+  }
+
+  createIRCClient(server: ServerInformaiton) {
+    if (!this.currentUser){
+      log.warn("Attemping to login with no user...")
+      return
+    }
+
+    const client = {
+      realName: this.currentUser.name,
+      username: this.currentUser.username,
+      nickname: this.currentUser.username,
+    };
+
+    const config = {
+      pingInterval: 20 * 1000, // this is arbitrary (maybe there is a proper number)
+    };
+
+    // TODO: add ref or some way of getting a "clean" copy of window
+    const ircClient = new IRCClient(server, client, config);
+
+    this.clients.set(server.host, ircClient);
+
+    ircClient.connect()
+
+    ircClient.onServerMessage((client, message) => {
+      const serverName = ircClient.server.host
+      this.window!.webContents.send('serverMessage', [message, serverName]);
+    })
+
   }
 }

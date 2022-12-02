@@ -1,6 +1,7 @@
 /* eslint import/prefer-default-export: off */
 import { URL } from 'url';
 var CryptoJS = require("crypto-js");
+import chalk from 'chalk';
 
 import path from 'path';
 

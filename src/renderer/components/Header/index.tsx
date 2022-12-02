@@ -15,6 +15,7 @@ function Header() {
           <Link to="/Accountsettings" style={{ margin: '15px' }}>Accountsettings</Link>
           <Link to="/Login" style={{ margin: '15px' }}>Login</Link>
           <Link to="/Signup" style={{ margin: '15px' }}>Signup</Link>
+          <Link to="/ServerList">Server List</Link>
         </nav>
         AOL Messenger
       </Box>

@@ -160,7 +160,7 @@ app
 ipcMain.on('sign-up', async (event, arg) => {
   // const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
   // console.log(msgTemplate(arg));
-  console.log("signup");
+  log.log("signup");
   const [ name, username, password ]= arg
   aol.signUp(name, username, password);
   console.log(arg)
@@ -168,35 +168,37 @@ ipcMain.on('sign-up', async (event, arg) => {
 
 
 ipcMain.on('login', async (event, arg) => {
-  console.log("login")
+  log.log("login")
   const [username, password] = arg
-  console.log(username, password);
+  log.log(username, password);
   aol.login(username, password)
 })
 
+ipcMain.on('createIRCConnection', async(event, arg) => {
+  log.log("attempting to create connection: ", arg)
+  const [server, port] = arg
+  aol.createIRCClient({
+    host: server, port: port
+  })
+});
 
-const server = {
-  host: 'irc.valanidas.dev',
-  port: 6667,
-};
+// const client = {
+//   realName: 'Reagan',
+//   username: 'ReaganTestt',
+//   nickname: 'RT',
+// };
 
-const client = {
-  realName: 'Reagan',
-  username: 'ReaganTestt',
-  nickname: 'RT',
-};
+// const config = {
+//   pingInterval: 20 * 1000, // this is arbitrary (maybe there is a proper number)
+// };
 
-const config = {
-  pingInterval: 20 * 1000, // this is arbitrary (maybe there is a proper number)
-};
+// // TODO: add ref or some way of getting a "clean" copy of window
+// const ircClient = new IRCClient(server, client, config);
 
-// TODO: add ref or some way of getting a "clean" copy of window
-const ircClient = new IRCClient(server, client, config);
+// setTimeout( () => ircClient.connect(), 20000);
 
-setTimeout( () => ircClient.connect(), 20000);
-
-ircClient.onServerMessage((client, message) => {
-  const serverName = ircClient.server.host
-  mainWindow!.webContents.send('serverMessage', [message, serverName]);
-})
+// ircClient.onServerMessage((client, message) => {
+//   const serverName = ircClient.server.host
+//   mainWindow!.webContents.send('serverMessage', [message, serverName]);
+// })
 
