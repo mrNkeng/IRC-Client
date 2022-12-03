@@ -2,11 +2,10 @@ import { StrictMode } from 'react';
 import * as ReactDOMClient from 'react-dom/client';
 import { history } from './history';
 import { App } from './App';
-import { createNotificationState, createStore, getStore, Server } from "./state"
+import { createStore, getStore, Server } from "./state"
 import { unstable_HistoryRouter as HistoryRouter } from 'react-router-dom';
 
 createStore();
-createNotificationState();
 const rootElement = document.getElementById('root');
 const root = ReactDOMClient.createRoot(rootElement!);
 

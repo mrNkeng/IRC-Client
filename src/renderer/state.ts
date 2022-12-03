@@ -1,6 +1,6 @@
-import { Toast, User } from "data-models";
+import { User } from "data-models";
 import { Message } from "data-models/IRCData";
-import { makeAutoObservable, toJS } from "mobx";
+import { makeAutoObservable } from "mobx";
 
 export class ApplicationState {
 
@@ -23,35 +23,12 @@ export class ApplicationState {
   }
 }
 
-export class NotificationState {
-  public static INSTANCE: NotificationState;
-
-  toast: Toast
-
-  constructor() {
-    if (NotificationState.INSTANCE) {
-      throw new Error('Store is a singleton');
-    }
-    NotificationState.INSTANCE = this;
-    this.toast = {type: "success", message: "Welcome!", display: true} 
-    makeAutoObservable(this);
-  }
-}
-
 export function createStore(): ApplicationState {
   return new ApplicationState();
 }
 
 export function getStore(): ApplicationState {
   return ApplicationState.INSTANCE;
-}
-
-export function createNotificationState(): NotificationState {
-  return new NotificationState();
-}
-
-export function getNotificationState(): NotificationState {
-  return NotificationState.INSTANCE;
 }
 
 export class Server {

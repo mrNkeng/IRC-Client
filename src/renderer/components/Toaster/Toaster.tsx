@@ -1,26 +1,26 @@
 import { Alert, Snackbar } from "@mui/material";
-import { observer } from "mobx-react";
-import { getNotificationState } from "renderer/state";
+import { useState } from "react";
 
-export const Toaster = observer(() => {
-    const { toast } = getNotificationState()
+export const Toaster = () => {
+    const [open, setOpen] = useState(false);
 
     const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
       if (reason === 'clickaway') {
         return;
       }
-      toast.display = false
+  
+      setOpen(false);
     };
 
     const vertical = "top";
     const horizontal = "center";
     return (
         <>
-            <Snackbar open={toast.display} autoHideDuration={10000} onClose={handleClose} anchorOrigin={{ vertical, horizontal }}>
-                <Alert onClose={handleClose} severity={toast.type} sx={{ width: '100%' }}>
-                    {toast?.message}
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical, horizontal }}>
+                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                    This is a success message!
                 </Alert>
             </Snackbar>
         </>
     );
-});
+}
