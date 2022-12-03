@@ -1,6 +1,6 @@
 import '../../styles.css';
 import { Box, Stack, Typography } from "@mui/material";
-import { User } from '../../../data-models/interfaces';
+import { User } from 'data-models';
 
 interface UserListProps {
   users: ReadonlyArray<User>;

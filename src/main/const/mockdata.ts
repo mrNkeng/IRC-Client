@@ -1,4 +1,4 @@
-import { Root } from "data-models/interfaces";
+import { Root } from "data-models/IRCData";
 
 const data: Root =  {
   "ServerList": [

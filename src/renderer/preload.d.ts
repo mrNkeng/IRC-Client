@@ -1,5 +1,5 @@
 import { Channels } from 'main/preload';
-import { Root } from '../data-models/interfaces';
+import { Root } from 'data-models';
 
 declare global {
   interface Window {

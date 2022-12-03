@@ -1,5 +1,4 @@
 import { User } from "@prisma/client";
-import { ipcMain } from "electron";
 import { prisma } from "./db";
 import { hashPassword } from "./util";
 

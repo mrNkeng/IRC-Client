@@ -1,8 +1,7 @@
 import React from "react";
-import { Chat } from "data-models";
 import Chatbubble from "./Chatbubble";
 import { Box } from "@mui/material";
-import { Message } from "data-models/interfaces";
+import { Message } from "data-models/IRCData";
 import { observer } from "mobx-react";
 
 interface Props {
