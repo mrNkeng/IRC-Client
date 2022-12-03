@@ -4,16 +4,14 @@ import { Signup } from "renderer/components/SignUp/Signup";
 import { Accountsettings } from "renderer/components/UserSettings/Accountsettings";
 import { Login } from "./components/Login/Login";
 import { observer } from "mobx-react-lite"
-import { Snackbar } from "material-ui";
-import { Alert } from "@mui/material";
 import { Toaster } from "./components/Toaster";
+import { getNotificationState } from "./state";
 
 export const App = observer((props: {}) => {
-
-  
+  const toast = getNotificationState().toast;
   return (
     <>
-      <Toaster />
+      <Toaster toast={toast}/>
       <Routes>
         <Route path="/Chat" element={<ChatApplication />} />
         <Route path="/Accountsettings" element={<Accountsettings />} />
