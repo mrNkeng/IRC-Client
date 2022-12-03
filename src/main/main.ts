@@ -156,7 +156,7 @@ app
 
 
 
-ipcMain.on('sign-up', async (event, arg) => {
+ipcMain.on('signUp', async (event, arg) => {
   log.log("signup");
   const [ name, username, password ]= arg
   aol.signUp(name, username, password);
