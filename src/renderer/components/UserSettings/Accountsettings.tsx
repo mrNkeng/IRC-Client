@@ -1,10 +1,109 @@
 import { AccountCircle } from '@mui/icons-material';
 import { Box, Button, Grid, Stack, TextField, Typography } from '@mui/material';
+import { useState } from 'react';
 import { history } from '../../history';
-
+import { VolumeSlider } from 'renderer/components/Chat/VolumeSlider';
 interface AccountsettingsProps {}
 
+type Tabs = 'account' | 'volume' | 'blockedusers';
+
+const AccountTab = (props: {}) => {
+  return (
+    <Stack>
+      <Typography
+        sx={{
+          textAlign: 'left',
+          paddingTop: ' 80px',
+          paddingLeft: '40px',
+          fontWeight: 'bold',
+          fontSize: '300%',
+          color: 'lightgrey',
+        }}
+      >
+        My Account
+      </Typography>
+
+      <Typography
+        sx={{
+          textAlign: 'left',
+          paddingTop: ' 10px',
+          paddingLeft: '40px',
+          fontWeight: 'bold',
+          fontSize: '100%',
+          color: 'lightgrey',
+        }}
+      >
+        {' '}
+        Username
+      </Typography>
+      <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+        <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+        <TextField
+          id="input-with-sx"
+          label="Edit Username"
+          variant="standard"
+        />
+      </Box>
+    </Stack>
+  );
+};
+
+const VolumeTab = (props: {}) => {
+  return (
+    <Stack>
+      <Typography
+        sx={{
+          textAlign: 'left',
+          paddingTop: ' 80px',
+          paddingLeft: '40px',
+          fontWeight: 'bold',
+          fontSize: '300%',
+          color: 'lightgrey',
+        }}
+      >
+        Alert Volume Settings
+      </Typography>
+      <VolumeSlider />
+    </Stack>
+  );
+};
+
+const BlockedUsersTab = (props: {}) => {
+  return (
+    <Stack>
+      <Typography
+        sx={{
+          textAlign: 'left',
+          paddingTop: ' 80px',
+          paddingLeft: '40px',
+          fontWeight: 'bold',
+          fontSize: '300%',
+          color: 'lightgrey',
+        }}
+      >
+        Blocked Users
+      </Typography>
+    </Stack>
+  );
+};
+
+
 export const Accountsettings = (props: AccountsettingsProps) => {
+  const [tab, setTab] = useState<Tabs>('account');
+
+  const RenderTab = () => {
+    switch(tab) {
+      case 'account':
+        return <AccountTab />
+      case 'volume':
+        return <VolumeTab />
+      case 'blockedusers':
+        return <BlockedUsersTab />
+      default:
+        return <></>
+    }
+  };
+
 
   const Skip = () => {
     history.push("/Chat");
@@ -49,19 +148,19 @@ export const Accountsettings = (props: AccountsettingsProps) => {
           </Typography>
           <Stack>
 
-            <Button variant="text" sx={{justifyContent:'flex-start', paddingTop:'20px', paddingBottom: '15px'}}>
+            <Button onClick={()=> setTab("account")} variant="text" sx={{justifyContent:'flex-start', paddingTop:'20px', paddingBottom: '15px'}}>
               <Typography className="randomSettingsThingsIcantNameRightNow">
                 My Account
               </Typography>
             </Button>
 
-            <Button variant="text" sx={{justifyContent:'flex-start', paddingBottom: '15px'}}>
+            <Button onClick={()=> setTab("blockedusers")} variant="text" sx={{justifyContent:'flex-start', paddingBottom: '15px'}}>
               <Typography className="randomSettingsThingsIcantNameRightNow">
                 Blocked Users
               </Typography>
             </Button>
 
-            <Button variant="text" sx={{justifyContent:'flex-start', paddingBottom: '15px'}}>
+            <Button onClick={()=> setTab("volume")} variant="text" sx={{justifyContent:'flex-start', paddingBottom: '15px'}}>
               <Typography className="randomSettingsThingsIcantNameRightNow">
                 Alert Volume Settings
               </Typography>
@@ -88,32 +187,7 @@ export const Accountsettings = (props: AccountsettingsProps) => {
           height: "100vh"
         }}>
           <Stack>
-            <Typography sx={{
-              textAlign: 'left',
-              paddingTop:' 80px',
-              paddingLeft: '40px',
-              fontWeight: 'bold',
-              fontSize: '300%',
-              color: 'lightgrey'
-            }} >
-              My Account
-            </Typography>
-
-            <Typography sx={{
-              textAlign: 'left',
-              paddingTop:' 10px',
-              paddingLeft: '40px',
-              fontWeight: 'bold',
-              fontSize: '100%',
-              color: 'lightgrey'
-            }} >
-              Username
-            </Typography>
-
-            <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-              <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
-              <TextField id="input-with-sx" label="Edit Username" variant="standard" />
-            </Box>
+            <RenderTab />
           </Stack>
         </Box>
       </Grid>
