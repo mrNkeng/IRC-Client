@@ -1,10 +1,10 @@
 import '../../styles.css';
 import Box from '@mui/material/Box';
-import { Container, Grid, IconButton, Stack, Tooltip, Typography } from '@mui/material';
+import { IconButton, Stack, Tooltip, Typography } from '@mui/material';
 import CatchingPokemonIcon from '@mui/icons-material/CatchingPokemon';
-import { Server } from '../../../data-models/interfaces';
 import { getStore } from 'renderer/state';
 import { observer } from 'mobx-react';
+
 
 interface ServerListProps {
   setSelection: (server: string) => void;

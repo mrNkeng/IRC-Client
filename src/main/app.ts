@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";;
+import { User } from "@prisma/client";
 import { prisma } from "./db";
 import { IRCClient } from "./irc/irc";
 import { ServerInformaiton } from "./irc/protocol";
