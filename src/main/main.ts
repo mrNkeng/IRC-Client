@@ -1,4 +1,7 @@
 /* eslint global-require: off, no-console: off, promise/always-return: off */
+// set up env
+import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
+dotenv.config()
 
 /**
  * This module executes inside of electron's main process. You can start
@@ -14,6 +17,18 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+import { IRCClient } from './irc/irc';
+import { Root } from '../data-models/interfaces';
+
+import mock_data from './const/mockdata';
+
+import { AOLMessenger } from './app';
+
+export function handleDataChannel() {
+  //console.log("inside handler");
+  const mock_servers: Root = mock_data;
+  return(mock_servers);
+}
 
 class AppUpdater {
   constructor() {
@@ -24,6 +39,8 @@ class AppUpdater {
 }
 
 let mainWindow: BrowserWindow | null = null;
+const aol = new AOLMessenger(mainWindow)
+
 
 ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
@@ -71,8 +88,8 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1024,
-    height: 728,
+    width: 1600,
+    height: 900,
     icon: getAssetPath('icon.png'),
     webPreferences: {
       preload: app.isPackaged
@@ -92,6 +109,7 @@ const createWindow = async () => {
     } else {
       mainWindow.show();
     }
+    aol.window = mainWindow
   });
 
   mainWindow.on('closed', () => {
@@ -127,6 +145,7 @@ app.on('window-all-closed', () => {
 app
   .whenReady()
   .then(() => {
+    ipcMain.handle('data-channel', handleDataChannel);
     createWindow();
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the
@@ -135,3 +154,49 @@ app
     });
   })
   .catch(console.log);
+
+
+
+ipcMain.on('sign-up', async (event, arg) => {
+  // const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
+  // console.log(msgTemplate(arg));
+  console.log("signup");
+  const [ name, username, password ]= arg
+  aol.signUp(name, username, password);
+  console.log(arg)
+});
+
+
+ipcMain.on('login', async (event, arg) => {
+  console.log("login")
+  const [username, password] = arg
+  console.log(username, password);
+  aol.login(username, password)
+})
+
+
+const server = {
+  host: 'irc.valanidas.dev',
+  port: 6667,
+};
+
+const client = {
+  realName: 'Reagan',
+  username: 'ReaganTestt',
+  nickname: 'RT',
+};
+
+const config = {
+  pingInterval: 20 * 1000, // this is arbitrary (maybe there is a proper number)
+};
+
+// TODO: add ref or some way of getting a "clean" copy of window
+const ircClient = new IRCClient(server, client, config);
+
+setTimeout( () => ircClient.connect(), 20000);
+
+ircClient.onServerMessage((client, message) => {
+  const serverName = ircClient.server.host
+  mainWindow!.webContents.send('serverMessage', [message, serverName]);
+})
+

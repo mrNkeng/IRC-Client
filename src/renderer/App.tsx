@@ -1,43 +1,18 @@
-import { MemoryRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { Accountsettings, Home, Login, Serverlist, Signup, AlertVolumeSettings, BlockedUsers} from './Pages';
-import CssBaseline from '@mui/material/CssBaseline';
-import React from 'react';
+import { Route, Routes } from "react-router-dom";
+import { ChatApplication } from "renderer/components/ChatApplication/ChatApplication";
+import { Signup } from "renderer/components/SignUp/Signup";
+import { Accountsettings } from "renderer/components/UserSettings/Accountsettings";
+import { Login } from "./components/Login/Login";
+import { observer } from "mobx-react-lite"
 
-export default function App() {
+export const App = observer((props: {}) => {
   return (
-    <Router>
-      <CssBaseline/>
-      <div>
-        <nav style={{
-        justifyContent: 'space-evenly',
-        height: "40px",
-        backgroundColor:"#1e2124"
-        }}>
-          <Link to="/">Home</Link>
-          <Link to="/Accountsettings">Accountsettings</Link>
-          <Link to="/AlertVolumeSettings">AlertVolumeSettings</Link>
-          <Link to="/BlockedUsers">BlockedUsers</Link>
-          <Link to="/Login">Login</Link>
-          <Link to="/Serverlist">Serverlist</Link>
-          <Link to="/Signup">Signup</Link>
+    <Routes>
+      <Route path="/Chat" element={<ChatApplication />} />
+      <Route path="/Accountsettings" element={<Accountsettings />} />
+      <Route path="*" element={<Login />} />
+      <Route path="/Signup" element={<Signup />} />
+    </Routes>
 
-
-
-
-
-
-        </nav>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/Accountsettings" element={<Accountsettings />} />
-          <Route path="/Login" element={<Login />} />
-          <Route path="/Serverlist" element={<Serverlist />} />
-          <Route path="/Signup" element={<Signup />} />
-
-
-
-        </Routes>
-      </div>
-    </Router>
   );
-}
+})
