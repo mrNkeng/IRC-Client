@@ -2,7 +2,7 @@ import '../../styles.css';
 import Box from '@mui/material/Box';
 import { Container, Grid, IconButton, Stack, Tooltip, Typography } from '@mui/material';
 import CatchingPokemonIcon from '@mui/icons-material/CatchingPokemon';
-import { Server } from '../../../data-models/interfaces';
+import { Server } from '../../../data-models/IRCData';
 
 interface ServerListProps {
   servers: ReadonlyArray<Server> | undefined;

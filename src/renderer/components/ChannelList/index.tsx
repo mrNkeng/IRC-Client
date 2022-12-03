@@ -1,6 +1,6 @@
 import '../../styles.css';
 import { Box, IconButton, Stack, Tooltip, Typography } from "@mui/material";
-import { Channel } from '../../../data-models/interfaces';
+import { Channel } from 'data-models/IRCData';
 
 interface ChannelListProps {
   currentServer: string | undefined;
