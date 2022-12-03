@@ -18,7 +18,7 @@ import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import { IRCClient } from './irc/irc';
-import { Root } from '../data-models/interfaces';
+import { Root } from '../data-models/IRCData';
 
 import mock_data from './const/mockdata';
 

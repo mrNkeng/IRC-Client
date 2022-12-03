@@ -2,18 +2,8 @@ import { StrictMode } from 'react';
 import * as ReactDOMClient from 'react-dom/client';
 import { history } from './history';
 import { App } from './App';
-import { createStore, getStore, Server } from './state';
+import { createStore, getStore, Server } from "./state"
 import { unstable_HistoryRouter as HistoryRouter } from 'react-router-dom';
-import {
-  Root,
-  ServerData,
-  ChannelData,
-  Server,
-  Channel,
-  User,
-  Message,
-} from 'data-models/interfaces';
-import { Server } from 'http';
 
 createStore();
 const rootElement = document.getElementById('root');

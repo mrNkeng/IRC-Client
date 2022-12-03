@@ -1,10 +1,7 @@
-import { Message, Root } from "data-models/interfaces";
+import { User } from "data-models";
+import { Message } from "data-models/IRCData";
 import { makeAutoObservable } from "mobx";
 
-
-// interface ServerList {
-//   [key: string]: Server
-// }
 export class ApplicationState {
 
   // singletons make me sad
