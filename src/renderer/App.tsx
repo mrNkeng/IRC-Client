@@ -13,5 +13,6 @@ export const App = observer((props: {}) => {
       <Route path="*" element={<Login />} />
       <Route path="/Signup" element={<Signup />} />
     </Routes>
+
   );
 })
