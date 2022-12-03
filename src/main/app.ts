@@ -1,6 +1,4 @@
-import { User } from "@prisma/client";
-import { Server } from "data-models/interfaces";
-import { ipcMain } from "electron";
+import { User } from "@prisma/client";;
 import { prisma } from "./db";
 import { IRCClient } from "./irc/irc";
 import { ServerInformaiton } from "./irc/protocol";

@@ -18,6 +18,5 @@ export const ChatWindow = observer((props: Props) => {
             <ChatBubblelist chats={props.messages} />
             <ChatInputField chat={chat} setchat={setchat} handleAdd={() => {}} />
         </div>
-
     );
 });
