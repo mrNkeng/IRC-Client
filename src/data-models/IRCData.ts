@@ -4,6 +4,7 @@ export interface Server {
 
 export interface Channel {
   name: string;
+
 }
 
 export interface Message {
@@ -12,19 +13,27 @@ export interface Message {
   content: string;
 }
 
+export interface IRCUser {
+  nick: string,
+  username: string,
+  fullName: string,
+}
+
 export interface Root {
-  ServerList: ServerData[]
+  [key: string]: ServerData
 }
 
 export interface ServerData {
-  serverName: string
-  serverMessages: Message[]
-  userList: string[]
-  channelList: ChannelData[]
+  name: string
+  metadata: ServerMetadata
+  users: {[key: string]: IRCUser}
+  channels: {[key: string]: Channel}
 }
-
-export interface ChannelData {
-  channelName: string
-  messages: string[]
+export interface ServerMetadata {
+  notices: Array<string>
+  connectedUsers?: number
+  createdOn?: Date
+  motd: Array<string>
+  version?: string
 }
 

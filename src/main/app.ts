@@ -4,6 +4,7 @@ import { IRCClient } from "./irc/irc";
 import { ServerInformaiton } from "./irc/protocol";
 import { hashPassword } from "./util";
 import log from 'electron-log';
+import { Root } from "data-models";
 
  type serverAddress = string;
 export class AOLMessenger {
@@ -13,6 +14,7 @@ export class AOLMessenger {
 
 
   private clients: Map<serverAddress, IRCClient> = new Map<serverAddress, IRCClient>();
+  private serverData: Root = {}
 
   constructor(window: Electron.CrossProcessExports.BrowserWindow | null) {
     this.window = window
@@ -74,15 +76,58 @@ export class AOLMessenger {
     const ircClient = new IRCClient(server, client, config);
     this.clients.set(server.host, ircClient);
 
-    ircClient.connect()
-    this.registerEvents(ircClient)
+    // init server
+    this.initServer(ircClient);
+
+    ircClient.connect();
+    this.registerEvents(ircClient);
+  }
+
+  sendServerData(serverName: string) {
+    const metadata = this.serverData[serverName].metadata
+    if (!metadata) {
+      log.warn("can't send data that doesn't exist");
+      return
+    }
+    this.window!.webContents.send('serverMetadata', [serverName, metadata]);
+
+  }
+
+  private initServer(ircClient: IRCClient) {
+    // TODO:  grab data from database if it exists.
+    this.serverData[ircClient.server.host] = {
+      name: ircClient.server.host,
+      users: {},
+      channels: {},
+      metadata: {
+        motd: [],
+        notices: []
+      },
+    }
+  }
+
+  private pustMetadata(ircClient: IRCClient) {
+    this.window!.webContents.send('serverMetadata', [ircClient.server.host, this.serverData[ircClient.server.host].metadata])
   }
 
 
   private registerEvents(ircClient: IRCClient) {
+    ircClient.onMOTDMessage((client, messsage) => {
+      this.serverData[ircClient.server.host].metadata.motd.push(messsage)
+      this.pustMetadata(ircClient)
+    })
+
     ircClient.onServerMessage((client, message) => {
       const serverName = ircClient.server.host
       this.window!.webContents.send('serverMessage', [message, serverName]);
     })
+  }
+}
+
+class ClientState {
+  public data: Root
+
+  constructor() {
+    this.data = {}
   }
 }

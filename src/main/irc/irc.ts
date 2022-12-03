@@ -2,7 +2,8 @@
 import net from "net";
 import { EventEmitter } from 'typed-event-emitter';
 import { buffer } from "stream/consumers";
-import { ClientInformation, createBlankIRCMessage, IRCClientConfiguration, IRCMessage, IRCReplies, ServerInformaiton, tokenizeServerMessage } from "./protocol";
+import { ClientInformation, createBlankIRCMessage, IRCClientConfiguration, IRCMessage, IRCReplies, ServerInformaiton, tokenizeServerMessage, IRCNumerics } from "./protocol";
+import log from "electron-log";
 
 
 export class IRCClient extends EventEmitter  {
@@ -21,6 +22,7 @@ export class IRCClient extends EventEmitter  {
 
   public readonly onPing = this.registerEvent<[number]>();
   public readonly onServerMessage = this.registerEvent<[string, string]>()
+  public readonly onMOTDMessage = this.registerEvent<[client: string, message: string]>();
   public readonly onConnectionLoss = this.registerEvent();
 
   constructor(server: ServerInformaiton, client: ClientInformation, config: IRCClientConfiguration) {
@@ -136,6 +138,12 @@ export class IRCClient extends EventEmitter  {
 
   }
 
+  private motd = (ircMessage: IRCMessage) => {
+    const client =  ircMessage.parameters[0]
+    const message = ircMessage.parameters.slice(1).join(" ")
+    this.emit(this.onMOTDMessage, client, message)
+  }
+
   private parseServerMessage = () => {
     let serverMessage = this.serverMessage;
     this.serverMessage = "";
@@ -159,60 +167,59 @@ export class IRCClient extends EventEmitter  {
       case "ERROR":
         this.handleError(ircMessage)
         break;
-      case IRCReplies.welcome.id:
+      case IRCNumerics.welcome:
         console.debug("~~~DEBUG~~~: processing Welcome");
         break;
-      case IRCReplies.yourHost.id:
+      case IRCNumerics.yourHost:
         console.debug("~~~DEBUG~~~: processing YourHost");
         break;
-      case IRCReplies.created.id:
+      case IRCNumerics.created:
         console.debug("~~~DEBUG~~~: processing created");
         break;
-      case IRCReplies.myInfo.id:
+      case IRCNumerics.myInfo:
         console.debug("~~~DEBUG~~~: processing myInfo");
         this.authenticated = true
         break;
-      case IRCReplies.iSupport.id:
+      case IRCNumerics.iSupport:
         console.debug("~~~DEBUG~~~: processing iSupport");
         // const result = IRCReplies.iSupport.parseFunction(serverMessage);
         // do something with the result...
         break;
-      case IRCReplies.bounce.id:
+      case IRCNumerics.bounce:
         //console.debug(Something here maybe?);
         break;
-      case IRCReplies.uModeIs.id:
+      case IRCNumerics.uModeIs:
         //console.debug(Something here maybe?);
         break;
-      case IRCReplies.lUserClient.id:
+      case IRCNumerics.lUserClient:
         //console.debug(Something here maybe?);
         break;
-      case IRCReplies.lUserUnknown.id:
+      case IRCNumerics.lUserUnknown:
         //console.debug(Something here maybe?);
         break;
-      case IRCReplies.lUserChannels.id:
+      case IRCNumerics.lUserChannels:
         //console.debug(Something here maybe?);
         break;
-      case IRCReplies.lUserMe.id:
+      case IRCNumerics.lUserMe:
         //console.debug(Something here maybe?);
         break;
-      case IRCReplies.localUsers.id:
+      case IRCNumerics.localUsers:
         //console.debug(Something here maybe?);
         break;
-      case IRCReplies.globalUsers.id:
+      case IRCNumerics.globalUsers:
         //console.debug(Something here maybe?);
         break;
-      case IRCReplies.motd.id:
-        // console.log(ircMessage)
-        this.emit(this.onServerMessage, ircMessage.parameters[0], ircMessage.parameters.slice(1).join(" "))
+      case IRCNumerics.motd:
+        this.motd(ircMessage);
         //console.debug(Something here maybe?);
         break;
-      case IRCReplies.motdStart.id:
-        //console.debug(Something here maybe?);
+      case IRCNumerics.motdStart:
+        this.motd(ircMessage);
         break;
-      case IRCReplies.endOfMotd.id:
-        //console.debug(Something here maybe?);
+      case IRCNumerics.endOfMotd:
+        this.motd(ircMessage);
         break;
-      case IRCReplies.notRegistered.id:
+      case IRCNumerics.notRegistered:
         //console.debug(Something here maybe?);
         break;
       default:

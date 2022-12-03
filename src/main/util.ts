@@ -25,3 +25,4 @@ export const hashPassword = (text: string, salt?: string) => {
     CryptoJS.PBKDF2(text, useSalt, { keySize: 256 / 32 }).toString(),
     useSalt,
   ]
+}

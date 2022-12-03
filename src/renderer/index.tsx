@@ -4,8 +4,10 @@ import { history } from './history';
 import { App } from './App';
 import { createNotificationState, createStore, getStore, Server } from "./state"
 import { unstable_HistoryRouter as HistoryRouter } from 'react-router-dom';
+import { ServerMetadata } from 'data-models';
+import { autorun } from 'mobx';
 
-createStore();
+const store = createStore();
 createNotificationState();
 const rootElement = document.getElementById('root');
 const root = ReactDOMClient.createRoot(rootElement!);
@@ -38,11 +40,35 @@ window.electron.ipcRenderer.on('authSuccess', (args) => {
 
 
 window.electron.ipcRenderer.on('serverMessage', (args) => {
-  const state = getStore();
-  const [message, server]: [string, string] = args;
-  state.serverList.get(server)?.messages.push({
-    content: message,
-    id: 0
-  })
-  console.log("message for: ", server);
+  // const state = getStore();
+  // const [message, server]: [string, string] = args;
+  // state.serverList.get(server)?.messages.push({
+  //   content: message,
+  //   id: 0
+  // })
+  // console.log("message for: ", server);
 });
+
+
+window.electron.ipcRenderer.on('serverMetadata', (args) => {
+  const state = getStore();
+  const [server, metadata]: [string, ServerMetadata] = args;
+
+  // conditionally update the metadata
+  if (server === state.selectedServer) {
+    state.setMetadata(metadata);
+  }
+})
+
+
+// checks if we need to request new data.
+autorun(() => {
+  if (store.selectedServer.length === 0) {
+    return;
+  }
+  requestServerData(store.selectedServer)
+});
+
+const requestServerData = (serverName: string) => {
+  window.electron.ipcRenderer.sendMessage('requestServerData', [serverName]);
+}

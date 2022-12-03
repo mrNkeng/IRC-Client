@@ -157,8 +157,6 @@ app
 
 
 ipcMain.on('sign-up', async (event, arg) => {
-  // const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-  // console.log(msgTemplate(arg));
   log.log("signup");
   const [ name, username, password ]= arg
   aol.signUp(name, username, password);
@@ -179,4 +177,10 @@ ipcMain.on('createIRCConnection', async(event, arg) => {
   aol.createIRCClient({
     host: server, port: port
   })
+});
+
+ipcMain.on('requestServerData', async(event, arg) => {
+  const [serverName] = arg
+  aol.sendServerData(serverName)
+  log.log("client requested new server data for: ", serverName)
 });

@@ -1,5 +1,5 @@
 import { Toast, User } from "data-models";
-import { Message } from "data-models/IRCData";
+import { Message, ServerMetadata } from "data-models/IRCData";
 import { makeAutoObservable, toJS } from "mobx";
 
 export class ApplicationState {
@@ -13,6 +13,10 @@ export class ApplicationState {
 
   serverList: Map<string, Server> = new Map()
 
+  selectedServer: string = ""
+  metadata: ServerMetadata | undefined = undefined
+
+
   constructor() {
     if (ApplicationState.INSTANCE) {
       throw new Error('Store is a singleton');
@@ -21,20 +25,32 @@ export class ApplicationState {
 
     makeAutoObservable(this);
   }
+
+  setMetadata = (metadata: ServerMetadata) => {
+    this.metadata = metadata
+  }
+
+  setSelectedServer = (serverName: string) => {
+    this.selectedServer = serverName;
+  }
 }
 
 export class NotificationState {
   public static INSTANCE: NotificationState;
 
-  toast: Toast
+  toast: Toast;
 
   constructor() {
     if (NotificationState.INSTANCE) {
       throw new Error('Store is a singleton');
     }
+    this.toast = {type: "success", message: "Welcome!", display: true};
     NotificationState.INSTANCE = this;
-    this.toast = {type: "success", message: "Welcome!", display: true} 
     makeAutoObservable(this);
+  }
+
+  hideToast = () => {
+    this.toast.display = false;
   }
 }
 
