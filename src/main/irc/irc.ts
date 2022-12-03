@@ -100,7 +100,9 @@ export class IRCClient extends EventEmitter  {
 
     // this.sendCommand(`CAP LS 302`);
 
-    setTimeout(() => this.sendCommand(`NICK ${this.client.nickname}`), 2*1000);
+    // set these commands on a timeout just in case the server doesn't like messages right at the start
+    // I read about this for a bit...
+    setTimeout(() => this.sendCommand(`NICK ${this.client.nickname}`), 1*1000);
     setTimeout(() => this.sendCommand(`USER ${this.client.username} 0 * :${this.client.realName}`), 2*1000)
 
     // we can only run after we've connected and authenticated
@@ -112,6 +114,7 @@ export class IRCClient extends EventEmitter  {
 
   private pinger = () => {
     // FIXME: do we need a unique message here? Please fix it
+    // FIXME: please change this to an interval thing and then clear this on connection termination
     this.sendCommand("PING :msg");
     this.pingSendTime = Date.now();
     setTimeout(this.pinger, this.config.pingInterval);
@@ -121,7 +124,6 @@ export class IRCClient extends EventEmitter  {
    * stands in as an example of how we'll propagate information out of the irc library.
    */
   private pong = () => {
-    console.debug("connection kept");
     const pingMilliseconds = Date.now() - (this.pingSendTime ?? Date.now()) // catch for first ping value...
     this.emit(this.onPing, pingMilliseconds)
   }

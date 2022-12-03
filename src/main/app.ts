@@ -57,10 +57,6 @@ export class AOLMessenger {
     console.log(user)
   }
 
-  addIRCServer() {
-
-  }
-
   createIRCClient(server: ServerInformaiton) {
     if (!this.currentUser){
       log.warn("Attemping to login with no user...")
@@ -77,17 +73,18 @@ export class AOLMessenger {
       pingInterval: 20 * 1000, // this is arbitrary (maybe there is a proper number)
     };
 
-    // TODO: add ref or some way of getting a "clean" copy of window
     const ircClient = new IRCClient(server, client, config);
-
     this.clients.set(server.host, ircClient);
 
     ircClient.connect()
+    this.registerEvents(ircClient)
+  }
 
+
+  private registerEvents(ircClient: IRCClient) {
     ircClient.onServerMessage((client, message) => {
       const serverName = ircClient.server.host
       this.window!.webContents.send('serverMessage', [message, serverName]);
     })
-
   }
 }

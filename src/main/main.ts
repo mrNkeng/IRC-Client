@@ -17,7 +17,6 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import { IRCClient } from './irc/irc';
 import { Root } from '../data-models/interfaces';
 
 import mock_data from './const/mockdata';
@@ -25,7 +24,6 @@ import mock_data from './const/mockdata';
 import { AOLMessenger } from './app';
 
 export function handleDataChannel() {
-  //console.log("inside handler");
   const mock_servers: Root = mock_data;
   return(mock_servers);
 }
@@ -181,24 +179,3 @@ ipcMain.on('createIRCConnection', async(event, arg) => {
     host: server, port: port
   })
 });
-
-// const client = {
-//   realName: 'Reagan',
-//   username: 'ReaganTestt',
-//   nickname: 'RT',
-// };
-
-// const config = {
-//   pingInterval: 20 * 1000, // this is arbitrary (maybe there is a proper number)
-// };
-
-// // TODO: add ref or some way of getting a "clean" copy of window
-// const ircClient = new IRCClient(server, client, config);
-
-// setTimeout( () => ircClient.connect(), 20000);
-
-// ircClient.onServerMessage((client, message) => {
-//   const serverName = ircClient.server.host
-//   mainWindow!.webContents.send('serverMessage', [message, serverName]);
-// })
-
