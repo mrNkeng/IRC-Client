@@ -20,7 +20,7 @@ export interface IRCUser {
 }
 
 export interface Root {
-  [key: string]: ServerData
+  [key: string]: ServerData | undefined
 }
 
 export interface ServerData {

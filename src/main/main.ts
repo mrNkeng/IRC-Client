@@ -22,7 +22,7 @@ import { Root } from '../data-models/IRCData';
 
 import mock_data from './const/mockdata';
 
-import { AOLMessenger } from './app';
+import { AOLMessenger } from './AOLMessenger';
 
 export function handleDataChannel() {
   const mock_servers: Root = mock_data;
