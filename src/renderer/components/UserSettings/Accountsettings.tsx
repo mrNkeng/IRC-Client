@@ -87,23 +87,27 @@ const BlockedUsersTab = (props: {}) => {
   );
 };
 
+interface RenderTabProps {
+  tab: Tabs
+}
+
+const RenderTab = (props: RenderTabProps) => {
+  const { tab } = props;
+  switch(tab) {
+    case 'account':
+      return <AccountTab />
+    case 'volume':
+      return <VolumeTab />
+    case 'blockedusers':
+      return <BlockedUsersTab />
+    default:
+      return <></>
+  }
+};
+
 
 export const Accountsettings = (props: AccountsettingsProps) => {
   const [tab, setTab] = useState<Tabs>('account');
-
-  const RenderTab = () => {
-    switch(tab) {
-      case 'account':
-        return <AccountTab />
-      case 'volume':
-        return <VolumeTab />
-      case 'blockedusers':
-        return <BlockedUsersTab />
-      default:
-        return <></>
-    }
-  };
-
 
   const Skip = () => {
     history.push("/Chat");
@@ -187,7 +191,7 @@ export const Accountsettings = (props: AccountsettingsProps) => {
           height: "100vh"
         }}>
           <Stack>
-            <RenderTab />
+            <RenderTab tab={tab} />
           </Stack>
         </Box>
       </Grid>
