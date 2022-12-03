@@ -10,7 +10,7 @@ import {
   Channel,
   User,
   Message,
-} from 'data-models';
+} from 'data-models/interfaces';
 import { observer } from 'mobx-react';
 import { getStore, Server } from 'renderer/state';
 

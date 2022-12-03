@@ -1,6 +1,7 @@
+import { Chat } from "data-models";
 import Typography from '@mui/material/Typography';
 import React from "react";
-import { Message } from "data-models/IRCData";
+import { Message } from "data-models/interfaces";
 
 type Props = {
   chat: Message;
