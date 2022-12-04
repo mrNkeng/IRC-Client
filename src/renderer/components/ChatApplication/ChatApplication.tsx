@@ -10,6 +10,7 @@ import { getStore } from 'renderer/state';
 import ServerList from '../ServerList';
 import { toJS } from 'mobx';
 import { ServerMetadata } from '../ServerMetadata';
+import { ServerPlus } from '../Chat/ServerPlus';
 
 export const ChatApplication = observer(() => {
   const [currChannel, setCurrChannel] = useState<Channel>();
@@ -27,17 +28,18 @@ export const ChatApplication = observer(() => {
       </Grid>
 
       {/* Server List */}
-      <Grid className="FlexChildrenColumn" item xs={0.5}>
+      <Grid className="FlexChildrenColumn" item xs={0.6}>
         <ServerList />
       </Grid>
 
       {/* Channel List */}
-      <Grid className="FlexChildrenColumn" item xs={1.25}>
+      <Grid className="FlexChildrenColumn" item xs={1.20}>
         {/* <ChannelList
           currentServer={currServer?.name}
           channels={getChannels()}
           setChannel={setCurrChannel}
         /> */}
+        <ServerPlus/>
       </Grid>
 
       {/* Main Window */}
@@ -52,7 +54,7 @@ export const ChatApplication = observer(() => {
       </Grid>
 
       {/* User List */}
-      <Grid className="FlexChildrenColumn" item xs={1.25}>
+      <Grid className="FlexChildrenColumn" item xs={1.20}>
         {/* <UserList users={getUsers()} /> */}
       </Grid>
     </Grid>

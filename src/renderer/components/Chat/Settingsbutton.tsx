@@ -10,6 +10,8 @@ import Stack from '@mui/material/Stack';
 import SettingsIcon from '@mui/icons-material/Settings';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { Link } from 'react-router-dom';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { Typography } from '@mui/material';
 interface Props {
 
 }
@@ -33,6 +35,7 @@ export const Settingsbutton = (props: Props) => {
     setOpen(false);
   };
 
+
   function handleListKeyDown(event: React.KeyboardEvent) {
     if (event.key === 'Tab') {
       event.preventDefault();
@@ -41,6 +44,7 @@ export const Settingsbutton = (props: Props) => {
       setOpen(false);
     }
   }
+
 
   // return focus to the button when we transitioned from !open -> open
   const prevOpen = React.useRef(open);
@@ -51,8 +55,9 @@ export const Settingsbutton = (props: Props) => {
 
     prevOpen.current = open;
   }, [open]);
-
+  const style2 = { color:"white"}
   return (
+
     <div>
         <Button
           ref={anchorRef}
@@ -61,8 +66,9 @@ export const Settingsbutton = (props: Props) => {
           aria-expanded={open ? 'true' : undefined}
           aria-haspopup="true"
           onClick={handleToggle}
+          sx={{height:"30px"}}
         >
-          <SettingsIcon/>
+          <SettingsIcon sx={{paddingBottom:"10px", fontSize: '250%',}}/>
         </Button>
         <Popper
           open={open}
@@ -80,7 +86,7 @@ export const Settingsbutton = (props: Props) => {
                   placement === 'bottom-start' ? 'left top' : 'left bottom',
               }}
             >
-              <Paper>
+              <Paper sx={{backgroundColor:"#1e2124"}}>
                 <ClickAwayListener onClickAway={handleClose}>
                   <MenuList
 
@@ -90,8 +96,9 @@ export const Settingsbutton = (props: Props) => {
                     onKeyDown={handleListKeyDown}
 
                   >
-                    <MenuItem component={Link} to="/Accountsettings" onClick={handleClose}>Account Settings</MenuItem>
-                    <MenuItem onClick={handleClose}>Dark Mode <DarkModeIcon/></MenuItem>
+                    <MenuItem component={Link} to="/Accountsettings" onClick={handleClose}><Typography sx={{color:"white"}}>Account Settings</Typography></MenuItem>
+                    <MenuItem onClick={handleClose}><Typography sx={{color:"white"}}>Dark Mode </Typography>< DarkModeIcon sx={{color:"white"}}/></MenuItem>
+                    <MenuItem component={Link} to="/Login" onClick={handleClose} > <Typography sx={{color:"white"}}>Sign Out</Typography> <LogoutIcon sx={{color:"white"}}/></MenuItem>
                     {/* <MenuItem onClick={handleClose}>Alert Volume</MenuItem> */}
                   </MenuList>
                 </ClickAwayListener>

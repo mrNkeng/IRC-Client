@@ -31,7 +31,7 @@ export const Signup = (props: SignupProps) => {
   const [password, setPassword] = useState("");
 
   const signUp = () => {
-    window.electron.ipcRenderer.sendMessage('sign-up', [fullName, username, password]);
+    window.electron.ipcRenderer.sendMessage('signUp', [fullName, username, password]);
   }
 
   const SwitchToLogIn = () => {
