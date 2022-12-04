@@ -120,6 +120,7 @@ export class AOLMessenger {
       name: ircClient.server.host,
       users: {},
       channels: {},
+      privateMessages: {},
       metadata: {
         motd: [],
         notices: []
