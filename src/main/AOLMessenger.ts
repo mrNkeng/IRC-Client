@@ -35,8 +35,8 @@ export class AOLMessenger {
     }
 
     const user = await prisma.user.create({data})
+    this.currentUser = user;
     this.window!.webContents.send('authSuccess', [user.username, user.name]);
-    console.log(user);
   }
 
   /**
