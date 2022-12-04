@@ -3,6 +3,8 @@ import { Box, Button, Grid, Stack, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { history } from '../../history';
 import { VolumeSlider } from 'renderer/components/Chat/VolumeSlider';
+import { getStore } from 'renderer/state';
+import { observer } from 'mobx-react';
 interface AccountsettingsProps {}
 
 type Tabs = 'account' | 'volume' | 'blockedusers';
@@ -48,7 +50,9 @@ const AccountTab = (props: {}) => {
   );
 };
 
-const VolumeTab = (props: {}) => {
+const VolumeTab = observer((props: {}) => {
+  const {settings, setVolume} = getStore()
+
   return (
     <Stack>
       <Typography
@@ -63,10 +67,10 @@ const VolumeTab = (props: {}) => {
       >
         Alert Volume Settings
       </Typography>
-      <VolumeSlider />
+      <VolumeSlider update={setVolume} value={settings.notificationVolume} />
     </Stack>
   );
-};
+});
 
 const BlockedUsersTab = (props: {}) => {
   return (
