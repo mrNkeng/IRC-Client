@@ -11,22 +11,10 @@ interface Props {
 
 export const ChatWindow = observer((props: Props) => {
     const [chat, setchat] = useState<string>("");
-    // TODO: Should the client be able to adjust the state from here? Or should the user also be able to update it.
-    const [chats, setchats] = useState<Array<Message>>(props.messages);
-
-    const handleAdd = (e: React.FormEvent) => {
-        e.preventDefault();
-
-        if (chat) {
-            setchats([...chats, { id: Date.now(), content: chat, isSelf: true }]);
-            setchat("");
-        }
-    };
     return (
         <div className="ChatWindow">
-            <ChatBubblelist chats={chats} setchats={setchats} />
-            <ChatInputField chat={chat} setchat={setchat} handleAdd={handleAdd} />
+            <ChatBubblelist chats={props.messages} />
+            <ChatInputField chat={chat} setchat={setchat} handleAdd={() => {}} />
         </div>
-
     );
 });

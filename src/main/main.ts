@@ -17,15 +17,14 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import { IRCClient } from './irc/irc';
 import { Root } from '../data-models/IRCData';
+
 
 import mock_data from './const/mockdata';
 
-import { AOLMessenger } from './app';
+import { AOLMessenger } from './AOLMessenger';
 
 export function handleDataChannel() {
-  //console.log("inside handler");
   const mock_servers: Root = mock_data;
   return(mock_servers);
 }
@@ -157,10 +156,8 @@ app
 
 
 
-ipcMain.on('sign-up', async (event, arg) => {
-  // const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-  // console.log(msgTemplate(arg));
-  console.log("signup");
+ipcMain.on('signUp', async (event, arg) => {
+  log.log("signup");
   const [ name, username, password ]= arg
   aol.signUp(name, username, password);
   console.log(arg)
@@ -168,35 +165,22 @@ ipcMain.on('sign-up', async (event, arg) => {
 
 
 ipcMain.on('login', async (event, arg) => {
-  console.log("login")
+  log.log("login")
   const [username, password] = arg
-  console.log(username, password);
+  log.log(username, password);
   aol.login(username, password)
 })
 
+ipcMain.on('createIRCConnection', async(event, arg) => {
+  log.log("attempting to create connection: ", arg)
+  const [server, port] = arg
+  aol.createIRCClient({
+    host: server, port: port
+  })
+});
 
-const server = {
-  host: 'irc.valanidas.dev',
-  port: 6667,
-};
-
-const client = {
-  realName: 'Reagan',
-  username: 'ReaganTestt',
-  nickname: 'RT',
-};
-
-const config = {
-  pingInterval: 20 * 1000, // this is arbitrary (maybe there is a proper number)
-};
-
-// TODO: add ref or some way of getting a "clean" copy of window
-const ircClient = new IRCClient(server, client, config);
-
-setTimeout( () => ircClient.connect(), 20000);
-
-ircClient.onServerMessage((client, message) => {
-  const serverName = ircClient.server.host
-  mainWindow!.webContents.send('serverMessage', [message, serverName]);
-})
-
+ipcMain.on('requestServerData', async(event, arg) => {
+  const [serverName] = arg
+  aol.sendServerData(serverName)
+  log.log("client requested new server data for: ", serverName)
+});

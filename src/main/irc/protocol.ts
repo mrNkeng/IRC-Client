@@ -1,6 +1,5 @@
-export const REGULAR_CHANNEL_PREFIX = '#'
-export const LOCAL_CHANNEL_PREFIX = '&'
-
+export const REGULAR_CHANNEL_PREFIX = '#';
+export const LOCAL_CHANNEL_PREFIX = '&';
 export const RESTRICTED_CHARACTERS = [' ', ',', '*', '?', '!', '@', '.'];
 export const RESTRICTED_START_CHARACTERS = ['$', ':', REGULAR_CHANNEL_PREFIX, LOCAL_CHANNEL_PREFIX];
 
@@ -48,6 +47,7 @@ export const createBlankIRCMessage = () => {
 export const tokenizeServerMessage = (message: string): IRCMessage => {
   const ircMessage: IRCMessage = createBlankIRCMessage();
   const tokens = message.split(" ");
+  // FIXME: Unnessesary for loop...
   for (let i = 0; i < tokens.length; i++) {
     const token = tokens[i];
     // parse tags
@@ -93,57 +93,51 @@ export const cleanParameters = (params: string[]): string[] => {
   return cleaned
 }
 
-// TODO: come up with a better name for this...
-export const IRCReplies = {
-  welcome: {
-    id: "001",
-  },
-  yourHost: {
-    id: "002",
-  },
-  created: {
-    id: "003",
-  },
-  myInfo: {
-    id: "004",
-  },
-  iSupport: {
-    id: "005",
-  },
-  bounce: {
-    id: "010",
-  },
-  uModeIs: {
-    id: "221",
-  },
-  lUserClient: {
-    id: "251",
-  },
-  lUserUnknown: {
-    id: "253",
-  },
-  lUserChannels: {
-    id: "254",
-  },
-  lUserMe: {
-    id: "255",
-  },
-  localUsers: {
-    id: "265",
-  },
-  globalUsers: {
-    id: "266",
-  },
-  motd: {
-    id: "372",
-  },
-  motdStart: {
-    id: "375",
-  },
-  endOfMotd: {
-    id: "376",
-  },
-  notRegistered: {
-    id: "451",
-  }
+export const IRCNumerics = {
+  welcome: "001",
+  yourHost: "002",
+  created: "003",
+  myInfo: "004",
+  iSupport: "005",
+  bounce: "010",
+  uModeIs: "221",
+  lUserClient: "251",
+  lUserUnknown: "253",
+  lUserChannels: "254",
+  lUserMe: "255",
+  localUsers: "265",
+  globalUsers: "266",
+  none: "300",
+  away: "301",
+  userhost: "302",
+  unaway: "305",
+  nowaway: "306",
+  whoRegNick: "307",
+  whoIsUser: "311",
+  whoIsServer: "312",
+  whoIsOperator: "313",
+  whoWasUser: "314",
+  whoIsIdle: "317",
+  endOfWhoIs: "318",
+  whoIsChannels: "319",
+  whoIsSpecial: "320",
+  listStart: "321",
+  list: "322",
+  listEnd: "323",
+  endOfWho: "315",
+  whoReply: "352",
+  namReply: "353",
+  endOfNames: "366",
+  motd: "372",
+  motdStart: "375",
+  endOfMotd: "376",
+  noSuchNick: "401",
+  noSuchServer: "402",
+  cannotSendToChan: "404",
+  tooManyTargets: "407",
+  noRecipient: "411",
+  notExtToSend: "412",
+  noTopLevel: "413",
+  wildTopLevel: "414",
+  notRegistered: "451",
 }
