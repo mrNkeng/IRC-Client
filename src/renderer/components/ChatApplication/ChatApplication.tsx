@@ -10,6 +10,8 @@ import { getStore } from 'renderer/state';
 import ServerList from '../ServerList';
 import { toJS } from 'mobx';
 import { ServerMetadata } from '../ServerMetadata';
+import { DropdownMenu } from '../DropdownMenu';
+
 
 export const ChatApplication = observer(() => {
   const [currChannel, setCurrChannel] = useState<Channel>();
@@ -53,6 +55,7 @@ export const ChatApplication = observer(() => {
 
       {/* User List */}
       <Grid className="FlexChildrenColumn" item xs={1.25}>
+        <DropdownMenu lines={["john", "josh", "bob", "davis", "sigmund", "alex"]} />
         {/* <UserList users={getUsers()} /> */}
       </Grid>
     </Grid>
