@@ -183,6 +183,9 @@ export class IRCClient extends EventEmitter {
 
   //##########################################
   // Receive fucntions
+
+  //returns the server, the user that requested
+  //undefined means that a different user joined a channel that we are in. if it isn't undefined, then we have joined a channel and have been returned the userlist
   private receiveJOIN = (ircMessage: IRCMessage) => {
     const source: string = ircMessage.source!;
     const client: string = ircMessage.parameters[0];
@@ -195,6 +198,7 @@ export class IRCClient extends EventEmitter {
     this.emit(this.onJOIN, source, client, usersInChannel)
   }
 
+  //returns the server, the user that requested, and the message being sent
   private receivePRIVMSG = (ircMessage: IRCMessage) => {
     // TODO: implement chanops and half ops (@ and %)
     // TODO: don't do this here, but I'm saving my work for later
@@ -207,6 +211,7 @@ export class IRCClient extends EventEmitter {
     this.emit(this.onPRIVMSG, source, client, message);
   }
 
+  //returns the server, the user that requested, and a list where first value is a channel, the rest is metadata
   private receiveLIST = (ircMessage: IRCMessage) => {
     const source: string = ircMessage.source!;
     const client: string = ircMessage.parameters[0];
@@ -215,6 +220,7 @@ export class IRCClient extends EventEmitter {
     this.emit(this.onLIST, source, client, message);
   }
 
+  //returns the server, the user that requested, the channel, and a list of users
   private receiveNAMES = (ircMessage: IRCMessage) => {
     const source: string = ircMessage.source!;
     const client: string = ircMessage.parameters[0];
@@ -224,6 +230,7 @@ export class IRCClient extends EventEmitter {
     this.emit(this.onNAMES, source, client, destinationChannel, message);
   }
 
+  //returns the server, the user that requested, the channel, and the topic requested (or no topic)
   private receiveTOPIC = (ircMessage: IRCMessage) => {
     const source: string = ircMessage.source!;
     const client: string = ircMessage.parameters[0];
@@ -233,6 +240,7 @@ export class IRCClient extends EventEmitter {
     this.emit(this.onTOPIC, source, client, destinationChannel, message);
   }
 
+  //returns the server, the user that requested, and the message being sent
   private receiveMOTD = (ircMessage: IRCMessage) => {
     const source: string = ircMessage.source!;
     const client = ircMessage.parameters[0];
@@ -241,6 +249,7 @@ export class IRCClient extends EventEmitter {
     this.emit(this.onMOTD, source, client, message);
   };
 
+  //returns the server, the user that requested, and the message being sent
   private receiveNOTICE = (ircMessage: IRCMessage) => {
     //servers send this before they know your NICK
     //client isn't very useful here
