@@ -180,3 +180,15 @@ ipcMain.on('requestServerData', async(event, arg) => {
   aol.sendServerData(serverName, channelName)
   log.log("client requested new server data for: ", serverName, channelName)
 });
+
+ipcMain.on('requestMessages', async(event, arg) => {
+  const [serverName, channelName] = arg
+  //aol.sendMessages(serverName, channelName)
+  log.log("client requested new server data for: ", serverName, channelName)
+});
+
+ipcMain.on('requestChannelUsers', async(event, arg) => {
+  const [serverName, channelName] = arg
+  //aol.sendServerData(serverName, channelName)
+  log.log("client requested new server data for: ", serverName, channelName)
+});

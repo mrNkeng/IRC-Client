@@ -111,7 +111,7 @@ export class AOLMessenger {
     // push each set of data
     this.pushMetadata(serverName);
     this.pushServerData();
-    this.pushChannelData(channelName);
+    this.pushChannelData(serverName, channelName);
   }
 
   /**
@@ -153,8 +153,8 @@ export class AOLMessenger {
    * @param serverName
    * @returns void
    */
-  private pushChannelData(channelName: string) {
-
+  private pushChannelData(serverName: string, channel: string) {
+    this.window!.webContents.send('sendChannels', [channel, this.serverData[serverName]!.naiveChannelList]);
   }
 
   /**
@@ -255,19 +255,13 @@ export class AOLMessenger {
         //do nothing i guess?
         return;
       }
-      log.log("LIST---------")
-      log.log("source: ", source)
-      log.log("destination: ", destination)
-      log.log("message: ", message)
-
       this.addChannelData(serverName, source, message[0], undefined);
-
-      this.window!.webContents.send('sendChannels', [destination, this.serverData[serverName]!.naiveChannelList]);
+      this.pushChannelData(serverName, destination);
     });
 
     ircClient.onPRIVMSG((source, destination, message) => {
         if (destination === this.currentUser?.username) {
-          this.addPrivateMessage(serverName, source, source, message);
+          this.addPrivateMessage(serverName, source, destination, message);
           this.pushMessages(serverName, source)
         }
         else {

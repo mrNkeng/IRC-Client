@@ -38,6 +38,10 @@ export class ApplicationState {
     this.selectedServer = serverName;
   }
 
+  setSelectedChannel = (channelName: string) => {
+    this.selectedChannel = channelName;
+  }
+
   setServers = (serverData: Array<Pick<Server, "name">>) => {
     this.servers = serverData;
   }

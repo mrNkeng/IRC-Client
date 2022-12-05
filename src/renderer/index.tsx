@@ -42,12 +42,14 @@ window.electron.ipcRenderer.on('sendMessageData', (args) => {
   const state = getStore();
   const [destination, messages]: [string, Array<Message>] = args;
   console.log(messages)
+  console.log(destination);
   if (destination === state.selectedChannel) {
     state.setMessages(messages);
   }
 });
 
 window.electron.ipcRenderer.on('sendChannels', (args) => {
+  //sends just the list of channels
   const state = getStore();
   const [destination, messages]: [string, Array<string>] = args;
   console.log(messages);

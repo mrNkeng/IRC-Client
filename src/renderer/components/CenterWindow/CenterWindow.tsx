@@ -1,24 +1,24 @@
 import '../../styles.css';
 import { Box, Typography } from '@mui/material';
+import { getStore } from 'renderer/state';
+import { ChatWindow } from './Chat/ChatWindow';
+import { observer } from 'mobx-react';
 
-export interface WindowProps {
-  windowTitle?: String
-  children?: JSX.Element
-}
+const CenterWindow = observer(() => {
+  let { selectedChannel, messages } = getStore();
 
-function CenterWindow(props: WindowProps) {
-  const { children, windowTitle } = props;
 
+  //TODO add back metadata thing somewhere here
   return (
     <Box className="TextWindow">
       <Box className = "WindowHeadingContainer">
         <Typography className="WindowHeading">
-          {windowTitle}
+          {selectedChannel}
         </Typography>
       </Box>
-      {children}
+      <ChatWindow messages={messages}/>
     </Box>
   );
-};
+});
 
 export default CenterWindow;

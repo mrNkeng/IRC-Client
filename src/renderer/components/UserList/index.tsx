@@ -25,10 +25,10 @@ const UserList = observer(() => {
         className="FlexColumnHeading"
         sx={{color: '#2E8B57'}}
       >
-        Offline
+        Away
       </Typography>
       <Stack>
-        <Typography className="typography">TODO?</Typography>
+
       </Stack>
     </Box>
   );

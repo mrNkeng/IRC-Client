@@ -12,6 +12,7 @@ const ChannelList = observer(() => {
   const channels: string[] = store.channels;
 
   const setChannel = (channel: string) => {
+    store.setSelectedChannel(channel);
     window.electron.ipcRenderer.sendMessage('requestServerData', [selectedServer, channel]);
   }
 
@@ -20,9 +21,6 @@ const ChannelList = observer(() => {
       <Typography className="FlexColumnHeading">
         {selectedServer}
       </Typography>
-      <>
-        {console.log(channels)}
-      </>
       <Stack alignItems="center" spacing={2}>
         {channels.map((channel) => (
           <IconButton

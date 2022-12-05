@@ -5,21 +5,9 @@ import ServerList from '../ServerList';
 import ChannelList from '../ChannelList';
 import UserList from '../UserList';
 import { CssBaseline, Grid } from '@mui/material';
-import { useState } from 'react';
-import { ChatWindow } from 'renderer/components/Chat/ChatWindow';
-import { Channel, Message } from 'data-models';
 import { observer } from 'mobx-react';
-import { getStore } from 'renderer/state';
-import { ServerMetadata } from '../ServerMetadata';
 
 export const ChatApplication = observer(() => {
-  const [currChannel, setCurrChannel] = useState<Channel>();
-  let { selectedServer } = getStore();
-
-  const store = getStore();
-
-  const windowName = currChannel ? currChannel.name : selectedServer;
-
   return (
     <Grid className="App" container>
       <CssBaseline />
@@ -37,9 +25,7 @@ export const ChatApplication = observer(() => {
       </Grid>
 
       <Grid className="FlexChildrenColumn" item xs={8.8}>
-        <CenterWindow windowTitle={windowName}>
-          {currChannel ? <ChatWindow messages={[]} /> : <ServerMetadata />}
-        </CenterWindow>
+        <CenterWindow />
       </Grid>
 
       <Grid className="FlexChildrenColumn" item xs={1.20}>
