@@ -51,5 +51,13 @@ export const IRCNumerics = {
   chanoPrivsNeeded: "482",
   noTopic: "331",
   topic: "332",
-  topicWhoTime: "333"
+  topicWhoTime: "333",
+  needMoreParams: "461",
+  passWdMismatch: "464",
+  noOperHost: "491",
+  youreOper: "381",
+  noNickNameGiven: "431",
+  erroneusNickname: "432",
+  nicknameInUse: "433",
+  nickCollision: "436",
 }

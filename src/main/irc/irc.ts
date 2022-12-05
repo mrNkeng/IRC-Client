@@ -26,17 +26,23 @@ export class IRCClient extends EventEmitter {
   private ircSocket: net.Socket | undefined;
 
   public readonly onPing = this.registerEvent<[number]>();
+
   public readonly onJOIN = this.registerEvent<[source: string, channel: string, usersInChannel: string[] | undefined]>();
-  public readonly onPRIVMSG = this.registerEvent<[source: string, destination: string, message: string]>();
-  public readonly onLIST = this.registerEvent<[source: string, destination: string, message: string[]]>();
-  public readonly onNAMES = this.registerEvent<[source: string, destination: string, destinationChannel: string, message: string[]]>();
-  public readonly onTOPIC = this.registerEvent<[source: string, destination: string, destinationChannel: string, message: string]>();
-  public readonly onMOTD = this.registerEvent<[source: string, destination: string, message: string]>();
-  public readonly onNOTICE = this.registerEvent<[source: string, destination: string, message: string]>();
-  public readonly onERROR = this.registerEvent<[source: string, destination: string, message: string]>();
+  public readonly onPRIVMSG = this.registerEvent<[source: string, client: string, message: string]>();
+  public readonly onLIST = this.registerEvent<[source: string, client: string, message: string[]]>();
+  public readonly onNAMES = this.registerEvent<[source: string, client: string, destinationChannel: string, message: string[]]>();
+  public readonly onTOPIC = this.registerEvent<[source: string, client: string, destinationChannel: string, message: string]>();
+  public readonly onMOTD = this.registerEvent<[source: string, client: string, message: string]>();
+  public readonly onNOTICE = this.registerEvent<[source: string, client: string, message: string]>();
+  public readonly onERROR = this.registerEvent<[source: string, client: string, message: string]>();
 
+  //TODO finish later
+  public readonly onOPER = this.registerEvent<[source: string, client: string, message: string]>();
+  public readonly onNICK = this.registerEvent<[source: string, client: string, message: string]>();
+  public readonly onAWAY = this.registerEvent<[source: string, client: string, message: string]>();
+  public readonly onBLOCK = this.registerEvent<[source: string, client: string, message: string]>();
 
-  //TODO emitters
+  //TODO other emitters
   public readonly onErrorMessage = this.registerEvent<[]>(); //TODO send things when server sends error
   public readonly onConnectionLoss = this.registerEvent<[]>(); //TODO send things when server stops responding
 
@@ -177,80 +183,105 @@ export class IRCClient extends EventEmitter {
 
   //##########################################
   // Receive fucntions
+
+  //returns the server, the user that requested
+  //undefined means that a different user joined a channel that we are in. if it isn't undefined, then we have joined a channel and have been returned the userlist
   private receiveJOIN = (ircMessage: IRCMessage) => {
     const source: string = ircMessage.source!;
-    const destination: string = ircMessage.parameters[0];
+    const client: string = ircMessage.parameters[0];
     let usersInChannel: string[] | undefined = undefined;
 
     if (ircMessage.parameters.length > 1) {
       usersInChannel = ircMessage.parameters.slice(2);
     }
 
-    this.emit(this.onJOIN, source, destination, usersInChannel)
+    this.emit(this.onJOIN, source, client, usersInChannel)
   }
 
+  //returns the server, the user that requested, and the message being sent
   private receivePRIVMSG = (ircMessage: IRCMessage) => {
     // TODO: implement chanops and half ops (@ and %)
     // TODO: don't do this here, but I'm saving my work for later
     const regex_symbols = new RegExp('@%#.+|%#.+|#.+');
 
     const source: string = ircMessage.source!;
-    const destination: string = ircMessage.parameters[0];
+    const client: string = ircMessage.parameters[0];
     const message: string = ircMessage.parameters.slice(1).join(" ");
 
-    this.emit(this.onPRIVMSG, source, destination, message);
+    this.emit(this.onPRIVMSG, source, client, message);
   }
 
+  //returns the server, the user that requested, and a list where first value is a channel, the rest is metadata
   private receiveLIST = (ircMessage: IRCMessage) => {
     const source: string = ircMessage.source!;
-    const destination: string = ircMessage.parameters[0];
+    const client: string = ircMessage.parameters[0];
     const message: string[] = ircMessage.parameters.slice(1);
 
-    this.emit(this.onLIST, source, destination, message);
+    this.emit(this.onLIST, source, client, message);
   }
 
+  //returns the server, the user that requested, the channel, and a list of users
   private receiveNAMES = (ircMessage: IRCMessage) => {
     const source: string = ircMessage.source!;
-    const destination: string = ircMessage.parameters[0];
+    const client: string = ircMessage.parameters[0];
     const destinationChannel: string = ircMessage.parameters[2];
     const message: string[] = ircMessage.parameters.slice(2);
 
-    this.emit(this.onNAMES, source, destination, destinationChannel, message);
+    this.emit(this.onNAMES, source, client, destinationChannel, message);
   }
 
+  //returns the server, the user that requested, the channel, and the topic requested (or no topic)
   private receiveTOPIC = (ircMessage: IRCMessage) => {
     const source: string = ircMessage.source!;
-    const destination: string = ircMessage.parameters[0];
+    const client: string = ircMessage.parameters[0];
     const destinationChannel: string = ircMessage.parameters[1];
     const message: string = ircMessage.parameters.slice(2).join(" ");
 
-    this.emit(this.onTOPIC, source, destination, destinationChannel, message);
+    this.emit(this.onTOPIC, source, client, destinationChannel, message);
   }
 
+  //returns the server, the user that requested, and the message being sent
   private receiveMOTD = (ircMessage: IRCMessage) => {
     const source: string = ircMessage.source!;
-    const destination = ircMessage.parameters[0];
+    const client = ircMessage.parameters[0];
     const message = ircMessage.parameters.slice(1).join(' ');
 
-    this.emit(this.onMOTD, source, destination, message);
+    this.emit(this.onMOTD, source, client, message);
   };
 
+  //returns the server, the user that requested, and the message being sent
   private receiveNOTICE = (ircMessage: IRCMessage) => {
     //servers send this before they know your NICK
     //client isn't very useful here
     const source: string = ircMessage.source!;
-    const destination = ircMessage.parameters[0];
+    const client = ircMessage.parameters[0];
     const message = ircMessage.parameters.slice(1).join(' ');
 
-    this.emit(this.onNOTICE, source, destination, message);
+    this.emit(this.onNOTICE, source, client, message);
+  };
+
+  private receiveNICK = (ircMessage: IRCMessage) => {
+    // const source: string = ircMessage.source!;
+    // const client = ircMessage.parameters[0];
+    // const message = ircMessage.parameters.slice(1).join(' ');
+
+    // this.emit(this.onNICK, source, client, message);
+  };
+
+  private receiveOPER = (ircMessage: IRCMessage) => {
+    // const source: string = ircMessage.source!;
+    // const client = ircMessage.parameters[0];
+    // const message = ircMessage.parameters.slice(1).join(' ');
+
+    // this.emit(this.onOPER, source, client, message);
   };
 
   private receiveERROR = (ircMessage: IRCMessage) => {
     const source: string = ircMessage.source!;
-    const destination = ircMessage.parameters[0];
+    const client = ircMessage.parameters[0];
     const message = ircMessage.parameters.slice(1).join(' ');
 
-    this.emit(this.onERROR, source, destination, message);
+    this.emit(this.onERROR, source, client, message);
   };
 
   private parseServerMessage = () => {
@@ -353,6 +384,30 @@ export class IRCClient extends EventEmitter {
         break;
       case IRCNumerics.topicWhoTime:
         this.receiveTOPIC(ircMessage);
+        break;
+      case IRCNumerics.noNickNameGiven:
+        this.receiveNICK(ircMessage);
+        break;
+      case IRCNumerics.erroneusNickname:
+        this.receiveNICK(ircMessage);
+        break;
+      case IRCNumerics.nicknameInUse:
+        this.receiveNICK(ircMessage);
+        break;
+      case IRCNumerics.nickCollision:
+        this.receiveNICK(ircMessage);
+        break;
+      case IRCNumerics.needMoreParams:
+        this.receiveOPER(ircMessage);
+        break;
+      case IRCNumerics.passWdMismatch:
+        this.receiveOPER(ircMessage);
+        break;
+      case IRCNumerics.noOperHost:
+        this.receiveOPER(ircMessage);
+        break;
+      case IRCNumerics.youreOper:
+        this.receiveOPER(ircMessage);
         break;
       default:
         log.warn('Unsupported message type: ', ircMessage.command);
