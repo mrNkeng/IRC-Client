@@ -1,6 +1,6 @@
-import { Toast, User } from "data-models";
+import { Server, Toast, User, Message, ServerMetadata, Channel } from "data-models";
 import { ClientSettings, defaultClientSettings } from "data-models/ClientSettings";
-import { Message, ServerMetadata } from "data-models/IRCData";
+
 import { makeAutoObservable, toJS } from "mobx";
 
 export class ApplicationState {
@@ -14,10 +14,14 @@ export class ApplicationState {
 
   // serverData: Root
 
-  serverList: Map<string, Server> = new Map()
+  // serverList: Map<string, Server> = new Map()
 
   selectedServer: string = ""
+  selectedChannel: string = ""
   metadata: ServerMetadata | undefined = undefined
+  servers: Array<Pick<Server, "name">> = []
+  channels: Array<Channel> = []
+  messages: Array<Message> = []
 
 
   constructor() {
@@ -35,6 +39,14 @@ export class ApplicationState {
 
   setSelectedServer = (serverName: string) => {
     this.selectedServer = serverName;
+  }
+
+  setServers = (serverData: Array<Pick<Server, "name">>) => {
+    this.servers = serverData;
+  }
+
+  setMessages = (messages: Array<Message>) => {
+    this.messages = messages;
   }
 
   setVolume = (volume: number) => {
@@ -76,32 +88,3 @@ export function createNotificationState(): NotificationState {
 export function getNotificationState(): NotificationState {
   return NotificationState.INSTANCE;
 }
-
-export class Server {
-  name: string
-  messages: Array<Message>
-  users: User[]
-  channels: Channel[]
-
-  constructor(name: string) {
-    this.name = name;
-    this.messages = []
-    this.users = []
-    this.channels = []
-    makeAutoObservable(this)
-  }
-}
-
-class Channel {
-
-  name: string
-  messages: Message[]
-
-  constructor(name: string) {
-    this.name = name
-    this.messages = []
-    makeAutoObservable(this);
-  }
-}
-
-// export const AppState = new ApplicationState();

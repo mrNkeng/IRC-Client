@@ -363,9 +363,9 @@ export class IRCClient extends EventEmitter {
   //##########################################
   // Send functions
   private sendCommand = (command: string) => {
-    if (!this.authenticated || !this.connect) {
-      throw new Error("Cannot send commands when the server doesn't exist");
-    }
+    // if (!this.authenticated || !this.connect) {
+    //   throw new Error("Cannot send commands when the server doesn't exist");
+    // }
 
     log.debug('Client: ', command);
     this.ircSocket?.write(command + '\r\n');
