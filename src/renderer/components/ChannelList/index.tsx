@@ -1,6 +1,7 @@
 import '../../styles.css';
 import { Box, IconButton, Stack, Tooltip, Typography } from "@mui/material";
 import { Channel } from 'data-models/IRCData';
+import { ChannelPlus } from './ChannelPlus';
 
 interface ChannelListProps {
   currentServer: string | undefined;
@@ -15,7 +16,7 @@ function ChannelList(props: ChannelListProps) {
         {props.currentServer}
       </Typography>
 
-      <Stack>
+      <Stack alignItems="center" spacing={2}>
         {props.channels.map((channel) => (
           <IconButton
             size="medium"
@@ -26,6 +27,7 @@ function ChannelList(props: ChannelListProps) {
             {channel.name}
           </IconButton>
         ))}
+        <ChannelPlus/>
       </Stack>
     </Box>
   );

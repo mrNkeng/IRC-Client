@@ -28,7 +28,7 @@ export const ChatApplication = observer(() => {
       </Grid>
 
       {/* Server List */}
-      <Grid className="FlexChildrenColumn" item xs={0.6}>
+      <Grid className="FlexChildrenColumn" item xs={0.8}>
         <ServerList />
       </Grid>
 
@@ -39,11 +39,11 @@ export const ChatApplication = observer(() => {
           channels={getChannels()}
           setChannel={setCurrChannel}
         /> */}
-        <ServerPlus/>
+
       </Grid>
 
       {/* Main Window */}
-      <Grid className="FlexChildrenColumn" item xs={9}>
+      <Grid className="FlexChildrenColumn" item xs={8.8}>
         {/*
           TODO: add logic here to display login, signup, and settings pages
           Not sure how to route this. <routes> can be across different files but this set up is tricky

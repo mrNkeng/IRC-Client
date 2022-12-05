@@ -2,7 +2,7 @@ import { AccountCircle, Spa } from '@mui/icons-material';
 import { Box, Button, Grid, Stack, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { history } from '../../history';
-import { VolumeSlider } from 'renderer/components/Chat/VolumeSlider';
+import { VolumeSlider } from 'renderer/components/UserSettings/VolumeSlider';
 interface AccountsettingsProps {}
 interface Props {
 
