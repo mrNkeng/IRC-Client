@@ -21,13 +21,6 @@ root.render(
   </StrictMode>
 );
 
-// calling IPC exposed from preload script
-window.electron.ipcRenderer.once('ipc-example', (arg) => {
-  // eslint-disable-next-line no-console
-  console.log(arg);
-});
-window.electron.ipcRenderer.sendMessage('ipc-example', ['ping']);
-
 window.electron.ipcRenderer.on('authSuccess', (args) => {
   const state = getStore();
   const [username, name]: [string, string] = args;
@@ -48,7 +41,7 @@ window.electron.ipcRenderer.on('sendServerData', (args) => {
 window.electron.ipcRenderer.on('sendMessageData', (args) => {
   const state = getStore();
   const [destination, messages]: [string, Array<Message>] = args;
-
+  console.log(messages)
   if (destination === state.selectedChannel) {
     state.setMessages(messages);
   }

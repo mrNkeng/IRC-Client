@@ -1,5 +1,6 @@
-import { Server, Toast, User } from "data-models";
-import { Channel, Message, ServerMetadata } from "data-models";
+import { Server, Toast, User, Message, ServerMetadata, Channel } from "data-models";
+import { ClientSettings, defaultClientSettings } from "data-models/ClientSettings";
+
 import { makeAutoObservable, toJS } from "mobx";
 
 export class ApplicationState {
@@ -8,6 +9,8 @@ export class ApplicationState {
   public static INSTANCE: ApplicationState;
 
   currentUser: User | undefined
+
+  settings: ClientSettings = defaultClientSettings;
 
   // serverData: Root
 
@@ -42,8 +45,12 @@ export class ApplicationState {
     this.servers = serverData;
   }
 
-  setMessages = (messages: Array<Message>) {
+  setMessages = (messages: Array<Message>) => {
     this.messages = messages;
+  }
+
+  setVolume = (volume: number) => {
+    this.settings.notificationVolume = volume
   }
 }
 

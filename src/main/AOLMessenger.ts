@@ -96,6 +96,11 @@ export class AOLMessenger {
     ircClient.connect();
     this.pushServerData();
     this.registerEvents(ircClient);
+    // setTimeout(() => ircClient.connect(), 10000);
+    setTimeout(() => ircClient.requestLIST([]), 30000);
+    // setTimeout(() => ircClient.joinCHANNEL(["#test"], []), 20000);
+    setTimeout(() => ircClient.joinCHANNEL(["#general"], []), 24000);
+    setTimeout(() => ircClient.sendPrivmsg("#general", "Hello World"), 28000);
   }
 
   /**
@@ -233,14 +238,16 @@ export class AOLMessenger {
   private registerEvents(ircClient: IRCClient) {
     const serverName = ircClient.server.host
     // MOTD Messages...
-    ircClient.onMOTDMessage((client, messsage) => {
+    ircClient.onMOTD((source, destination, messsage) => {
       this.serverData[serverName]!.metadata.motd.push(messsage)
       this.pushMetadata(serverName)
     })
 
-    ircClient.onServerMessage((client, message) => {
-      this.window!.webContents.send('serverMessage', [message, serverName]);
-    })
+    ircClient.onLIST((source, destination, message) => {
+      log.log("source: ", source)
+      log.log("destination: ", destination)
+      log.log("message: ", message)
+    });
 
     ircClient.onPRIVMSG((source, destination, message) => {
         if (destination === this.currentUser?.username) {

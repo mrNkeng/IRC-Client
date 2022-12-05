@@ -1,14 +1,9 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
-export type Channels = 'ipc-example' | 'signUp' | 'login' | 'authSuccess' | 'data-channel' | "serverMessage" | "createIRCConnection" | "serverMetadata" | "sendServerData" | "requestServerData" | 'sendMessageData';
+export type Channels = 'ipc-example' | 'signUp' | 'login' | 'serverMessage' | 'authSuccess' | 'createIRCConnection' | 'serverMetadata' | 'requestServerData' |  'sendMessageData' | 'sendServerData'
 
 contextBridge.exposeInMainWorld('electron', {
   ipcRenderer: {
-    async getData(channel: Channels) {
-      const data = await ipcRenderer.invoke(channel);
-      //console.log(data);
-      return data;
-    },
     sendMessage(channel: Channels, args: unknown[]) {
       ipcRenderer.send(channel, args);
     },
