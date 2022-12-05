@@ -144,7 +144,6 @@ app.on('window-all-closed', () => {
 app
   .whenReady()
   .then(() => {
-    ipcMain.handle('data-channel', handleDataChannel);
     createWindow();
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the
@@ -154,15 +153,12 @@ app
   })
   .catch(console.log);
 
-
-
 ipcMain.on('signUp', async (event, arg) => {
   log.log("signup");
   const [ name, username, password ]= arg
   aol.signUp(name, username, password);
   console.log(arg)
 });
-
 
 ipcMain.on('login', async (event, arg) => {
   log.log("login")
