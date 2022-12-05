@@ -1,3 +1,5 @@
+import { IRCClient } from "main/irc/irc";
+
 export interface Server {
   name: string;
 }
@@ -25,6 +27,7 @@ export interface Root {
 }
 
 export interface ServerData {
+  ircClient: IRCClient
   name: string
   metadata: ServerMetadata
   naiveChannelList: Array<string>

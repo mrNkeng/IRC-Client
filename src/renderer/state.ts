@@ -12,13 +12,14 @@ export class ApplicationState {
 
   settings: ClientSettings = defaultClientSettings;
 
-  selectedServer: string = ""
-  selectedChannel: string = ""
-  metadata: ServerMetadata | undefined = undefined
-  servers: Array<Pick<Server, "name">> = []
-  users: Array<string> = [];
-  channels: Array<string> = []
-  messages: Array<Message> = []
+  selectedServer: string = "";
+  selectedChannel: string = "";
+  metadata: ServerMetadata | undefined = undefined;
+  servers: Array<Pick<Server, "name">> = [];
+  globalUsers: Array<string> = [];
+  channelUsers: Array<string> = [];
+  channels: Array<string> = [];
+  messages: Array<Message> = [];
 
 
   constructor() {
@@ -56,6 +57,23 @@ export class ApplicationState {
 
   setVolume = (volume: number) => {
     this.settings.notificationVolume = volume
+  }
+
+  setGlobalUsers = (users: string[]) => {
+    this.globalUsers = users;
+  }
+
+  setChannelUsers = (users: string[]) => {
+    this.channelUsers = users;
+  }
+
+  changeChannel = (channel: string) => {
+    this.setSelectedChannel(channel);
+    window.electron.ipcRenderer.sendMessage('requestServerData', [this.selectedServer, channel]);
+  }
+
+  sendMessage = (message: string) => {
+    window.electron.ipcRenderer.sendMessage('sendMessageToChannel', [this.selectedServer, this.selectedChannel, message]);
   }
 }
 

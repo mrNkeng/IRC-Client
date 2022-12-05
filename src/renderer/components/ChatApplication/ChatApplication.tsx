@@ -1,11 +1,12 @@
 import '../../styles.css';
-import CenterWindow from 'renderer/components/CenterWindow/CenterWindow';
 import Header from 'renderer/components/Header';
 import ServerList from '../ServerList';
 import ChannelList from '../ChannelList';
 import UserList from '../UserList';
 import { CssBaseline, Grid } from '@mui/material';
 import { observer } from 'mobx-react';
+import { ChatWindow } from '../Chat/ChatWindow';
+import ChannelUserList from '../ChannelUserList';
 
 export const ChatApplication = observer(() => {
   return (
@@ -16,19 +17,23 @@ export const ChatApplication = observer(() => {
         <Header />
       </Grid>
 
-      <Grid className="FlexChildrenColumn" item xs={0.8}>
+      <Grid className="FlexChildrenColumn" item xs={0.75}>
         <ServerList />
       </Grid>
 
-      <Grid className="FlexChildrenColumn" item xs={1.20}>
+      <Grid className="FlexChildrenColumn" item xs={1.25}>
         <ChannelList/>
       </Grid>
 
-      <Grid className="FlexChildrenColumn" item xs={8.8}>
-        <CenterWindow />
+      <Grid className="FlexChildrenColumn" item xs={8}>
+        <ChatWindow />
       </Grid>
 
-      <Grid className="FlexChildrenColumn" item xs={1.20}>
+      <Grid className="FlexChildrenColumn" item xs={1}>
+        <ChannelUserList/>
+      </Grid>
+
+      <Grid className="FlexChildrenColumn" item xs={1}>
         <UserList/>
       </Grid>
     </Grid>

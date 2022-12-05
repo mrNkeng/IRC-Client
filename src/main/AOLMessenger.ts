@@ -112,6 +112,14 @@ export class AOLMessenger {
     this.pushMetadata(serverName);
     this.pushServerData();
     this.pushChannelData(serverName, channelName);
+    this.pushMessages(serverName, channelName)
+  }
+
+  sendMessageToChannel(serverName: string, channelName: string, message: string) {
+    this.serverData[serverName]!.ircClient.sendPrivmsg(channelName, message);
+
+    this.addChannelData(serverName, this.currentUser!.name, channelName, message);
+    this.pushMessages(serverName, channelName);
   }
 
   /**
@@ -122,6 +130,7 @@ export class AOLMessenger {
     // TODO:  grab data from database if it exists.
     this.serverData[ircClient.server.host] = {
       name: ircClient.server.host,
+      ircClient: ircClient,
       users: {},
       naiveChannelList: [],
       naiveUserList: [],
@@ -171,6 +180,14 @@ export class AOLMessenger {
       data.push({name: serverName})
     }
     this.window!.webContents.send('sendServerData', [data]);
+  }
+
+  private pushGlobalUsers() {
+
+  }
+
+  private pushChannelUsers() {
+
   }
 
   private pushMessages(serverName: string, destination: string) {

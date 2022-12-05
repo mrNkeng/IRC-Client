@@ -1,7 +1,8 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
-export type Channels = 'requestMessages'| 'sendChannels' | 'signUp' | 'login' | 'serverMessage' |
-  'authSuccess' | 'createIRCConnection' | 'serverMetadata' | 'requestServerData' |  'sendMessageData' | 'sendServerData';
+export type Channels = 'requestMessages' | 'sendMessageToChannel' | 'sendChannels' | 'signUp' | 'login' | 'serverMessage' |
+  'authSuccess' | 'createIRCConnection' | 'serverMetadata' | 'requestServerData' |  'sendMessageData' | 'sendServerData' |
+  'sendGlobalUserList' | 'sendChannelUserList';
 
 contextBridge.exposeInMainWorld('electron', {
   ipcRenderer: {

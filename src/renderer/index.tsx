@@ -31,7 +31,6 @@ window.electron.ipcRenderer.on('authSuccess', (args) => {
   // loadInitalData()
 });
 
-
 window.electron.ipcRenderer.on('sendServerData', (args) => {
   const state = getStore();
   const [serverData]: [Array<Pick<Server, "name">>] = args;
@@ -50,6 +49,24 @@ window.electron.ipcRenderer.on('sendMessageData', (args) => {
 
 window.electron.ipcRenderer.on('sendChannels', (args) => {
   //sends just the list of channels
+  const state = getStore();
+  const [destination, messages]: [string, Array<string>] = args;
+  console.log(messages);
+  state.setChannels(messages);
+});
+
+window.electron.ipcRenderer.on('sendGlobalUserList', (args) => {
+  //sends the list of global users
+  //TODO
+  const state = getStore();
+  const [destination, messages]: [string, Array<string>] = args;
+  console.log(messages);
+  state.setChannels(messages);
+});
+
+window.electron.ipcRenderer.on('sendChannelUserList', (args) => {
+  //sends the list of channel users
+  //TODO
   const state = getStore();
   const [destination, messages]: [string, Array<string>] = args;
   console.log(messages);

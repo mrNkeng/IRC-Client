@@ -12,8 +12,7 @@ const ChannelList = observer(() => {
   const channels: string[] = store.channels;
 
   const setChannel = (channel: string) => {
-    store.setSelectedChannel(channel);
-    window.electron.ipcRenderer.sendMessage('requestServerData', [selectedServer, channel]);
+    store.changeChannel(channel);
   }
 
   return(
