@@ -11,7 +11,6 @@ export class AOLMessenger {
   private currentUser: User | undefined
   public window: Electron.CrossProcessExports.BrowserWindow | null
 
-
   private serverData: Root = {}
 
   constructor(window: Electron.CrossProcessExports.BrowserWindow | null) {
@@ -96,24 +95,23 @@ export class AOLMessenger {
     ircClient.connect();
     this.pushServerData();
     this.registerEvents(ircClient);
-    // setTimeout(() => ircClient.connect(), 10000);
-    setTimeout(() => ircClient.requestLIST([]), 30000);
-    // setTimeout(() => ircClient.joinCHANNEL(["#test"], []), 20000);
-    setTimeout(() => ircClient.joinCHANNEL(["#general"], []), 24000);
-    setTimeout(() => ircClient.sendPrivmsg("#general", "Hello World"), 28000);
+    setTimeout(() => ircClient.requestLIST([]), 6500);
+    setTimeout(() => ircClient.joinCHANNEL(["#test"], []), 5100);
+    setTimeout(() => ircClient.joinCHANNEL(["#general"], []), 5200);
+    setTimeout(() => ircClient.sendPrivmsg("#general", "Hello World"), 5300);
   }
 
   /**
    * Pushes all data assocaited with the server name to the frontend.
    * @param serverName
    */
-  sendServerData(serverName: string) {
+  sendServerData(serverName: string, channelName: string) {
     // name has contender as refresh()
 
     // push each set of data
     this.pushMetadata(serverName);
     this.pushServerData();
-    this.pushChannelData(serverName);
+    this.pushChannelData(channelName);
   }
 
   /**
@@ -125,6 +123,8 @@ export class AOLMessenger {
     this.serverData[ircClient.server.host] = {
       name: ircClient.server.host,
       users: {},
+      naiveChannelList: [],
+      naiveUserList: [],
       channels: {},
       privateMessages: {},
       metadata: {
@@ -153,9 +153,8 @@ export class AOLMessenger {
    * @param serverName
    * @returns void
    */
-  private pushChannelData(serverName: string) {
+  private pushChannelData(channelName: string) {
 
-    // TODO: push data that has to do with servers from here
   }
 
   /**
@@ -182,7 +181,10 @@ export class AOLMessenger {
     }
   }
 
-  private addChannelData(serverName: string, source: string, channelName: string, messageContent: string) {
+  /*
+
+  */
+  private addChannelData(serverName: string, source: string, channelName: string, messageContent: string | undefined) {
     if (!this.serverData[serverName]) {
       log.warn("server does not exist");
       return
@@ -194,16 +196,21 @@ export class AOLMessenger {
         name: channelName,
         messages: []
       }
+      this.serverData[serverName]!.naiveChannelList.push(channelName);
+      console.log(this.serverData[serverName]!.channels[channelName])
+      console.log(this.serverData[serverName]!.naiveChannelList);
     }
 
-    const message: Message = {
-      sender: source,
-      content: messageContent,
-      isSelf: source === this.currentUser?.username,
-      id: this.serverData[serverName]?.channels[channelName].messages.length!
-    }
+    if (messageContent) {
+      const message: Message = {
+        sender: source,
+        content: messageContent,
+        isSelf: source === this.currentUser?.username,
+        id: this.serverData[serverName]?.channels[channelName].messages.length!
+      }
 
-    this.serverData[serverName]?.channels[channelName].messages.push(message);
+      this.serverData[serverName]?.channels[channelName].messages.push(message);
+    }
   }
 
   private addPrivateMessage(serverName: string, source: string, target: string, messageContent: string) {
@@ -244,9 +251,18 @@ export class AOLMessenger {
     })
 
     ircClient.onLIST((source, destination, message) => {
+      if (message[0] === 'End' || message[0] === 'Channel') {
+        //do nothing i guess?
+        return;
+      }
+      log.log("LIST---------")
       log.log("source: ", source)
       log.log("destination: ", destination)
       log.log("message: ", message)
+
+      this.addChannelData(serverName, source, message[0], undefined);
+
+      this.window!.webContents.send('sendChannels', [destination, this.serverData[serverName]!.naiveChannelList]);
     });
 
     ircClient.onPRIVMSG((source, destination, message) => {

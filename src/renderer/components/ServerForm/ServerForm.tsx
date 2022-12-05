@@ -13,7 +13,7 @@ import { history } from '../../history';
 interface ServerFormProps {}
 
 export const ServerForm = (props: ServerFormProps) => {
-  const [server, setServer] = useState("");
+  const [server, setServer] = useState("irc.valanidas.dev");
   const [port, setPort] = useState(6667);
   const navigate = useNavigate();
 

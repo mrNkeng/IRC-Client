@@ -27,6 +27,8 @@ export interface Root {
 export interface ServerData {
   name: string
   metadata: ServerMetadata
+  naiveChannelList: Array<string>
+  naiveUserList: Array<string>
   users: {[key: string]: IRCUser}
   channels: {[key: string]: Channel}
   privateMessages: {[key: string]: Channel}

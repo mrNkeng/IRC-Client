@@ -1,12 +1,11 @@
 import '../../styles.css';
 import { Box, Stack, Typography } from "@mui/material";
-import { User } from 'data-models';
+import { getStore } from 'renderer/state';
+import { observer } from 'mobx-react';
 
-interface UserListProps {
-  users: ReadonlyArray<User>;
-}
+const UserList = observer(() => {
+  const store = getStore();
 
-function UserList(props: UserListProps) {
   return (
     <Box className="UserList">
       <Typography
@@ -17,8 +16,8 @@ function UserList(props: UserListProps) {
       </Typography>
 
       <Stack>
-        {props.users.map((user) => (
-          <Typography className="typography" key={user.name}>{user.name}</Typography>
+        {store.users.map((user) => (
+          <Typography className="typography" key={user}>{user}</Typography>
         ))}
       </Stack>
 
@@ -33,6 +32,6 @@ function UserList(props: UserListProps) {
       </Stack>
     </Box>
   );
-};
+});
 
 export default UserList;

@@ -262,7 +262,7 @@ export class IRCClient extends EventEmitter {
     // For above use this: https://modern.ircdocs.horse/#client-to-server-protocol-structure
     const ircMessage = tokenizeServerMessage(serverMessage);
 
-    log.log(ircMessage);
+    //log.log(ircMessage);
     switch (ircMessage.command) {
       case "PRIVMSG":
         this.receivePRIVMSG(ircMessage);

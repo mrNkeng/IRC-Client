@@ -4,7 +4,6 @@ import { IconButton, Stack, Tooltip, Typography } from '@mui/material';
 import CatchingPokemonIcon from '@mui/icons-material/CatchingPokemon';
 import { getStore } from 'renderer/state';
 import { observer } from 'mobx-react';
-import { DropDownMenu } from 'material-ui';
 import { ServerPlus } from './ServerPlus';
 
 const ServerList = observer(() => {

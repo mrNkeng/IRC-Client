@@ -47,6 +47,13 @@ window.electron.ipcRenderer.on('sendMessageData', (args) => {
   }
 });
 
+window.electron.ipcRenderer.on('sendChannels', (args) => {
+  const state = getStore();
+  const [destination, messages]: [string, Array<string>] = args;
+  console.log(messages);
+  state.setChannels(messages);
+});
+
 window.electron.ipcRenderer.on('serverMetadata', (args) => {
   const state = getStore();
   const [server, metadata]: [string, ServerMetadata] = args;
@@ -63,9 +70,9 @@ autorun(() => {
   if (store.selectedServer.length === 0) {
     return;
   }
-  requestServerData(store.selectedServer)
+  requestServerData(store.selectedServer, store.selectedChannel)
 });
 
-const requestServerData = (serverName: string) => {
-  window.electron.ipcRenderer.sendMessage('requestServerData', [serverName]);
+const requestServerData = (serverName: string, channelName: string) => {
+  window.electron.ipcRenderer.sendMessage('requestServerData', [serverName, channelName]);
 }

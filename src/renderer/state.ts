@@ -12,15 +12,12 @@ export class ApplicationState {
 
   settings: ClientSettings = defaultClientSettings;
 
-  // serverData: Root
-
-  // serverList: Map<string, Server> = new Map()
-
   selectedServer: string = ""
   selectedChannel: string = ""
   metadata: ServerMetadata | undefined = undefined
   servers: Array<Pick<Server, "name">> = []
-  channels: Array<Channel> = []
+  users: Array<string> = [];
+  channels: Array<string> = []
   messages: Array<Message> = []
 
 
@@ -43,6 +40,10 @@ export class ApplicationState {
 
   setServers = (serverData: Array<Pick<Server, "name">>) => {
     this.servers = serverData;
+  }
+
+  setChannels = (channels: Array<string>) => {
+    this.channels = channels;
   }
 
   setMessages = (messages: Array<Message>) => {
