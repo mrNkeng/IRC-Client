@@ -7,8 +7,8 @@ import {
   IRCMessage,
   ServerInformaiton,
   tokenizeServerMessage,
-  IRCNumerics,
 } from './protocol';
+import { IRCNumerics } from './IRCNumerics';
 import log from 'electron-log';
 
 export class IRCClient extends EventEmitter {
@@ -22,13 +22,23 @@ export class IRCClient extends EventEmitter {
 
   private serverMessage: string;
   private pingSendTime: number | undefined;
-
+  private numberOfServerTimeouts: number = 0;
   private ircSocket: net.Socket | undefined;
 
   public readonly onPing = this.registerEvent<[number]>();
-  public readonly onServerMessage = this.registerEvent<[string, string]>();
-  public readonly onMOTDMessage = this.registerEvent<[client: string, message: string]>();
-  public readonly onConnectionLoss = this.registerEvent();
+  public readonly onJOIN = this.registerEvent<[source: string, channel: string, usersInChannel: string[] | undefined]>();
+  public readonly onPRIVMSG = this.registerEvent<[source: string, destination: string, message: string]>();
+  public readonly onLIST = this.registerEvent<[source: string, destination: string, message: string[]]>();
+  public readonly onNAMES = this.registerEvent<[source: string, destination: string, destinationChannel: string, message: string[]]>();
+  public readonly onTOPIC = this.registerEvent<[source: string, destination: string, destinationChannel: string, message: string]>();
+  public readonly onMOTD = this.registerEvent<[source: string, destination: string, message: string]>();
+  public readonly onNOTICE = this.registerEvent<[source: string, destination: string, message: string]>();
+  public readonly onERROR = this.registerEvent<[source: string, destination: string, message: string]>();
+
+
+  //TODO emitters
+  public readonly onErrorMessage = this.registerEvent<[]>(); //TODO send things when server sends error
+  public readonly onConnectionLoss = this.registerEvent<[]>(); //TODO send things when server stops responding
 
   constructor(
     server: ServerInformaiton,
@@ -79,22 +89,42 @@ export class IRCClient extends EventEmitter {
    * Emitted when the server closes. If connections exist, this event is not emitted until all connections are ended.
    */
   private onClose = () => {
+    // TODO: handle close
     this.connected = false;
   };
 
   private onError = () => {
     // TODO: handle errors
+    this.connected = false;
+    this.emit(this.onErrorMessage);
   };
 
+  /**
+   * When the server begins shutdown
+   */
   private onEnd = () => {
     // TODO: handle end
   };
 
+  /**
+   * Occurs during timeout
+   */
   private onTimeout = () => {
-    // TODO: handle timeout
+    //try 3 times to reconnect
+    this.numberOfServerTimeouts++;
+    if (this.numberOfServerTimeouts < 3)
+    {
+      this.connect();
+    }
+
+    this.connected = false;
+    this.emit(this.onConnectionLoss);
+    return;
   };
 
-  private setConnected = (connection: boolean) => {};
+  private setConnected = (connection: boolean) => {
+    // TODO: Not sure what this function is
+  };
 
   private setAuthenticated = (authenticated: boolean) => {
     this.authenticated = authenticated;
@@ -121,17 +151,14 @@ export class IRCClient extends EventEmitter {
       2 * 1000
     );
 
-    // we can only run after we've connected and authenticated
-    // setTimeout(() => this.sendCommand('JOIN #test'), 10000)
-
     // start ping stuff
     this.pinger();
   };
 
   private pinger = () => {
-    // FIXME: do we need a unique message here? Please fix it
+    // FIXME: Added a somewhat descriptive PING message
     // FIXME: please change this to an interval thing and then clear this on connection termination
-    this.sendCommand('PING :msg');
+    this.sendCommand('PING :Checking Connection');
     this.pingSendTime = Date.now();
     setTimeout(this.pinger, this.config.pingInterval);
   };
@@ -148,12 +175,82 @@ export class IRCClient extends EventEmitter {
     this.sendCommand(`PONG :${token}`);
   };
 
-  private handleError = (message: IRCMessage) => {};
+  //##########################################
+  // Receive fucntions
+  private receiveJOIN = (ircMessage: IRCMessage) => {
+    const source: string = ircMessage.source!;
+    const destination: string = ircMessage.parameters[0];
+    let usersInChannel: string[] | undefined = undefined;
 
-  private motd = (ircMessage: IRCMessage) => {
-    const client = ircMessage.parameters[0];
+    if (ircMessage.parameters.length > 1) {
+      usersInChannel = ircMessage.parameters.slice(2);
+    }
+
+    this.emit(this.onJOIN, source, destination, usersInChannel)
+  }
+
+  private receivePRIVMSG = (ircMessage: IRCMessage) => {
+    // TODO: implement chanops and half ops (@ and %)
+    // TODO: don't do this here, but I'm saving my work for later
+    const regex_symbols = new RegExp('@%#.+|%#.+|#.+');
+
+    const source: string = ircMessage.source!;
+    const destination: string = ircMessage.parameters[0];
+    const message: string = ircMessage.parameters.slice(1).join(" ");
+
+    this.emit(this.onPRIVMSG, source, destination, message);
+  }
+
+  private receiveLIST = (ircMessage: IRCMessage) => {
+    const source: string = ircMessage.source!;
+    const destination: string = ircMessage.parameters[0];
+    const message: string[] = ircMessage.parameters.slice(1);
+
+    this.emit(this.onLIST, source, destination, message);
+  }
+
+  private receiveNAMES = (ircMessage: IRCMessage) => {
+    const source: string = ircMessage.source!;
+    const destination: string = ircMessage.parameters[0];
+    const destinationChannel: string = ircMessage.parameters[2];
+    const message: string[] = ircMessage.parameters.slice(2);
+
+    this.emit(this.onNAMES, source, destination, destinationChannel, message);
+  }
+
+  private receiveTOPIC = (ircMessage: IRCMessage) => {
+    const source: string = ircMessage.source!;
+    const destination: string = ircMessage.parameters[0];
+    const destinationChannel: string = ircMessage.parameters[1];
+    const message: string = ircMessage.parameters.slice(2).join(" ");
+
+    this.emit(this.onTOPIC, source, destination, destinationChannel, message);
+  }
+
+  private receiveMOTD = (ircMessage: IRCMessage) => {
+    const source: string = ircMessage.source!;
+    const destination = ircMessage.parameters[0];
     const message = ircMessage.parameters.slice(1).join(' ');
-    this.emit(this.onMOTDMessage, client, message);
+
+    this.emit(this.onMOTD, source, destination, message);
+  };
+
+  private receiveNOTICE = (ircMessage: IRCMessage) => {
+    //servers send this before they know your NICK
+    //client isn't very useful here
+    const source: string = ircMessage.source!;
+    const destination = ircMessage.parameters[0];
+    const message = ircMessage.parameters.slice(1).join(' ');
+
+    this.emit(this.onNOTICE, source, destination, message);
+  };
+
+  private receiveERROR = (ircMessage: IRCMessage) => {
+    const source: string = ircMessage.source!;
+    const destination = ircMessage.parameters[0];
+    const message = ircMessage.parameters.slice(1).join(' ');
+
+    this.emit(this.onERROR, source, destination, message);
   };
 
   private parseServerMessage = () => {
@@ -161,13 +258,18 @@ export class IRCClient extends EventEmitter {
     this.serverMessage = '';
     log.debug('Server: ', serverMessage);
 
-    // parsing
     // TODO: properly tokenize the message instead of naive split
     // For above use this: https://modern.ircdocs.horse/#client-to-server-protocol-structure
     const ircMessage = tokenizeServerMessage(serverMessage);
-    // console.log("command: ", ircMessage.command)
+
     log.log(ircMessage);
     switch (ircMessage.command) {
+      case "PRIVMSG":
+        this.receivePRIVMSG(ircMessage);
+        break;
+      case "JOIN":
+        this.receiveJOIN(ircMessage);
+        break;
       case 'PING':
         this.ping(ircMessage.parameters[0]);
         break;
@@ -175,25 +277,21 @@ export class IRCClient extends EventEmitter {
         this.pong();
         break;
       case 'NOTICE':
+        this.receiveNOTICE(ircMessage);
         break;
       case 'ERROR':
-        this.handleError(ircMessage);
+        this.receiveERROR(ircMessage);
         break;
       case IRCNumerics.welcome:
-        log.debug('~~~DEBUG~~~: processing Welcome');
         break;
       case IRCNumerics.yourHost:
-        log.debug('~~~DEBUG~~~: processing YourHost');
         break;
       case IRCNumerics.created:
-        log.debug('~~~DEBUG~~~: processing created');
         break;
       case IRCNumerics.myInfo:
-        log.debug('~~~DEBUG~~~: processing myInfo');
         this.authenticated = true;
         break;
       case IRCNumerics.iSupport:
-        log.debug('~~~DEBUG~~~: processing iSupport');
         break;
       case IRCNumerics.bounce:
         break;
@@ -212,15 +310,49 @@ export class IRCClient extends EventEmitter {
       case IRCNumerics.globalUsers:
         break;
       case IRCNumerics.motd:
-        this.motd(ircMessage);
+        this.receiveMOTD(ircMessage);
         break;
       case IRCNumerics.motdStart:
-        this.motd(ircMessage);
+        this.receiveMOTD(ircMessage);
         break;
       case IRCNumerics.endOfMotd:
-        this.motd(ircMessage);
+        this.receiveMOTD(ircMessage);
         break;
-      case IRCNumerics.notRegistered:
+      case IRCNumerics.listStart:
+        this.receiveLIST(ircMessage);
+        break;
+      case IRCNumerics.list:
+        this.receiveLIST(ircMessage);
+        break;
+      case IRCNumerics.listEnd:
+        this.receiveLIST(ircMessage);
+        break;
+      case IRCNumerics.namesReply:
+        this.receiveNAMES(ircMessage);
+        break;
+      case IRCNumerics.endOfNames:
+        this.receiveNAMES(ircMessage);
+        break;
+      case IRCNumerics.needMorePerms:
+        this.receiveTOPIC(ircMessage);
+        break;
+      case IRCNumerics.noSuchChannel:
+        this.receiveTOPIC(ircMessage);
+        break;
+      case IRCNumerics.notOnChannel:
+        this.receiveTOPIC(ircMessage);
+        break;
+      case IRCNumerics.chanoPrivsNeeded:
+        this.receiveTOPIC(ircMessage);
+        break;
+      case IRCNumerics.noTopic:
+        this.receiveTOPIC(ircMessage);
+        break;
+      case IRCNumerics.topic:
+        this.receiveTOPIC(ircMessage);
+        break;
+      case IRCNumerics.topicWhoTime:
+        this.receiveTOPIC(ircMessage);
         break;
       default:
         log.warn('Unsupported message type: ', ircMessage.command);
@@ -228,8 +360,63 @@ export class IRCClient extends EventEmitter {
     }
   };
 
+  //##########################################
+  // Send functions
   private sendCommand = (command: string) => {
+    // if (!this.authenticated || !this.connect) {
+    //   throw new Error("Cannot send commands when the server doesn't exist");
+    // }
+
     log.debug('Client: ', command);
     this.ircSocket?.write(command + '\r\n');
   };
+
+  //https://modern.ircdocs.horse/#privmsg-message:~:text=Sending%20Messages-,PRIVMSG%20message,-Command%3A%20PRIVMSG%0A%20%20Parameters
+  public sendPrivmsg = (target: string, message: string) => {
+    //channel processing perhaps?
+    const outgoing = 'PRIVMSG ' + target + ' :' + message;
+    this.sendCommand(outgoing);
+  }
+
+  //add support for other types of commands
+  //https://modern.ircdocs.horse/#list-message:~:text=in%2Dnames%20Extension-,LIST%20message,-Command%3A%20LIST%0A%20%20Parameters
+  public requestLIST = (channelList: string[]) => {
+    const formattedChannels = channelList.join(',');
+    const outgoing = 'LIST ' + formattedChannels;
+    this.sendCommand(outgoing);
+  }
+
+  //https://modern.ircdocs.horse/#topic-message:~:text=topic%20for%20%22%23test%22-,NAMES%20message,-Command%3A%20NAMES%0A%20%20Parameters
+  public requestNAMES = (namesList: string[]) => {
+    const formattedNames = namesList.join(',');
+    const outgoing = 'NAMES ' + formattedNames;
+    this.sendCommand(outgoing);
+  }
+
+  //https://modern.ircdocs.horse/#topic-message:~:text=the%20channel%20%23test-,TOPIC%20message,-Command%3A%20TOPIC%0A%20%20Parameters
+  public requestTOPIC = (channelList: string[]) => {
+    //TODO add set and other abilities
+    const formattedChannels = channelList.join(',');
+    const outgoing = 'TOPIC ' + formattedChannels;
+    this.sendCommand(outgoing);
+  }
+
+  //https://modern.ircdocs.horse/#list-message:~:text=the%20entire%20network.-,JOIN%20message,-Command%3A%20JOIN%0A%20%20Parameters
+  public joinCHANNEL = (channelList: string[], channelKeyList: string[]) => {
+    const formattedChannels = channelList.join(',');
+    const formattedKeys = channelKeyList.join(',');
+    const outgoing = 'JOIN ' + formattedChannels + ' ' + formattedKeys;
+    this.sendCommand(outgoing);
+  }
+
+  //https://modern.ircdocs.horse/#list-message:~:text=extended%2Djoin%20Extension-,PART%20message,-Command%3A%20PART%0A%20%20Parameters
+  public partCHANNEL = (channelList: string[]) => {
+    const formattedChannels = channelList.join(',');
+    const outgoing = 'PART ' + formattedChannels + ' :byebye';
+    this.sendCommand(outgoing);
+  }
+
+  public terminateConnection = () => {
+    this.sendCommand('QUIT :byebye');
+  }
 }

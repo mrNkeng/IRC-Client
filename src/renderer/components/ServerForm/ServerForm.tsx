@@ -1,22 +1,18 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
-import InputLabel from '@mui/material/InputLabel';
-import flexbox from '@mui/system';
 import Button from '@mui/material/Button';
-import { Container, Grid } from '@mui/material';
-import { url } from 'inspector';
+import { Grid } from '@mui/material';
 import DiamondIcon from '@mui/icons-material/Diamond';
-import { setServers } from 'dns';
 import { Link, useNavigate } from 'react-router-dom';
-import { getStore, Server } from 'renderer/state';
+import { getStore } from 'renderer/state';
 import CloseIcon from '@mui/icons-material/Close';
 import { history } from '../../history';
 
-interface ServerlistProps {}
+interface ServerFormProps {}
 
-export const ServerForm = (props: ServerlistProps) => {
+export const ServerForm = (props: ServerFormProps) => {
   const [server, setServer] = useState("");
   const [port, setPort] = useState(6667);
   const navigate = useNavigate();
@@ -24,7 +20,7 @@ export const ServerForm = (props: ServerlistProps) => {
   const onConnect = () => {
     const state = getStore();
     window.electron.ipcRenderer.sendMessage('createIRCConnection', [server, port]);
-    state.serverList.set(server, new Server(server))
+    // state.serverList.set(server, new Server(server))
     navigate("/Chat")
   }
   const Skip = () => {
@@ -96,7 +92,7 @@ export const ServerForm = (props: ServerlistProps) => {
               <TextField label="Server" variant="outlined" value={server} onChange={(e) => setServer(e.target.value)} />
             </Grid>
             <Grid item>
-              <TextField type="number" label="Port" variant="outlined" value={port} onChange={(e) => setPort(e.target.value)}/>
+              <TextField type="number" label="Port" variant="outlined" value={port} onChange={(e) => setPort(Number(e.target.value))}/>
             </Grid>
             {/* <Grid item>
               <TextField label="Username" variant="outlined" />

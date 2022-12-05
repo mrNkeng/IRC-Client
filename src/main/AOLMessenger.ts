@@ -4,7 +4,7 @@ import { IRCClient } from "./irc/irc";
 import { ServerInformaiton } from "./irc/protocol";
 import { hashPassword } from "./util";
 import log from 'electron-log';
-import { Root } from "data-models";
+import { Message, Root, Server } from "data-models";
 
 export class AOLMessenger {
 
@@ -94,7 +94,13 @@ export class AOLMessenger {
     this.initServer(ircClient);
 
     ircClient.connect();
+    this.pushServerData();
     this.registerEvents(ircClient);
+    // setTimeout(() => ircClient.connect(), 10000);
+    setTimeout(() => ircClient.requestLIST([]), 30000);
+    // setTimeout(() => ircClient.joinCHANNEL(["#test"], []), 20000);
+    setTimeout(() => ircClient.joinCHANNEL(["#general"], []), 24000);
+    setTimeout(() => ircClient.sendPrivmsg("#general", "Hello World"), 28000);
   }
 
   /**
@@ -148,6 +154,7 @@ export class AOLMessenger {
    * @returns void
    */
   private pushChannelData(serverName: string) {
+
     // TODO: push data that has to do with servers from here
   }
 
@@ -160,9 +167,68 @@ export class AOLMessenger {
    */
   private pushServerData() {
     // TODO: push data that has to do with servers from here
+    const data: Array<Pick<Server, "name">> = [];
+    for (const [serverName, serverData] of Object.entries(this.serverData)) {
+      data.push({name: serverName})
+    }
+    this.window!.webContents.send('sendServerData', [data]);
   }
 
+  private pushMessages(serverName: string, destination: string) {
+    if (this.serverData[serverName].channels[destination]) {
+      this.window!.webContents.send('sendMessageData', [destination, this.serverData[serverName].channels[destination].messages]);
+    } else if(this.serverData[serverName].privateMessages[destination]) {
+      this.window!.webContents.send('sendMessageData', [destination, this.serverData[serverName].privateMessages[destination].messages]);
+    }
+  }
 
+  private addChannelData(serverName: string, source: string, channelName: string, messageContent: string) {
+    if (!this.serverData[serverName]) {
+      log.warn("server does not exist");
+      return
+    }
+
+    // create channel if it doesn't exist
+    if (!this.serverData[serverName]!.channels[channelName]) {
+      this.serverData[serverName]!.channels[channelName] = {
+        name: channelName,
+        messages: []
+      }
+    }
+
+    const message: Message = {
+      sender: source,
+      content: messageContent,
+      isSelf: source === this.currentUser?.username,
+      id: this.serverData[serverName]?.channels[channelName].messages.length!
+    }
+
+    this.serverData[serverName]?.channels[channelName].messages.push(message);
+  }
+
+  private addPrivateMessage(serverName: string, source: string, target: string, messageContent: string) {
+    if (!this.serverData[serverName]) {
+      log.warn("server does not exist");
+      return
+    }
+
+    // create channel if it doesn't exist
+    if (!this.serverData[serverName]!.privateMessages[target]) {
+      this.serverData[serverName]!.privateMessages[target] = {
+        name: target,
+        messages: []
+      }
+    }
+
+    const message: Message = {
+      sender: source,
+      content: messageContent,
+      isSelf: source === this.currentUser?.username,
+      id: this.serverData[serverName]?.privateMessages[target].messages.length!
+    }
+
+    this.serverData[serverName]?.privateMessages[target].messages.push(message);
+  }
 
   /**
    * Registers all events from the {@link IRCClient} class for the newly created instance. Data transactions
@@ -170,15 +236,28 @@ export class AOLMessenger {
    * @param ircClient
    */
   private registerEvents(ircClient: IRCClient) {
+    const serverName = ircClient.server.host
     // MOTD Messages...
-    ircClient.onMOTDMessage((client, messsage) => {
-      this.serverData[ircClient.server.host]!.metadata.motd.push(messsage)
-      this.pushMetadata(ircClient.server.host)
+    ircClient.onMOTD((source, destination, messsage) => {
+      this.serverData[serverName]!.metadata.motd.push(messsage)
+      this.pushMetadata(serverName)
     })
 
-    ircClient.onServerMessage((client, message) => {
-      const serverName = ircClient.server.host
-      this.window!.webContents.send('serverMessage', [message, serverName]);
+    ircClient.onLIST((source, destination, message) => {
+      log.log("source: ", source)
+      log.log("destination: ", destination)
+      log.log("message: ", message)
+    });
+
+    ircClient.onPRIVMSG((source, destination, message) => {
+        if (destination === this.currentUser?.username) {
+          this.addPrivateMessage(serverName, source, source, message);
+          this.pushMessages(serverName, source)
+        }
+        else {
+          this.addChannelData(serverName, source, destination, message)
+          this.pushMessages(serverName, destination)
+        }
     })
   }
 }
