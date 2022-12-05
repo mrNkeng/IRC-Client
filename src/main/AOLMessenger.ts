@@ -95,6 +95,11 @@ export class AOLMessenger {
 
     ircClient.connect();
     this.registerEvents(ircClient);
+    setTimeout(() => ircClient.connect(), 10000);
+    setTimeout(() => ircClient.list(), 15000);
+    setTimeout(() => ircClient.joinChannel("#test"), 20000);
+    setTimeout(() => ircClient.joinChannel("#general"), 24000);
+    setTimeout(() => ircClient.sendPrivmsg("#test", "Hello World"), 28000);
   }
 
   /**
