@@ -5,8 +5,10 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { Grid } from '@mui/material';
 import DiamondIcon from '@mui/icons-material/Diamond';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getStore } from 'renderer/state';
+import CloseIcon from '@mui/icons-material/Close';
+import { history } from '../../history';
 
 interface ServerFormProps {}
 
@@ -20,6 +22,9 @@ export const ServerForm = (props: ServerFormProps) => {
     window.electron.ipcRenderer.sendMessage('createIRCConnection', [server, port]);
     // state.serverList.set(server, new Server(server))
     navigate("/Chat")
+  }
+  const Skip = () => {
+    history.push("/Chat");
   }
   return (
     <Box
@@ -102,6 +107,13 @@ export const ServerForm = (props: ServerFormProps) => {
                 variant="outlined"
               >
                 Connect to Server
+              </Button>
+            </Grid>
+
+            <Grid item>
+              <Button onClick={() => {Skip();}} size="small"
+                variant="outlined">
+                 Cancel  <CloseIcon/>
               </Button>
             </Grid>
           </Grid>
