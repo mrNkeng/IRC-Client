@@ -26,8 +26,9 @@ export interface Root {
 export interface ServerData {
   name: string
   metadata: ServerMetadata
-  users: {[key: string]: IRCUser}
-  channels: {[key: string]: Channel}
+  users: {[key: string]: IRCUser | undefined}
+  channels: {[key: string]: Channel | undefined}
+  privateMessages: {[key: string]: Channel | undefined}
 }
 export interface ServerMetadata {
   notices: Array<string>

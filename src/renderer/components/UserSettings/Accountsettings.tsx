@@ -2,7 +2,9 @@ import { AccountCircle, Spa } from '@mui/icons-material';
 import { Box, Button, Grid, Stack, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { history } from '../../history';
-import { VolumeSlider } from 'renderer/components/UserSettings/VolumeSlider';
+import { VolumeSlider } from './VolumeSlider';
+import { getStore } from 'renderer/state';
+import { observer } from 'mobx-react';
 interface AccountsettingsProps {}
 interface Props {
 
@@ -99,25 +101,27 @@ const AccountTab = (props: {}) => {
  );
 };
 
-const VolumeTab = (props: {}) => {
- return (
-   <Stack>
-     <Typography
-       sx={{
-         textAlign: 'left',
-         paddingTop: ' 80px',
-         paddingLeft: '40px',
-         fontWeight: 'bold',
-         fontSize: '300%',
-         color: 'lightgrey',
-       }}
-     >
-       Alert Volume Settings
-     </Typography>
-     <VolumeSlider />
-   </Stack>
- );
-};
+const VolumeTab = observer((props: {}) => {
+  const {settings, setVolume} = getStore()
+
+  return (
+    <Stack>
+      <Typography
+        sx={{
+          textAlign: 'left',
+          paddingTop: ' 80px',
+          paddingLeft: '40px',
+          fontWeight: 'bold',
+          fontSize: '300%',
+          color: 'lightgrey',
+        }}
+      >
+        Alert Volume Settings
+      </Typography>
+      <VolumeSlider update={setVolume} value={settings.notificationVolume} />
+    </Stack>
+  );
+});
 
 const BlockedUsersTab = (props: {}) => {
  return (

@@ -12,27 +12,30 @@ const Input = styled(MuiInput)`
 `;
 
 interface Props {
-
+  update: (value: number) => void
+  value: number
 }
 
 export const VolumeSlider = (props: Props) => {
-  const [value, setValue] = React.useState<number | string | Array<number | string>>(
-    30,
-  );
+  const { update, value } = props;
+  // const [value, setValue] = React.useState<number | string | Array<number | string>>(
+  //   30,
+  // );
 
   const handleSliderChange = (event: Event, newValue: number | number[]) => {
-    setValue(newValue);
+    // setValue(newValue);
+    update(Number(newValue))
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(event.target.value === '' ? '' : Number(event.target.value));
+    update(Number(event.target.value));
   };
 
   const handleBlur = () => {
     if (value < 0) {
-      setValue(0);
+      update(0);
     } else if (value > 100) {
-      setValue(100);
+      update(100);
     }
   };
 
