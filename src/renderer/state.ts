@@ -1,4 +1,5 @@
 import { Toast, User } from "data-models";
+import { ClientSettings, defaultClientSettings } from "data-models/ClientSettings";
 import { Message, ServerMetadata } from "data-models/IRCData";
 import { makeAutoObservable, toJS } from "mobx";
 
@@ -8,6 +9,8 @@ export class ApplicationState {
   public static INSTANCE: ApplicationState;
 
   currentUser: User | undefined
+
+  settings: ClientSettings = defaultClientSettings;
 
   // serverData: Root
 
@@ -32,6 +35,10 @@ export class ApplicationState {
 
   setSelectedServer = (serverName: string) => {
     this.selectedServer = serverName;
+  }
+
+  setVolume = (volume: number) => {
+    this.settings.notificationVolume = volume
   }
 }
 
