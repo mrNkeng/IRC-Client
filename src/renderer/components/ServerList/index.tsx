@@ -12,7 +12,7 @@ const ServerList = observer(() => {
       <Typography className="FlexColumnHeading">Server List</Typography>
 
       <Stack>
-        {Array.from(store.serverList.values()).map((server) => (
+        {store.servers.map((server) => (
           <Tooltip
             title={server.name}
             key={server.name}

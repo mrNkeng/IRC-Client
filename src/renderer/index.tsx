@@ -2,9 +2,9 @@ import { StrictMode } from 'react';
 import * as ReactDOMClient from 'react-dom/client';
 import { history } from './history';
 import { App } from './App';
-import { createNotificationState, createStore, getStore, Server } from "./state"
+import { createNotificationState, createStore, getStore } from "./state"
 import { unstable_HistoryRouter as HistoryRouter } from 'react-router-dom';
-import { ServerMetadata } from 'data-models';
+import { Message, ServerMetadata, Server } from 'data-models';
 import { autorun } from 'mobx';
 
 const store = createStore();
@@ -39,16 +39,20 @@ window.electron.ipcRenderer.on('authSuccess', (args) => {
 });
 
 
-window.electron.ipcRenderer.on('serverMessage', (args) => {
-  // const state = getStore();
-  // const [message, server]: [string, string] = args;
-  // state.serverList.get(server)?.messages.push({
-  //   content: message,
-  //   id: 0
-  // })
-  // console.log("message for: ", server);
+window.electron.ipcRenderer.on('sendServerData', (args) => {
+  const state = getStore();
+  const [serverData]: [Array<Pick<Server, "name">>] = args;
+  state.setServers(serverData)
 });
 
+window.electron.ipcRenderer.on('sendMessageData', (args) => {
+  const state = getStore();
+  const [destination, messages]: [string, Array<Message>] = args;
+
+  if (destination === state.selectedChannel) {
+    state.setMessages(messages);
+  }
+});
 
 window.electron.ipcRenderer.on('serverMetadata', (args) => {
   const state = getStore();

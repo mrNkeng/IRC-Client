@@ -28,6 +28,7 @@ export class IRCClient extends EventEmitter {
   public readonly onPing = this.registerEvent<[number]>();
   public readonly onServerMessage = this.registerEvent<[string, string]>();
   public readonly onMOTDMessage = this.registerEvent<[client: string, message: string]>();
+  public readonly onPRIVMSG = this.registerEvent<[source: string, destination: string, message: string]>();  public readonly onMessageToUser = this.registerEvent<[client: string, destination: string, message: string]>();
   public readonly onConnectionLoss = this.registerEvent();
 
   constructor(
