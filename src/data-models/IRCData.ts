@@ -5,6 +5,7 @@ export interface Server {
 }
 
 export interface Channel {
+  hasJoined: boolean;
   naiveUsers: Array<string>;
   users: {[key: string]: IRCUser}
   name: string;

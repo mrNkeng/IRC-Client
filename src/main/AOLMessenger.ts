@@ -95,10 +95,6 @@ export class AOLMessenger {
     ircClient.connect();
     this.pushServerData();
     this.registerEvents(ircClient);
-    setTimeout(() => ircClient.requestLIST([]), 6500);
-    setTimeout(() => ircClient.joinCHANNEL(["#test"], []), 5100);
-    setTimeout(() => ircClient.joinCHANNEL(["#general"], []), 5200);
-    //setTimeout(() => ircClient.requestNAMES(), 5300);
   }
 
   /**
@@ -208,17 +204,17 @@ export class AOLMessenger {
   }
 
   /*
-
+    Aims to populate channel with messages, if no channel exists, it creates a barebones structure
   */
   private addChannelData(serverName: string, source: string, channelName: string, messageContent: string | undefined) {
     if (!this.serverData[serverName]) {
       log.warn("server does not exist");
       return
     }
-
     // create channel if it doesn't exist
     if (!this.serverData[serverName]!.channels[channelName]) {
       this.serverData[serverName]!.channels[channelName] = {
+        hasJoined: false,
         naiveUsers: [],
         users: {},
         name: channelName,
@@ -239,6 +235,9 @@ export class AOLMessenger {
     }
   }
 
+  /*
+    Aims to populate channel with users, if no channel exists, it creates a barebones structure
+  */
   private addChannelNames(serverName: string, source: string, channelName: string, usernames: string[]) {
     if (!this.serverData[serverName]) {
       log.warn("server does not exist");
@@ -247,6 +246,7 @@ export class AOLMessenger {
     // create channel if it doesn't exist
     if (!this.serverData[serverName]!.channels[channelName]) {
       this.serverData[serverName]!.channels[channelName] = {
+        hasJoined: false,
         naiveUsers: usernames,
         users: {},
         name: channelName,
@@ -260,6 +260,29 @@ export class AOLMessenger {
     }
   }
 
+  /*
+    Aims to update if channel has been joined, if no channel exists, it creates a barebones structure
+  */
+  private addChannelJoined(serverName: string, source: string, channelName: string, usernames: string[]) {
+    if (!this.serverData[serverName]) {
+      log.warn("server does not exist");
+      return
+    }
+    // create channel if it doesn't exist
+    if (!this.serverData[serverName]!.channels[channelName]) {
+      this.serverData[serverName]!.channels[channelName] = {
+        hasJoined: true,
+        naiveUsers: usernames,
+        users: {},
+        name: channelName,
+        messages: []
+      }
+      this.serverData[serverName]!.naiveChannelList.push(channelName);
+    } else {
+      this.serverData[serverName]!.channels[channelName].hasJoined = true;
+    }
+  }
+
   private addPrivateMessage(serverName: string, source: string, target: string, messageContent: string) {
     if (!this.serverData[serverName]) {
       log.warn("server does not exist");
@@ -269,6 +292,7 @@ export class AOLMessenger {
     // create channel if it doesn't exist
     if (!this.serverData[serverName]!.privateMessages[target]) {
       this.serverData[serverName]!.privateMessages[target] = {
+        hasJoined: false,
         naiveUsers: [],
         users: {},
         name: target,
@@ -294,18 +318,33 @@ export class AOLMessenger {
   private registerEvents(ircClient: IRCClient) {
     const serverName = ircClient.server.host
     // MOTD Messages...
-    ircClient.onMOTD((source, destination, messsage) => {
+    ircClient.onMOTD((source, client, messsage) => {
       this.serverData[serverName]!.metadata.motd.push(messsage)
       this.pushMetadata(serverName)
     });
 
-    ircClient.onLIST((source, destination, message) => {
+    ircClient.onAUTHENTICATE((source, client) => {
+      ircClient.requestLIST([]);
+      ircClient.joinCHANNEL(["#test"], []);
+      ircClient.joinCHANNEL(["#general"], []);
+    });
+
+    ircClient.onLIST((source, client, message) => {
       if (message[0] === 'End' || message[0] === 'Channel') {
         //do nothing i guess?
         return;
       }
       this.addChannelData(serverName, source, message[0], undefined);
-      this.pushChannelData(serverName, destination);
+      this.pushChannelData(serverName, client);
+    });
+
+    ircClient.onJOIN((source, channel, usersInChannel) => {
+      if (usersInChannel) {
+        this.addChannelJoined(serverName, source, channel, usersInChannel);
+      } else {
+        //broadcast to channel that a user has joined and update user list
+        //this.addChannelData();
+      }
     });
 
     ircClient.onPRIVMSG((source, destination, message) => {
@@ -319,13 +358,13 @@ export class AOLMessenger {
       }
     });
 
-    ircClient.onNAMES((source, destination, destinationChannel, message) => {
+    ircClient.onNAMES((source, client, destinationChannel, message) => {
       if (message[0] === 'End' || message[0] === 'Channel') {
         //do nothing i guess?
         return;
       }
       this.addChannelNames(serverName, source, destinationChannel, message.slice(1));
-      this.pushChannelUsers(serverName, destination, destinationChannel);
+      this.pushChannelUsers(serverName, client, destinationChannel);
     });
   }
 }

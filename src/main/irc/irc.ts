@@ -28,13 +28,14 @@ export class IRCClient extends EventEmitter {
   public readonly onPing = this.registerEvent<[number]>();
 
   public readonly onJOIN = this.registerEvent<[source: string, channel: string, usersInChannel: string[] | undefined]>();
-  public readonly onPRIVMSG = this.registerEvent<[source: string, client: string, message: string]>();
+  public readonly onPRIVMSG = this.registerEvent<[source: string, destination: string, message: string]>();
   public readonly onLIST = this.registerEvent<[source: string, client: string, message: string[]]>();
   public readonly onNAMES = this.registerEvent<[source: string, client: string, destinationChannel: string, message: string[]]>();
   public readonly onTOPIC = this.registerEvent<[source: string, client: string, destinationChannel: string, message: string]>();
   public readonly onMOTD = this.registerEvent<[source: string, client: string, message: string]>();
   public readonly onNOTICE = this.registerEvent<[source: string, client: string, message: string]>();
   public readonly onERROR = this.registerEvent<[source: string, client: string, message: string]>();
+  public readonly onAUTHENTICATE = this.registerEvent<[source: string, client: string]>();
 
   //TODO finish later
   public readonly onOPER = this.registerEvent<[source: string, client: string, message: string]>();
@@ -205,10 +206,10 @@ export class IRCClient extends EventEmitter {
     const regex_symbols = new RegExp('@%#.+|%#.+|#.+');
 
     const source: string = ircMessage.source!;
-    const client: string = ircMessage.parameters[0];
+    const destination: string = ircMessage.parameters[0];
     const message: string = ircMessage.parameters.slice(1).join(" ");
 
-    this.emit(this.onPRIVMSG, source, client, message);
+    this.emit(this.onPRIVMSG, source, destination, message);
   }
 
   //returns the server, the user that requested, and a list where first value is a channel, the rest is metadata
@@ -247,6 +248,16 @@ export class IRCClient extends EventEmitter {
     const message = ircMessage.parameters.slice(1).join(' ');
 
     this.emit(this.onMOTD, source, client, message);
+  };
+
+  //emitter to tell user that server is done authenticating
+  private receiveAUTHENTICATE = (ircMessage: IRCMessage) => {
+    const source: string = ircMessage.source!;
+    const client = ircMessage.parameters[0];
+
+    this.authenticated = true;
+
+    this.emit(this.onAUTHENTICATE, source, client);
   };
 
   //returns the server, the user that requested, and the message being sent
@@ -320,7 +331,7 @@ export class IRCClient extends EventEmitter {
       case IRCNumerics.created:
         break;
       case IRCNumerics.myInfo:
-        this.authenticated = true;
+        this.receiveAUTHENTICATE(ircMessage);
         break;
       case IRCNumerics.iSupport:
         break;
