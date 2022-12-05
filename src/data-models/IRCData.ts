@@ -5,6 +5,8 @@ export interface Server {
 }
 
 export interface Channel {
+  naiveUsers: Array<string>;
+  users: {[key: string]: IRCUser}
   name: string;
   messages: Array<Message>
 }
@@ -32,6 +34,7 @@ export interface ServerData {
   metadata: ServerMetadata
   naiveChannelList: Array<string>
   naiveUserList: Array<string>
+  naiveUsers: Array<string>;
   users: {[key: string]: IRCUser}
   channels: {[key: string]: Channel}
   privateMessages: {[key: string]: Channel}

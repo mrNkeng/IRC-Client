@@ -84,7 +84,7 @@ export class AOLMessenger {
     };
 
     const config = {
-      pingInterval: 20 * 1000, // this is arbitrary (maybe there is a proper number)
+      pingInterval: 60 * 1000, // this is arbitrary (maybe there is a proper number)
     };
 
     const ircClient = new IRCClient(server, client, config);
@@ -98,7 +98,7 @@ export class AOLMessenger {
     setTimeout(() => ircClient.requestLIST([]), 6500);
     setTimeout(() => ircClient.joinCHANNEL(["#test"], []), 5100);
     setTimeout(() => ircClient.joinCHANNEL(["#general"], []), 5200);
-    setTimeout(() => ircClient.sendPrivmsg("#general", "Hello World"), 5300);
+    //setTimeout(() => ircClient.requestNAMES(), 5300);
   }
 
   /**
@@ -112,7 +112,8 @@ export class AOLMessenger {
     this.pushMetadata(serverName);
     this.pushServerData();
     this.pushChannelData(serverName, channelName);
-    this.pushMessages(serverName, channelName)
+    this.pushMessages(serverName, channelName);
+    this.pushChannelUsers(serverName, "client add here maybe", channelName);
   }
 
   sendMessageToChannel(serverName: string, channelName: string, message: string) {
@@ -134,6 +135,7 @@ export class AOLMessenger {
       users: {},
       naiveChannelList: [],
       naiveUserList: [],
+      naiveUsers: [],
       channels: {},
       privateMessages: {},
       metadata: {
@@ -163,6 +165,9 @@ export class AOLMessenger {
    * @returns void
    */
   private pushChannelData(serverName: string, channel: string) {
+    if (!this.serverData[serverName]) {
+      return;
+    }
     this.window!.webContents.send('sendChannels', [channel, this.serverData[serverName]!.naiveChannelList]);
   }
 
@@ -186,8 +191,12 @@ export class AOLMessenger {
 
   }
 
-  private pushChannelUsers() {
-
+  private pushChannelUsers(serverName: string, client: string, destinationChannel: string) {
+    //will sometimes be called before channels have been created
+    if (!this.serverData[serverName]!.channels[destinationChannel]) {
+      return;
+    }
+    this.window!.webContents.send('sendChannelUserList', [destinationChannel, this.serverData[serverName]!.channels[destinationChannel].naiveUsers]);
   }
 
   private pushMessages(serverName: string, destination: string) {
@@ -210,23 +219,44 @@ export class AOLMessenger {
     // create channel if it doesn't exist
     if (!this.serverData[serverName]!.channels[channelName]) {
       this.serverData[serverName]!.channels[channelName] = {
+        naiveUsers: [],
+        users: {},
         name: channelName,
         messages: []
       }
       this.serverData[serverName]!.naiveChannelList.push(channelName);
-      console.log(this.serverData[serverName]!.channels[channelName])
-      console.log(this.serverData[serverName]!.naiveChannelList);
     }
 
     if (messageContent) {
       const message: Message = {
-        sender: source,
+        sender: source.split("!")[0],
         content: messageContent,
         isSelf: source === this.currentUser?.username,
         id: this.serverData[serverName]?.channels[channelName].messages.length!
       }
 
       this.serverData[serverName]?.channels[channelName].messages.push(message);
+    }
+  }
+
+  private addChannelNames(serverName: string, source: string, channelName: string, usernames: string[]) {
+    if (!this.serverData[serverName]) {
+      log.warn("server does not exist");
+      return
+    }
+    // create channel if it doesn't exist
+    if (!this.serverData[serverName]!.channels[channelName]) {
+      this.serverData[serverName]!.channels[channelName] = {
+        naiveUsers: usernames,
+        users: {},
+        name: channelName,
+        messages: []
+      }
+      this.serverData[serverName]!.naiveChannelList.push(channelName);
+    } else {
+      this.serverData[serverName]!.channels[channelName].naiveUsers = usernames;
+      //TODO write the proper way
+      //this.serverData[serverName]!.channels[channelName].users = usernames;
     }
   }
 
@@ -239,6 +269,8 @@ export class AOLMessenger {
     // create channel if it doesn't exist
     if (!this.serverData[serverName]!.privateMessages[target]) {
       this.serverData[serverName]!.privateMessages[target] = {
+        naiveUsers: [],
+        users: {},
         name: target,
         messages: []
       }
@@ -265,7 +297,7 @@ export class AOLMessenger {
     ircClient.onMOTD((source, destination, messsage) => {
       this.serverData[serverName]!.metadata.motd.push(messsage)
       this.pushMetadata(serverName)
-    })
+    });
 
     ircClient.onLIST((source, destination, message) => {
       if (message[0] === 'End' || message[0] === 'Channel') {
@@ -277,14 +309,23 @@ export class AOLMessenger {
     });
 
     ircClient.onPRIVMSG((source, destination, message) => {
-        if (destination === this.currentUser?.username) {
-          this.addPrivateMessage(serverName, source, destination, message);
-          this.pushMessages(serverName, source)
-        }
-        else {
-          this.addChannelData(serverName, source, destination, message)
-          this.pushMessages(serverName, destination)
-        }
-    })
+      if (destination === this.currentUser?.username) {
+        this.addPrivateMessage(serverName, source, destination, message);
+        this.pushMessages(serverName, source)
+      }
+      else {
+        this.addChannelData(serverName, source, destination, message)
+        this.pushMessages(serverName, destination)
+      }
+    });
+
+    ircClient.onNAMES((source, destination, destinationChannel, message) => {
+      if (message[0] === 'End' || message[0] === 'Channel') {
+        //do nothing i guess?
+        return;
+      }
+      this.addChannelNames(serverName, source, destinationChannel, message.slice(1));
+      this.pushChannelUsers(serverName, destination, destinationChannel);
+    });
   }
 }

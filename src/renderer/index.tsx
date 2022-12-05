@@ -34,15 +34,15 @@ window.electron.ipcRenderer.on('authSuccess', (args) => {
 window.electron.ipcRenderer.on('sendServerData', (args) => {
   const state = getStore();
   const [serverData]: [Array<Pick<Server, "name">>] = args;
+
   state.setServers(serverData)
 });
 
 window.electron.ipcRenderer.on('sendMessageData', (args) => {
   const state = getStore();
   const [destination, messages]: [string, Array<Message>] = args;
-  console.log(messages)
-  console.log(destination);
-  if (destination === state.selectedChannel) {
+
+  if (messages !== undefined) {
     state.setMessages(messages);
   }
 });
@@ -50,18 +50,19 @@ window.electron.ipcRenderer.on('sendMessageData', (args) => {
 window.electron.ipcRenderer.on('sendChannels', (args) => {
   //sends just the list of channels
   const state = getStore();
-  const [destination, messages]: [string, Array<string>] = args;
-  console.log(messages);
-  state.setChannels(messages);
+  const [client, messages]: [string, Array<string>] = args;
+
+  if (client === state.currentUser?.name && messages !== undefined) {
+    state.setChannels(messages);
+  }
 });
 
 window.electron.ipcRenderer.on('sendGlobalUserList', (args) => {
   //sends the list of global users
   //TODO
   const state = getStore();
-  const [destination, messages]: [string, Array<string>] = args;
-  console.log(messages);
-  state.setChannels(messages);
+
+  const [client, messages]: [string, Array<string>] = args;
 });
 
 window.electron.ipcRenderer.on('sendChannelUserList', (args) => {
@@ -69,8 +70,10 @@ window.electron.ipcRenderer.on('sendChannelUserList', (args) => {
   //TODO
   const state = getStore();
   const [destination, messages]: [string, Array<string>] = args;
-  console.log(messages);
-  state.setChannels(messages);
+
+  if (destination === state.selectedChannel && messages !== undefined) {
+    state.setChannelUsers(messages);
+  }
 });
 
 window.electron.ipcRenderer.on('serverMetadata', (args) => {
