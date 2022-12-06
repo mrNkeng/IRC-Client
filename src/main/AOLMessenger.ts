@@ -138,6 +138,22 @@ export class AOLMessenger {
     client.requestLIST([]);
   }
 
+  joinChannel(serverName: string, channelName: string) {
+    const client = this.serverData[serverName].ircClient;
+    this.serverData[serverName].channels[channelName].hasJoined=true;
+    this.pushChannelUsers(serverName, "", channelName)
+    this.pushChannelData(serverName, channelName)
+    client.joinCHANNEL([channelName], []);
+  }
+
+  leaveChannel(serverName: string, channelName: string) {
+    const client = this.serverData[serverName].ircClient;
+    this.serverData[serverName].channels[channelName].hasJoined=false;
+    this.pushChannelUsers(serverName, "", channelName)
+    this.pushChannelData(serverName, channelName)
+    client.partCHANNEL([channelName]);
+  }
+
   /**
    * Initalize the ice client's object inside of {@link serverData} and deal with all the database related code.
    * @param ircClient

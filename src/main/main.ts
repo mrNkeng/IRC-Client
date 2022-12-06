@@ -194,3 +194,13 @@ ipcMain.on('refreshChannelList', async(event, arg) => {
   const [serverName] = arg
   aol.refreshChannelList(serverName);
 })
+
+ipcMain.on('disconnectFromChannel', async(event, arg) => {
+  const [serverName, channelName] = arg
+  aol.leaveChannel(serverName, channelName);
+})
+
+ipcMain.on('connectToChannel', async(event, arg) => {
+  const [serverName, channelName] = arg
+  aol.joinChannel(serverName, channelName);
+})
