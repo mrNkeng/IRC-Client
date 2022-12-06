@@ -10,12 +10,12 @@ import { Box, Typography } from "@mui/material";
 
 export const ChatWindow = observer(() => {
   //todo maybe add back metadata?
-  const { messages, selectedChannel, selectedChannelJoinStatus } = getStore();
+  const { messages, selectedChannel } = getStore();
   return (
     <Box className="TextWindow">
       <Box className = "WindowHeadingContainer">
         <Typography className="WindowHeading">
-          {selectedChannel + ": " + selectedChannelJoinStatus}
+          {selectedChannel}
         </Typography>
       </Box>
         <div className="ChatWindow">

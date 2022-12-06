@@ -172,8 +172,10 @@ export class AOLMessenger {
     if (!this.serverData[serverName]) {
       return;
     }
-    const channels = this.serverData[serverName].channels
-    console.log(channels);
+    const channels: {name: string, connected: boolean}[] = []
+    for (const [channelName, channel] of Object.entries(this.serverData[serverName].channels)) {
+      channels.push({name: channelName, connected: channel.hasJoined});
+  }
     this.window!.webContents.send('sendChannels', [serverName, channels]);
   }
 
@@ -292,9 +294,9 @@ export class AOLMessenger {
       this.serverData[serverName]!.naiveChannelList.push(channelName);
     } else {
       this.serverData[serverName]!.channels[channelName].hasJoined = true;
-      if (usernames){
-        this.serverData[serverName]!.channels[channelName].naiveUsers = usernames;
-      }
+      // if (usernames){
+      //   this.serverData[serverName]!.channels[channelName].naiveUsers = usernames;
+      // }
     }
     //console.log(this.serverData[serverName]!.channels[channelName]);
   }
@@ -357,6 +359,7 @@ export class AOLMessenger {
     ircClient.onJOIN((source, channel, usersInChannel) => {
       if (usersInChannel) {
         this.addChannelJoined(serverName, source, channel, usersInChannel);
+        this.pushChannelData(serverName, "")
       } else {
         //broadcast to channel that a user has joined and update user list
         //this.addChannelData();

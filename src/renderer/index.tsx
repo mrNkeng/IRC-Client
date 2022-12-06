@@ -58,7 +58,7 @@ window.electron.ipcRenderer.on('sendMessageData', (args) => {
 window.electron.ipcRenderer.on('sendChannels', (args) => {
   //sends just the list of channels
   const state = getStore();
-  const [serverName, channels]: [string, { [key: string]: Channel}] = args;
+  const [serverName, channels]: [string, {name: string, connected: boolean}[]] = args;
 
   console.debug("ChannelList: ", serverName)
   console.debug("ChannelList: ", channels)
@@ -67,9 +67,7 @@ window.electron.ipcRenderer.on('sendChannels', (args) => {
   if (serverName !== state.selectedServer) {
     return
   }
-  const flatList = Object.keys(channels)
-  state.setChannels(flatList ?? []);
-  state.setJoinStatus(channels[state.selectedChannel].hasJoined);
+  state.setChannels(channels);
 });
 
 window.electron.ipcRenderer.on('sendGlobalUserList', (args) => {
@@ -84,11 +82,14 @@ window.electron.ipcRenderer.on('sendChannelUserList', (args) => {
   //sends the list of channel users
   //TODO
   const state = getStore();
-  const [destination, messages]: [string, Array<string>] = args;
+  const [destination, users]: [string, Array<string>] = args;
+
+  console.debug(destination)
+  console.debug(users)
 
   if (destination === state.selectedChannel) {
     console.debug("Updaing ChannelUserList")
-    state.setChannelUsers(messages ?? []);
+    state.setChannelUsers(users ?? []);
   }
 });
 
