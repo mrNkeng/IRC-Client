@@ -9,26 +9,37 @@ interface ChatInputFieldProps {
   // handleAdd: (e: React.FormEvent) => void;
 }
 
-const ChatInputField: React.FC<ChatInputFieldProps> = (props: ChatInputFieldProps) => {
-  const [message, setMessage] = useState("");
+const ChatInputField: React.FC<ChatInputFieldProps> = (
+  props: ChatInputFieldProps
+) => {
+  const [message, setMessage] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
   const sendMessage = () => {
-    if (message !== "") {
+    if (message !== '') {
       getStore().sendMessage(message);
-      setMessage("");
+      setMessage('');
       //TODO the input box isn't getting cleared, someone needs to fix it
     }
-  }
+  };
 
   return (
-    <Box className="chat_input_field_form">
+    <Box
+      className="chat_input_field_form"
+      component={'form'}
+      onSubmit={(e) => {
+        e.preventDefault();
+        sendMessage();
+      }}
+    >
       <input
         type="text"
+        value={message}
         placeholder="Enter a Chat"
         ref={inputRef}
         onChange={(e) => setMessage(e.target.value)}
         className="input__box"
+        onSubmit={sendMessage}
       />
       <button type="submit" className="input_submit" onClick={sendMessage}>
         <SendIcon />
