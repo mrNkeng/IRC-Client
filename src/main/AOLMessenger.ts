@@ -128,6 +128,11 @@ export class AOLMessenger {
     this.pushMessages(serverName, channelName);
   }
 
+  createIRCChannel(serverName: string, channel: string) {
+    const client = this.serverData[serverName].ircClient;
+    client.joinCHANNEL(["#" + channel], [""])
+  }
+
   /**
    * Initalize the ice client's object inside of {@link serverData} and deal with all the database related code.
    * @param ircClient

@@ -184,3 +184,8 @@ ipcMain.on('sendMessageToChannel', async(event, arg) => {
   const [serverName, channelName, message] = arg;
   aol.sendMessageToChannel(serverName, channelName, message);
 });
+
+ipcMain.on("createIRCChannel", async(event, arg) => {
+  const [serverName, channelName] = arg;
+  aol.createIRCChannel(serverName, channelName);
+})

@@ -6,6 +6,7 @@ import { Login } from "./components/Login/Login";
 import { observer } from "mobx-react-lite"
 import { ServerForm } from "./components/ServerForm";
 import { Toaster } from "./components/Toaster";
+import { ChannelForm } from "./components/ChannelAdd/ChannelForm";
 
 export const App = observer((props: {}) => {
   return (
@@ -13,6 +14,7 @@ export const App = observer((props: {}) => {
       <Toaster/>
       <Routes>
         <Route path="/Chat" element={<ChatApplication />} />
+        <Route path="/ChannelAdd" element={<ChannelForm />} />
         <Route path="/Accountsettings" element={<Accountsettings />} />
         <Route path="*" element={<Login />} />
         <Route path="/Signup" element={<Signup />} />

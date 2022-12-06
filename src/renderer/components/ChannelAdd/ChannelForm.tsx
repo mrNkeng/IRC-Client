@@ -10,22 +10,22 @@ import { getStore } from 'renderer/state';
 import CloseIcon from '@mui/icons-material/Close';
 import { history } from '../../history';
 
-interface ServerFormProps {}
+interface ChannelFormProps {}
 
-export const ServerForm = (props: ServerFormProps) => {
-  const [server, setServer] = useState("");
-  const [port, setPort] = useState(6667);
+export const ChannelForm = (props: ChannelFormProps) => {
+  const [channel, setChannel] = useState("");
   const navigate = useNavigate();
 
-  const onConnect = () => {
+  const createIRCChannel = () => {
     const state = getStore();
-    window.electron.ipcRenderer.sendMessage('createIRCConnection', [server, port]);
-    // state.serverList.set(server, new Server(server))
+    window.electron.ipcRenderer.sendMessage('createIRCChannel', [state.selectedServer, channel]);
     navigate("/Chat")
   }
+
   const Skip = () => {
     history.push("/Chat");
   }
+
   return (
     <Box
       sx={{
@@ -89,7 +89,7 @@ export const ServerForm = (props: ServerFormProps) => {
             alignItems="center"
           >
             <Grid item>
-              <TextField label="Channel" variant="outlined"/>
+              <TextField label="Channel" variant="outlined" value={channel} onChange={e => setChannel(e.target.value)}/>
             </Grid>
             <Grid item>
             </Grid>
@@ -104,13 +104,14 @@ export const ServerForm = (props: ServerFormProps) => {
 
                 size="small"
                 variant="outlined"
+                onClick={createIRCChannel}
               >
                 Create Channel
               </Button>
             </Grid>
 
             <Grid item>
-              <Button onClick={() => {Skip();}} size="small"
+              <Button onClick={Skip} size="small"
                 variant="outlined">
                  Cancel  <CloseIcon/>
               </Button>
