@@ -4,8 +4,7 @@ import { history } from './history';
 import { App } from './App';
 import { createNotificationState, createStore, getStore } from "./state"
 import { unstable_HistoryRouter as HistoryRouter } from 'react-router-dom';
-import { Message, ServerMetadata, Server, Channel } from 'data-models';
-import { Message, ServerMetadata, Server, Channel } from 'data-models';
+import { Message, ServerMetadata, Server } from 'data-models';
 import { autorun } from 'mobx';
 
 const store = createStore();
