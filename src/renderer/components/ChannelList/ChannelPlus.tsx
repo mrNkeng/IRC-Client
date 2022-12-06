@@ -17,6 +17,7 @@ return(
             arrow
           >
 <Button
+component={Link} to="/ChannelAdd"
 style={{
 width:'35px',
 height:'55px',

@@ -100,6 +100,7 @@ export const Settingsbutton = (props: Props) => {
                       <Typography sx={{color:"white"}}>Account Settings</Typography></MenuItem>
                     <MenuItem onClick={handleClose}><Typography sx={{color:"white"}}>Dark Mode </Typography>< DarkModeIcon sx={{color:"white"}}/></MenuItem>
                     <MenuItem component={Link} to="/Login" onClick={handleClose} > <Typography sx={{color:"white"}}>Sign Out</Typography> <LogoutIcon sx={{color:"white"}}/></MenuItem>
+
                     {/* <MenuItem onClick={handleClose}>Alert Volume</MenuItem> */}
                   </MenuList>
                 </ClickAwayListener>
