@@ -50,10 +50,10 @@ window.electron.ipcRenderer.on('sendMessageData', (args) => {
 window.electron.ipcRenderer.on('sendChannels', (args) => {
   //sends just the list of channels
   const state = getStore();
-  const [client, messages]: [string, Array<string>] = args;
+  const [client, channels]: [string, Array<string>] = args;
 
-  if (client === state.currentUser?.name && messages !== undefined) {
-    state.setChannels(messages);
+  if (client === state.currentUser?.username && channels !== undefined) {
+    state.setChannels(channels);
   }
 });
 

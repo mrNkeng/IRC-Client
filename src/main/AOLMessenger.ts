@@ -115,7 +115,7 @@ export class AOLMessenger {
   sendMessageToChannel(serverName: string, channelName: string, message: string) {
     this.serverData[serverName]!.ircClient.sendPrivmsg(channelName, message);
 
-    this.addChannelData(serverName, this.currentUser!.name, channelName, message);
+    this.addChannelData(serverName, this.currentUser!.username, channelName, message);
     this.pushMessages(serverName, channelName);
   }
 
@@ -160,11 +160,12 @@ export class AOLMessenger {
    * @param serverName
    * @returns void
    */
-  private pushChannelData(serverName: string, channel: string) {
+  private pushChannelData(serverName: string, client: string) {
     if (!this.serverData[serverName]) {
       return;
     }
-    this.window!.webContents.send('sendChannels', [channel, this.serverData[serverName]!.naiveChannelList]);
+    const channels = Object.keys(this.serverData[serverName].channels)
+    this.window!.webContents.send('sendChannels', [client, channels]);
   }
 
   /**
