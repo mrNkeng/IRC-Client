@@ -110,6 +110,7 @@ export class AOLMessenger {
     this.pushChannelData(serverName, channelName);
     this.pushMessages(serverName, channelName);
     this.pushChannelUsers(serverName, "client add here maybe", channelName);
+    log.debug("Requesting ServerData!")
   }
 
   sendMessageToChannel(serverName: string, channelName: string, message: string) {
@@ -164,8 +165,8 @@ export class AOLMessenger {
     if (!this.serverData[serverName]) {
       return;
     }
-    const channels = Object.keys(this.serverData[serverName].channels)
-    this.window!.webContents.send('sendChannels', [client, channels]);
+    const channels = this.serverData[serverName].channels
+    this.window!.webContents.send('sendChannels', [serverName, channels]);
   }
 
   /**
@@ -198,9 +199,9 @@ export class AOLMessenger {
 
   private pushMessages(serverName: string, destination: string) {
     if (this.serverData[serverName].channels[destination]) {
-      this.window!.webContents.send('sendMessageData', [destination, this.serverData[serverName].channels[destination].messages]);
+      this.window!.webContents.send('sendMessageData', [serverName, destination, this.serverData[serverName].channels[destination].messages]);
     } else if(this.serverData[serverName].privateMessages[destination]) {
-      this.window!.webContents.send('sendMessageData', [destination, this.serverData[serverName].privateMessages[destination].messages]);
+      this.window!.webContents.send('sendMessageData', [serverName, destination, this.serverData[serverName].privateMessages[destination].messages]);
     }
   }
 

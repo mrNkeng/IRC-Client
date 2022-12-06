@@ -4,7 +4,7 @@ import { history } from './history';
 import { App } from './App';
 import { createNotificationState, createStore, getStore } from "./state"
 import { unstable_HistoryRouter as HistoryRouter } from 'react-router-dom';
-import { Message, ServerMetadata, Server } from 'data-models';
+import { Message, ServerMetadata, Server, Channel } from 'data-models';
 import { autorun } from 'mobx';
 
 const store = createStore();
@@ -34,15 +34,22 @@ window.electron.ipcRenderer.on('authSuccess', (args) => {
 window.electron.ipcRenderer.on('sendServerData', (args) => {
   const state = getStore();
   const [serverData]: [Array<Pick<Server, "name">>] = args;
-
+  console.debug("Updaing serverData")
   state.setServers(serverData)
 });
 
 window.electron.ipcRenderer.on('sendMessageData', (args) => {
   const state = getStore();
-  const [destination, messages]: [string, Array<Message>] = args;
+  const [serverName, destination, messages]: [string, string, Array<Message>] = args;
 
-  if (messages !== undefined) {
+  console.debug("MessageData: ", serverName)
+  console.debug("MessageData: ", destination)
+  console.debug("MessageData: ", messages)
+
+  console.debug("SelectedChannel: ", state.selectedChannel)
+
+  if (serverName === state.selectedServer && destination === state.selectedChannel) {
+    console.debug("Updaing MessageData")
     state.setMessages(messages);
   }
 });
@@ -50,11 +57,17 @@ window.electron.ipcRenderer.on('sendMessageData', (args) => {
 window.electron.ipcRenderer.on('sendChannels', (args) => {
   //sends just the list of channels
   const state = getStore();
-  const [client, channels]: [string, Array<string>] = args;
+  const [serverName, channels]: [string, { [key: string]: Channel}] = args;
 
-  if (client === state.currentUser?.username && channels !== undefined) {
-    state.setChannels(channels);
+  console.debug("ChannelList: ", serverName)
+  console.debug("ChannelList: ", channels)
+  console.debug("ChannelList: ", state.currentUser?.username)
+
+  if (serverName !== state.selectedServer) {
+    return
   }
+  const flatList = Object.keys(channels)
+  state.setChannels(flatList ?? []);
 });
 
 window.electron.ipcRenderer.on('sendGlobalUserList', (args) => {
@@ -71,8 +84,9 @@ window.electron.ipcRenderer.on('sendChannelUserList', (args) => {
   const state = getStore();
   const [destination, messages]: [string, Array<string>] = args;
 
-  if (destination === state.selectedChannel && messages !== undefined) {
-    state.setChannelUsers(messages);
+  if (destination === state.selectedChannel) {
+    console.debug("Updaing ChannelUserList")
+    state.setChannelUsers(messages ?? []);
   }
 });
 
@@ -82,6 +96,7 @@ window.electron.ipcRenderer.on('serverMetadata', (args) => {
 
   // conditionally update the metadata
   if (server === state.selectedServer) {
+    console.debug("Updaing serverMetadata")
     state.setMetadata(metadata);
   }
 })

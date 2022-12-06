@@ -9,6 +9,11 @@ import { ServerPlus } from './ServerPlus';
 const ServerList = observer(() => {
   const store = getStore();
 
+  const onClick = (serverName: string) => {
+    store.setSelectedServer(serverName);
+    store.setSelectedChannel("");
+  }
+
   return (
     <Box className="ServerList">
       <Typography className="FlexColumnHeading">Server List</Typography>
@@ -24,7 +29,7 @@ const ServerList = observer(() => {
             <IconButton
               size="large"
               color="secondary"
-              onClick={() => (store.setSelectedServer(server.name))}
+              onClick={() => onClick(server.name)}
             >
               <CatchingPokemonIcon fontSize="inherit" />
             </IconButton>
