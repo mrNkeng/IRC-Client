@@ -11,9 +11,11 @@ type Props = {
 const Chatbubble = observer(({ chat, chats }: Props) => {
   const chatBubbleClasses = ["Chatbubble"];
   chatBubbleClasses.push(chat.isSelf ? "self_chat": "other_chat");
+
+  const message = chat.isSelf ? chat.content : chat.sender + ": " + chat.content;
   return (
     <div className={chatBubbleClasses.join(" ")}>
-      <Typography className="Chatbubbletext">{chat.sender + ": " + chat.content}</Typography>
+      <Typography className="Chatbubbletext">{message}</Typography>
     </div>
   );
 });
