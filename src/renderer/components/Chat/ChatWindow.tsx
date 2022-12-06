@@ -2,19 +2,26 @@ import React, { useState } from "react";
 import ChatInputField from "./ChatInputField";
 import ChatBubblelist from "./Chatbubblelist";
 import "./ChatStyles.css";
+import { getStore } from "renderer/state";
 import { Message } from "data-models/IRCData";
 import { observer } from "mobx-react";
+import { Box, Typography } from "@mui/material";
 
-interface Props {
-  messages: Array<Message>
-}
 
-export const ChatWindow = observer((props: Props) => {
-    const [chat, setchat] = useState<string>("");
-    return (
+export const ChatWindow = observer(() => {
+  //todo maybe add back metadata?
+  const { messages, selectedChannel } = getStore();
+  return (
+    <Box className="TextWindow">
+      <Box className = "WindowHeadingContainer">
+        <Typography className="WindowHeading">
+          {selectedChannel}
+        </Typography>
+      </Box>
         <div className="ChatWindow">
-            <ChatBubblelist chats={props.messages} />
-            <ChatInputField chat={chat} setchat={setchat} handleAdd={() => {}} />
+          <ChatBubblelist chats={messages} />
+          <ChatInputField />
         </div>
-    );
+    </Box>
+  );
 });

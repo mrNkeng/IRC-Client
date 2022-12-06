@@ -105,7 +105,7 @@ export const ServerForm = (props: ServerFormProps) => {
                 size="small"
                 variant="outlined"
               >
-                Createe Channel
+                Create Channel
               </Button>
             </Grid>
 

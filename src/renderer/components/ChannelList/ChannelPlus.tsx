@@ -8,8 +8,8 @@ interface Props {
 }
 
 export const ChannelPlus = (props: Props) => {
-return(
 
+return(
   <Tooltip
             title={"Add Channel"}
             key={"Add Channel"}
@@ -32,6 +32,4 @@ boxShadow:'0 0 5px black'
 
   </Button>
   </Tooltip>
-
-)
-}
+)}

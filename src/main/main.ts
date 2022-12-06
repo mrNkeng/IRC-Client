@@ -176,7 +176,11 @@ ipcMain.on('createIRCConnection', async(event, arg) => {
 });
 
 ipcMain.on('requestServerData', async(event, arg) => {
-  const [serverName] = arg
-  aol.sendServerData(serverName)
-  log.log("client requested new server data for: ", serverName)
+  const [serverName, channelName] = arg;
+  aol.sendServerData(serverName, channelName);
+});
+
+ipcMain.on('sendMessageToChannel', async(event, arg) => {
+  const [serverName, channelName, message] = arg;
+  aol.sendMessageToChannel(serverName, channelName, message);
 });

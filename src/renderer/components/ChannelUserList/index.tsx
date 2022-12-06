@@ -3,15 +3,15 @@ import { Box, Stack, Typography } from "@mui/material";
 import { getStore } from 'renderer/state';
 import { observer } from 'mobx-react';
 
-const UserList = observer(() => {
-  const { globalUsers } = getStore();
+const ChannelUserList = observer(() => {
+  const { channelUsers } = getStore();
 
   return (
     <Box className="UserList">
       <Typography
         className="FlexColumnHeading"
       >
-        Global Users
+        Channel Users
       </Typography>
       <Typography
         className="FlexColumnHeading"
@@ -21,7 +21,7 @@ const UserList = observer(() => {
       </Typography>
 
       <Stack>
-        {globalUsers.map((user) => (
+        {channelUsers.map((user) => (
           <Typography className="typography" key={user}>{user}</Typography>
         ))}
       </Stack>
@@ -39,4 +39,4 @@ const UserList = observer(() => {
   );
 });
 
-export default UserList;
+export default ChannelUserList;
