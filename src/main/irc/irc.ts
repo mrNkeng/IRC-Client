@@ -247,10 +247,15 @@ export class IRCClient extends EventEmitter {
   }
 
   //returns the server, the user that requested, and the message being sent
-  private receiveMOTD = (ircMessage: IRCMessage) => {
-    const source: string = ircMessage.source!;
-    const client = ircMessage.parameters[0];
-    const message = ircMessage.parameters.slice(1).join(' ');
+  private receiveMOTD = (serverMessage: string) => {
+    const first: string[] = serverMessage.split(":");
+    const second: string[] = first[1].split(" ");
+
+    const source = second[0];
+    const client = second[2];
+    const message = first[2] ;
+
+    console.log(message);
 
     this.emit(this.onMOTD, source, client, message);
   };
@@ -303,7 +308,7 @@ export class IRCClient extends EventEmitter {
   private parseServerMessage = () => {
     let serverMessage = this.serverMessage;
     this.serverMessage = '';
-    log.debug('Server: ', serverMessage);
+    //log.debug('Server: ', serverMessage);
 
     // TODO: properly tokenize the message instead of naive split
     // For above use this: https://modern.ircdocs.horse/#client-to-server-protocol-structure
@@ -357,13 +362,13 @@ export class IRCClient extends EventEmitter {
       case IRCNumerics.globalUsers:
         break;
       case IRCNumerics.motd:
-        this.receiveMOTD(ircMessage);
+        this.receiveMOTD(serverMessage);
         break;
       case IRCNumerics.motdStart:
-        this.receiveMOTD(ircMessage);
+        this.receiveMOTD(serverMessage);
         break;
       case IRCNumerics.endOfMotd:
-        this.receiveMOTD(ircMessage);
+        this.receiveMOTD(serverMessage);
         break;
       case IRCNumerics.listStart:
         this.receiveLIST(ircMessage);
