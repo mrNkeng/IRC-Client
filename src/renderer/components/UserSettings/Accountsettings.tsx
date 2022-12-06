@@ -1,10 +1,11 @@
 import { AccountCircle, Spa } from '@mui/icons-material';
-import { Box, Button, Grid, Stack, TextField, Typography } from '@mui/material';
+import { Box, Button, Grid, IconButton, Stack, TextField, Tooltip, Typography } from '@mui/material';
 import { useState } from 'react';
 import { history } from '../../history';
 import { VolumeSlider } from './VolumeSlider';
 import { getStore } from 'renderer/state';
 import { observer } from 'mobx-react';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 interface AccountsettingsProps {}
 interface Props {
 
@@ -172,22 +173,11 @@ export const Accountsettings = (props: AccountsettingsProps) => {
    //TODO fix styling on button
    <Grid className="AppContainer" container>
 
-     <Grid item xs={4}>
-       <Box sx={{
-         display: "flex",
-         flexDirection: "column",
-         alignItems: "right",
-         justifyContent:"right",
-         backgroundColor: "  #1e2124",
-         height: "100vh"
-       }}>
-         <Button onClick={() => {Skip();}} size="small" variant="outlined">
-           Home
-         </Button>
-       </Box>
+     <Grid item xs={3}>
+
      </Grid>
 
-     <Grid item xs={1}>
+     <Grid item xs={1.5}>
        <Box sx={{
          display: "flex",
          flexDirection: "column",
@@ -205,7 +195,7 @@ export const Accountsettings = (props: AccountsettingsProps) => {
          }} >
            User Settings
          </Typography>
-         <Stack>
+         <Stack sx={{alignItems:"center"}}>
 
            <Button onClick={()=> setTab("account")} variant="text" sx={{justifyContent:'flex-start', paddingTop:'20px', paddingBottom: '15px'}}>
              <Typography className="randomSettingsThingsIcantNameRightNow">
@@ -242,6 +232,30 @@ export const Accountsettings = (props: AccountsettingsProps) => {
          <Stack>
            <RenderTab tab={tab} />
          </Stack>
+       </Box>
+     </Grid>
+     <Grid item xs={0.5} sx={{backgroundColor:"#424549"}}>
+
+       <Box sx={{
+         display: "flex",
+         flexDirection: "column",
+         alignItems: "right",
+         justifyContent:"right",
+         backgroundColor: "  #424549",
+         height: "100vh",
+         width:'60px'
+
+       }}>
+        <Tooltip
+            title={"Close"}
+            key={"Close"}
+            placement="right"
+            arrow
+          >
+         <IconButton onClick={() => {Skip();}} >
+         <HighlightOffIcon sx={{color:"#7289da", fontSize:"150%"}}/>
+         </IconButton>
+         </Tooltip>
        </Box>
      </Grid>
 
