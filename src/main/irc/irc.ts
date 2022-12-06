@@ -73,6 +73,10 @@ export class IRCClient extends EventEmitter {
     this.ircSocket.on('timeout', this.onTimeout);
   };
 
+  disconnect = () => {
+    this.ircSocket?.destroy();
+  }
+
   // This feels kind of improper ~ come back this this. Maybe we should
   // subclass the socket? and then propagate messages upward? - JV
   private onData = (data: Buffer) => {

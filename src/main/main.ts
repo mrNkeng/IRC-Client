@@ -204,3 +204,8 @@ ipcMain.on('connectToChannel', async(event, arg) => {
   const [serverName, channelName] = arg
   aol.joinChannel(serverName, channelName);
 })
+
+
+ipcMain.on('logout', async(event, arg) => {
+  aol.logout()
+})

@@ -9,9 +9,10 @@ import MenuList from '@mui/material/MenuList';
 import Stack from '@mui/material/Stack';
 import SettingsIcon from '@mui/icons-material/Settings';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Typography } from '@mui/material';
+import { getStore } from 'renderer/state';
 interface Props {
 
 }
@@ -19,6 +20,7 @@ interface Props {
 export const Settingsbutton = (props: Props) => {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef<HTMLButtonElement>(null);
+  const navigate = useNavigate();
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -45,6 +47,13 @@ export const Settingsbutton = (props: Props) => {
     }
   }
 
+  const logUserOut = (event: Event | React.SyntheticEvent) => {
+    handleClose(event)
+    getStore().logout()
+    window.electron.ipcRenderer.sendMessage('logout', []);
+    navigate("*")
+
+  }
 
   // return focus to the button when we transitioned from !open -> open
   const prevOpen = React.useRef(open);
@@ -99,7 +108,7 @@ export const Settingsbutton = (props: Props) => {
                     <MenuItem component={Link} to="/Accountsettings" onClick={handleClose}>
                       <Typography sx={{color:"white"}}>Account Settings</Typography></MenuItem>
                     <MenuItem onClick={handleClose}><Typography sx={{color:"white"}}>Dark Mode </Typography>< DarkModeIcon sx={{color:"white"}}/></MenuItem>
-                    <MenuItem component={Link} to="/Login" onClick={handleClose} > <Typography sx={{color:"white"}}>Sign Out</Typography> <LogoutIcon sx={{color:"white"}}/></MenuItem>
+                    <MenuItem onClick={logUserOut} > <Typography sx={{color:"white"}}>Sign Out</Typography> <LogoutIcon sx={{color:"white"}}/></MenuItem>
 
                     {/* <MenuItem onClick={handleClose}>Alert Volume</MenuItem> */}
                   </MenuList>

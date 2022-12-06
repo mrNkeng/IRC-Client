@@ -66,6 +66,17 @@ export class AOLMessenger {
     //console.log(user)
   }
 
+  logout = () => {
+    log.info("logging user out!");
+    const servers = Object.keys(this.serverData)
+    for (const server of servers) {
+      const client = this.serverData[server].ircClient
+      client.disconnect();
+    }
+    this.currentUser = undefined;
+    this.serverData = {};
+  }
+
   /**
    * TODO: define me
    * @param server

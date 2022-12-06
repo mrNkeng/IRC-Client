@@ -75,6 +75,25 @@ export class ApplicationState {
   sendMessage = (message: string) => {
     window.electron.ipcRenderer.sendMessage('sendMessageToChannel', [this.selectedServer, this.selectedChannel, message]);
   }
+
+  reset = () => {
+    this.currentUser = undefined
+
+    this.settings = defaultClientSettings;
+
+    this.selectedServer = "";
+    this.selectedChannel = "";
+    this.metadata = undefined;
+    this.servers = [];
+    this.globalUsers = [];
+    this.channelUsers = [];
+    this.channels = [];
+    this.messages = [];
+  }
+
+  logout = () => {
+    this.reset()
+  }
 }
 
 export class NotificationState {
