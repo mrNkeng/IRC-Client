@@ -22,7 +22,7 @@ export const Login = (props: LoginProps) => {
   }
 
   const Skip = () => {
-    history.push("/Chat");
+    window.electron.ipcRenderer.sendMessage('login', ["user", "pass"]);
   }
 
   return (

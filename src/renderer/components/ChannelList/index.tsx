@@ -1,27 +1,30 @@
 import '../../styles.css';
-import { Box, IconButton, Stack, Tooltip, Typography } from "@mui/material";
-import { Channel } from 'data-models/IRCData';
+import { Box, IconButton, Stack, Typography } from "@mui/material";
 import { ChannelPlus } from './ChannelPlus';
+import { getStore } from 'renderer/state';
+import { observer } from 'mobx-react';
 
-interface ChannelListProps {
-  currentServer: string | undefined;
-  channels: ReadonlyArray<Channel>;
-  setChannel: (channel: Channel) => void;
-}
 
-function ChannelList(props: ChannelListProps) {
+const ChannelList = observer(() => {
+
+  const store = getStore();
+  const selectedServer = store.selectedServer;
+
+  const setChannel = (channel: string) => {
+    store.changeChannel(channel);
+  }
+
   return(
     <Box className="ChannelList">
       <Typography className="FlexColumnHeading">
-        {props.currentServer}
+        {selectedServer}
       </Typography>
-
       <Stack alignItems="center" spacing={2}>
-        {props.channels.map((channel) => (
+        {store.channels.map((channel) => (
           <IconButton
             size="medium"
-            color="secondary"
-            onClick={() => props.setChannel(channel)}
+            color={channel.connected ? "secondary" : "error"}
+            onClick={() => setChannel(channel.name)}
             key={channel.name}
           >
             {channel.name}
@@ -31,6 +34,6 @@ function ChannelList(props: ChannelListProps) {
       </Stack>
     </Box>
   );
-}
+});
 
 export default ChannelList;

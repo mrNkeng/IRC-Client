@@ -4,11 +4,15 @@ import { IconButton, Stack, Tooltip, Typography } from '@mui/material';
 import CatchingPokemonIcon from '@mui/icons-material/CatchingPokemon';
 import { getStore } from 'renderer/state';
 import { observer } from 'mobx-react';
-import { DropDownMenu } from 'material-ui';
 import { ServerPlus } from './ServerPlus';
 
 const ServerList = observer(() => {
   const store = getStore();
+
+  const onClick = (serverName: string) => {
+    store.setSelectedServer(serverName);
+    store.setSelectedChannel("");
+  }
 
   return (
     <Box className="ServerList">
@@ -25,7 +29,7 @@ const ServerList = observer(() => {
             <IconButton
               size="large"
               color="secondary"
-              onClick={() => (store.setSelectedServer(server.name))}
+              onClick={() => onClick(server.name)}
             >
               <CatchingPokemonIcon fontSize="inherit" />
             </IconButton>

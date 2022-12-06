@@ -1,8 +1,13 @@
+import { IRCClient } from "main/irc/irc";
+
 export interface Server {
   name: string;
 }
 
 export interface Channel {
+  hasJoined: boolean;
+  naiveUsers: Array<string>;
+  users: {[key: string]: IRCUser}
   name: string;
   messages: Array<Message>
 }
@@ -25,8 +30,11 @@ export interface Root {
 }
 
 export interface ServerData {
+  ircClient: IRCClient
   name: string
   metadata: ServerMetadata
+  naiveChannelList: Array<string>
+  naiveUsers: Array<string>;
   users: {[key: string]: IRCUser}
   channels: {[key: string]: Channel}
   privateMessages: {[key: string]: Channel}
