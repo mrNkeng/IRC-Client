@@ -133,6 +133,11 @@ export class AOLMessenger {
     client.joinCHANNEL(["#" + channel], [""])
   }
 
+  refreshChannelList(serverName: string) {
+    const client = this.serverData[serverName].ircClient;
+    client.requestLIST([]);
+  }
+
   /**
    * Initalize the ice client's object inside of {@link serverData} and deal with all the database related code.
    * @param ircClient

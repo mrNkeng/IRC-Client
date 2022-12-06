@@ -189,3 +189,8 @@ ipcMain.on("createIRCChannel", async(event, arg) => {
   const [serverName, channelName] = arg;
   aol.createIRCChannel(serverName, channelName);
 })
+
+ipcMain.on('refreshChannelList', async(event, arg) => {
+  const [serverName] = arg
+  aol.refreshChannelList(serverName);
+})

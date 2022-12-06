@@ -3,6 +3,7 @@ import { Box, IconButton, Stack, Typography } from "@mui/material";
 import { ChannelPlus } from './ChannelPlus';
 import { getStore } from 'renderer/state';
 import { observer } from 'mobx-react';
+import { RefreshChannelList } from '../RefreshChannelList';
 
 
 const ChannelList = observer(() => {
@@ -31,6 +32,7 @@ const ChannelList = observer(() => {
           </IconButton>
         ))}
         <ChannelPlus/>
+        <RefreshChannelList />
       </Stack>
     </Box>
   );
