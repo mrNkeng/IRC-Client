@@ -1,7 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { observer } from "mobx-react";
 import { getStore } from "renderer/state";
-import { toJS } from "mobx";
 
 
 export const ServerMetadata = observer(() => {

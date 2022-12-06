@@ -7,8 +7,12 @@ import { CssBaseline, Grid } from '@mui/material';
 import { observer } from 'mobx-react';
 import { ChatWindow } from '../Chat/ChatWindow';
 import ChannelUserList from '../ChannelUserList';
+import { getStore } from 'renderer/state';
+import { ServerMetadata } from '../ServerMetadata';
 
 export const ChatApplication = observer(() => {
+  const { selectedChannel } = getStore()
+
   return (
     <Grid className="App" container>
       <CssBaseline />
@@ -26,7 +30,7 @@ export const ChatApplication = observer(() => {
       </Grid>
 
       <Grid className="FlexChildrenColumn" item xs={8}>
-        <ChatWindow />
+        {selectedChannel === "" ? <ServerMetadata/> : <ChatWindow /> }
       </Grid>
 
       <Grid className="FlexChildrenColumn" item xs={1}>
