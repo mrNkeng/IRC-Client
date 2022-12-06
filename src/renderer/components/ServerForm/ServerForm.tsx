@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { Grid } from '@mui/material';
+import { CssBaseline, Grid } from '@mui/material';
 import DiamondIcon from '@mui/icons-material/Diamond';
 import { Link, useNavigate } from 'react-router-dom';
 import { getStore } from 'renderer/state';
@@ -27,20 +27,7 @@ export const ServerForm = (props: ServerFormProps) => {
     history.push("/Chat");
   }
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '	#1e2124',
-        position: 'absolute',
-        top: '20px',
-        right: '0px',
-        bottom: '0px',
-        left: '0px',
-      }}
-    >
+    <Box className="AppContainer">
       <Box
         sx={{
           display: 'flex',
