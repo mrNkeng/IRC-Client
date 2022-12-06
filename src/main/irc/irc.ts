@@ -187,10 +187,15 @@ export class IRCClient extends EventEmitter {
 
   //returns the server, the user that requested
   //undefined means that a different user joined a channel that we are in. if it isn't undefined, then we have joined a channel and have been returned the userlist
+  //empty list means that we have joined successfully
   private receiveJOIN = (ircMessage: IRCMessage) => {
     const source: string = ircMessage.source!;
-    const client: string = ircMessage.parameters[0];
+    const client: string = ircMessage.parameters[0].replace("\r", "");
     let usersInChannel: string[] | undefined = undefined;
+
+    if (ircMessage.parameters.length == 1) {
+      usersInChannel =[];
+    }
 
     if (ircMessage.parameters.length > 1) {
       usersInChannel = ircMessage.parameters.slice(2);

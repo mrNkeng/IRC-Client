@@ -63,7 +63,7 @@ export class AOLMessenger {
     this.currentUser = user;
 
     this.window!.webContents.send('authSuccess', [user.username, user.name]);
-    console.log(user)
+    //console.log(user)
   }
 
   /**
@@ -114,6 +114,14 @@ export class AOLMessenger {
   }
 
   sendMessageToChannel(serverName: string, channelName: string, message: string) {
+    if (!this.serverData[serverName]) {
+      log.error("Server doesn't exist"); return;
+    } else if (!this.serverData[serverName].channels[channelName]) {
+      log.error("Channel doesn't exist"); return;
+    } else if (!this.serverData[serverName].channels[channelName].hasJoined) {
+      log.error("Channel hasn't been joined"); return;
+    }
+
     this.serverData[serverName]!.ircClient.sendPrivmsg(channelName, message);
 
     this.addChannelData(serverName, this.currentUser!.username, channelName, message);
@@ -131,7 +139,6 @@ export class AOLMessenger {
       ircClient: ircClient,
       users: {},
       naiveChannelList: [],
-      naiveUserList: [],
       naiveUsers: [],
       channels: {},
       privateMessages: {},
@@ -166,6 +173,7 @@ export class AOLMessenger {
       return;
     }
     const channels = this.serverData[serverName].channels
+    console.log(channels);
     this.window!.webContents.send('sendChannels', [serverName, channels]);
   }
 
@@ -263,26 +271,32 @@ export class AOLMessenger {
   }
 
   /*
-    Aims to update if channel has been joined, if no channel exists, it creates a barebones structure
+    Aims to update if channel has been joined and the number of users, if no channel exists, it creates a barebones structure
+    Also aims to tell us how many users exist, users can be [] which means this is just a join confirm
   */
   private addChannelJoined(serverName: string, source: string, channelName: string, usernames: string[]) {
     if (!this.serverData[serverName]) {
       log.warn("server does not exist");
       return
     }
+
     // create channel if it doesn't exist
     if (!this.serverData[serverName]!.channels[channelName]) {
       this.serverData[serverName]!.channels[channelName] = {
         hasJoined: true,
         naiveUsers: usernames,
-        users: {},
+        users: {}, //todo this guy
         name: channelName,
         messages: []
       }
       this.serverData[serverName]!.naiveChannelList.push(channelName);
     } else {
       this.serverData[serverName]!.channels[channelName].hasJoined = true;
+      if (usernames){
+        this.serverData[serverName]!.channels[channelName].naiveUsers = usernames;
+      }
     }
+    //console.log(this.serverData[serverName]!.channels[channelName]);
   }
 
   private addPrivateMessage(serverName: string, source: string, target: string, messageContent: string) {

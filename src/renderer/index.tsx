@@ -5,6 +5,7 @@ import { App } from './App';
 import { createNotificationState, createStore, getStore } from "./state"
 import { unstable_HistoryRouter as HistoryRouter } from 'react-router-dom';
 import { Message, ServerMetadata, Server, Channel } from 'data-models';
+import { Message, ServerMetadata, Server, Channel } from 'data-models';
 import { autorun } from 'mobx';
 
 const store = createStore();
@@ -68,6 +69,7 @@ window.electron.ipcRenderer.on('sendChannels', (args) => {
   }
   const flatList = Object.keys(channels)
   state.setChannels(flatList ?? []);
+  state.setJoinStatus(channels[state.selectedChannel].hasJoined);
 });
 
 window.electron.ipcRenderer.on('sendGlobalUserList', (args) => {

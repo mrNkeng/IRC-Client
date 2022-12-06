@@ -14,6 +14,7 @@ export class ApplicationState {
 
   selectedServer: string = "";
   selectedChannel: string = "";
+  selectedChannelJoinStatus: boolean = false;
   metadata: ServerMetadata | undefined = undefined;
   servers: Array<Pick<Server, "name">> = [];
   globalUsers: Array<string> = [];
@@ -65,6 +66,10 @@ export class ApplicationState {
 
   setChannelUsers = (users: string[]) => {
     this.channelUsers = users;
+  }
+
+  setJoinStatus = (hasJoined: boolean) => {
+    this.selectedChannelJoinStatus = hasJoined;
   }
 
   changeChannel = (channel: string) => {
