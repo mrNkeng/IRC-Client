@@ -1,8 +1,8 @@
 ## CMSC 447 Project -- IRC Client
 
-<p>
+
 Based on Electorn React Boilerplate See [here](https://github.com/electron-react-boilerplate/electron-react-boilerplate) for more details. 
-</p>
+
 
 
 
