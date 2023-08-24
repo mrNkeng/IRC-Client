@@ -5,7 +5,7 @@ Based on Electorn React Boilerplate See [here](https://github.com/electron-react
 
 
 
-
+To run this project, do the following:
 ## Install
 
 Clone the repo and install dependencies:
